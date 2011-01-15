@@ -10,12 +10,13 @@ TARGET = qsm
 TEMPLATE = app
 
 
+HEADERS += mainwindow.h
+
 SOURCES += main.cpp \
            mainwindow.cpp
 
-HEADERS += mainwindow.h
-
 FORMS += mainwindow.ui
+
 
 TRANSLATIONS = qsm_de.ts
 CODECFORTR = ISO-8859-15

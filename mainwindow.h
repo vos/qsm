@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QModelIndex>
+
+class QFileSystemModel;
 
 namespace Ui {
     class MainWindow;
@@ -17,6 +20,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QFileSystemModel *folderBrowserModel;
+
+private slots:
+    void folderBrowserTreeView_clicked(QModelIndex index);
+
 };
 
 #endif // MAINWINDOW_H
