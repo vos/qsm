@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "scanfolderthread.h"
+#include "imagelistmodel.h"
 
 #include <QMessageBox>
 #include <QFileSystemModel>
@@ -41,11 +42,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scanFolderThread, SIGNAL(folderScanned(QString, QFileInfoList)), SLOT(scanFolderThread_folderScanned(QString, QFileInfoList)));
     connect(m_scanFolderThread, SIGNAL(finished()), SLOT(scanFolderThread_finished()));
 
+    m_imageListModel = new ImageListModel(this);
+    ui->imageListListView->setModel(m_imageListModel);
+    ui->imageListListView->setIconSize(QSize(64, 64));
+
     statusBar()->showMessage(tr("Ready"));
 }
 
 MainWindow::~MainWindow()
 {
+    delete m_imageListModel;
     delete m_scanFolderThread;
     delete m_folderBrowserModel;
     delete ui;
@@ -64,11 +70,13 @@ void MainWindow::folderBrowserTreeView_clicked(const QModelIndex &index)
 void MainWindow::scanFolderThread_started()
 {
     qDebug("scanFolderThread_started");
+    m_imageListModel->clear();
 }
 
-void MainWindow::scanFolderThread_folderScanned(const QString folder, const QFileInfoList &files)
+void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files)
 {
     qDebug() << "folderScanned: " << folder << ", file count = " << files.size();
+    m_imageListModel->addImageFileInfoList(files);
 }
 
 void MainWindow::scanFolderThread_finished()

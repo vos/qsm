@@ -5,8 +5,9 @@
 #include <QModelIndex>
 #include <QFileInfoList>
 
-class ScanFolderThread;
 class QFileSystemModel;
+class ScanFolderThread;
+class ImageListModel;
 
 namespace Ui {
     class MainWindow;
@@ -24,11 +25,12 @@ private:
     Ui::MainWindow *ui;
     QFileSystemModel *m_folderBrowserModel;
     ScanFolderThread *m_scanFolderThread;
+    ImageListModel *m_imageListModel;
 
 private slots:
     void folderBrowserTreeView_clicked(const QModelIndex &index);
     void scanFolderThread_started();
-    void scanFolderThread_folderScanned(const QString folder, const QFileInfoList &files);
+    void scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files);
     void scanFolderThread_finished();
 
     void on_actionStatusbar_triggered();
