@@ -23,8 +23,10 @@ private:
     QFileSystemModel *folderBrowserModel;
 
 private slots:
-    void folderBrowserTreeView_clicked(QModelIndex index);
+    void on_actionStatusbar_triggered();
+    void on_actionAboutQsm_triggered();
 
+    void folderBrowserTreeView_activated(const QModelIndex &index);
 };
 
 #endif // MAINWINDOW_H
