@@ -11,11 +11,13 @@ TEMPLATE = app
 
 
 HEADERS += mainwindow.h \
-           scanfolderthread.h
+           scanfolderthread.h \
+           imagelistmodel.h
 
 SOURCES += main.cpp \
            mainwindow.cpp \
-           scanfolderthread.cpp
+           scanfolderthread.cpp \
+           imagelistmodel.cpp
 
 FORMS += mainwindow.ui
 
