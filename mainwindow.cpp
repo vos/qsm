@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "scanfolderthread.h"
 
 #include <QMessageBox>
 #include <QFileSystemModel>
@@ -23,36 +24,56 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuView->addMenu(menuSidebar);
     connect(ui->actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
-    folderBrowserModel = new QFileSystemModel;
-    folderBrowserModel->setFilter(QDir::Drives | QDir::Dirs | QDir::NoDotAndDotDot);
-    folderBrowserModel->setRootPath(folderBrowserModel->myComputer().toString());
+    m_folderBrowserModel = new QFileSystemModel;
+    m_folderBrowserModel->setFilter(QDir::Drives | QDir::Dirs | QDir::NoDotAndDotDot);
+    m_folderBrowserModel->setRootPath(m_folderBrowserModel->myComputer().toString());
 
-    ui->folderBrowserTreeView->setModel(folderBrowserModel);
-    ui->folderBrowserTreeView->expand(folderBrowserModel->index(QDir::rootPath()));
+    ui->folderBrowserTreeView->setModel(m_folderBrowserModel);
+    ui->folderBrowserTreeView->expand(m_folderBrowserModel->index(QDir::rootPath()));
     ui->folderBrowserTreeView->setHeaderHidden(true);
     ui->folderBrowserTreeView->hideColumn(1);
     ui->folderBrowserTreeView->hideColumn(2);
     ui->folderBrowserTreeView->hideColumn(3);
+    connect(ui->folderBrowserTreeView, SIGNAL(clicked(QModelIndex)), SLOT(folderBrowserTreeView_clicked(QModelIndex)));
 
-    connect(ui->folderBrowserTreeView, SIGNAL(activated(QModelIndex)), SLOT(folderBrowserTreeView_activated(QModelIndex)));
+    m_scanFolderThread = new ScanFolderThread(this);
+    connect(m_scanFolderThread, SIGNAL(started()), SLOT(scanFolderThread_started()));
+    connect(m_scanFolderThread, SIGNAL(folderScanned(QString, QFileInfoList)), SLOT(scanFolderThread_folderScanned(QString, QFileInfoList)));
+    connect(m_scanFolderThread, SIGNAL(finished()), SLOT(scanFolderThread_finished()));
 
     statusBar()->showMessage(tr("Ready"));
 }
 
 MainWindow::~MainWindow()
 {
-    delete folderBrowserModel;
+    delete m_scanFolderThread;
+    delete m_folderBrowserModel;
     delete ui;
 }
 
-void MainWindow::folderBrowserTreeView_activated(const QModelIndex &index)
+void MainWindow::folderBrowserTreeView_clicked(const QModelIndex &index)
 {
-    // TODO separate thread for folder scanning
-    QStringList filters;
-    filters << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp" << "*.tiff" << "*.gif" << "*.ico";
-    QFileInfoList fileList = QDir(folderBrowserModel->filePath(index)).entryInfoList(filters, QDir::Files | QDir::Readable, QDir::Name);
+    if (m_scanFolderThread->isRunning()) {
+        m_scanFolderThread->terminate();
+        m_scanFolderThread->wait();
+    }
+    m_scanFolderThread->setFolder(m_folderBrowserModel->filePath(index), ui->includeSubfoldersCheckBox->isChecked());
+    m_scanFolderThread->start(QThread::NormalPriority);
+}
 
-    qDebug() << fileList.size();
+void MainWindow::scanFolderThread_started()
+{
+    qDebug("scanFolderThread_started");
+}
+
+void MainWindow::scanFolderThread_folderScanned(const QString folder, const QFileInfoList &files)
+{
+    qDebug() << "folderScanned: " << folder << ", file count = " << files.size();
+}
+
+void MainWindow::scanFolderThread_finished()
+{
+    qDebug("scanFolderThread_finished");
 }
 
 void MainWindow::on_actionStatusbar_triggered()

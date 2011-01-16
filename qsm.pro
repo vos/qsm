@@ -10,10 +10,12 @@ TARGET = qsm
 TEMPLATE = app
 
 
-HEADERS += mainwindow.h
+HEADERS += mainwindow.h \
+           scanfolderthread.h
 
 SOURCES += main.cpp \
-           mainwindow.cpp
+           mainwindow.cpp \
+           scanfolderthread.cpp
 
 FORMS += mainwindow.ui
 

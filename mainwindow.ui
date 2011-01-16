@@ -180,6 +180,9 @@
    <property name="toolTip">
     <string>Exit the application</string>
    </property>
+   <property name="statusTip">
+    <string>Exit the application</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
@@ -194,15 +197,24 @@
    <property name="text">
     <string>&amp;Statusbar</string>
    </property>
+   <property name="statusTip">
+    <string>Statusbar</string>
+   </property>
   </action>
   <action name="actionOptions">
    <property name="text">
     <string>&amp;Options...</string>
    </property>
+   <property name="statusTip">
+    <string>Options</string>
+   </property>
   </action>
   <action name="actionQsmHelp">
    <property name="text">
     <string>QSM &amp;Help</string>
+   </property>
+   <property name="statusTip">
+    <string>QSM Help</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -215,12 +227,18 @@
    <property name="toolTip">
     <string>Show the Qt library's About box</string>
    </property>
+   <property name="statusTip">
+    <string>Show the Qt library's About box</string>
+   </property>
   </action>
   <action name="actionAboutQsm">
    <property name="text">
     <string>&amp;About QSM...</string>
    </property>
    <property name="toolTip">
+    <string>Show the application's About box</string>
+   </property>
+   <property name="statusTip">
     <string>Show the application's About box</string>
    </property>
   </action>
