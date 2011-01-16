@@ -7,17 +7,19 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
+    app.setOrganizationName("Fachhochschule Südwestfalen");
+    app.setApplicationName("QSM - Qt SlideShow Manager");
 
     QTranslator translator;
     if (QLocale::system().language() == QLocale::German) {
         QTextCodec::setCodecForTr(QTextCodec::codecForName("ISO-8859-15"));
         translator.load("qsm_de");
     }
-    a.installTranslator(&translator);
+    app.installTranslator(&translator);
 
-    MainWindow w;
-    w.show();
+    MainWindow mainWindow;
+    mainWindow.show();
 
-    return a.exec();
+    return app.exec();
 }
