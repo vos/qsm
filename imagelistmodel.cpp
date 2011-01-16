@@ -51,6 +51,14 @@ QVariant ImageListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+QString ImageListModel::filePath(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return QString();
+
+    return m_fileList.at(index.row()).filePath();
+}
+
 void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
 {
     if (files.size() == 0)

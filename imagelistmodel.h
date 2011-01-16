@@ -18,6 +18,7 @@ public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QString filePath(const QModelIndex &index) const;
 
 public slots:
     void addImageFileInfoList(const QFileInfoList &files);
