@@ -9,14 +9,14 @@ ScanFolderThread::ScanFolderThread(QObject *parent) :
 {
     if (ScanFolderThread::FILE_FILTERS.isEmpty())
         ScanFolderThread::FILE_FILTERS << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp" << "*.tiff" << "*.gif" << "*.ico";
+
+    qRegisterMetaType<QFileInfoList>("QFileInfoList");
 }
 
 void ScanFolderThread::setFolder(const QString &path, bool recursive)
 {
     m_path = path;
     m_recursive = recursive;
-
-    qRegisterMetaType<QFileInfoList>("QFileInfoList");
 }
 
 void ScanFolderThread::run()
