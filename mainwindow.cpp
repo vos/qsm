@@ -46,6 +46,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imageListListView->setModel(m_imageListModel);
     ui->imageListListView->setIconSize(QSize(64, 64));
 
+    ui->slideshowImageListListView->setModel(m_imageListModel); // test
+
     statusBar()->showMessage(tr("Ready"));
 }
 
@@ -82,6 +84,14 @@ void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFi
 void MainWindow::scanFolderThread_finished()
 {
     qDebug("scanFolderThread_finished");
+}
+
+
+void MainWindow::on_imageListListView_clicked(QModelIndex index)
+{
+    QString imagePath = m_imageListModel->filePath(index);
+    QPixmap image(imagePath);
+    ui->imageLabel->setPixmap(image);
 }
 
 void MainWindow::on_actionStatusbar_triggered()

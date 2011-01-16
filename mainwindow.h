@@ -32,6 +32,7 @@ private slots:
     void scanFolderThread_started();
     void scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files);
     void scanFolderThread_finished();
+    void on_imageListListView_clicked(QModelIndex index);
 
     void on_actionStatusbar_triggered();
     void on_actionAboutQsm_triggered();
