@@ -5,6 +5,7 @@
 
 #include <QMessageBox>
 #include <QFileSystemModel>
+#include <QtConcurrentRun>
 
 #include <QDebug>
 #include <QElapsedTimer>
@@ -89,8 +90,22 @@ void MainWindow::scanFolderThread_finished()
 
 void MainWindow::on_imageListListView_clicked(QModelIndex index)
 {
+    QVariant var = m_imageListModel->data(index, Qt::DecorationRole);
+    if (!var.canConvert<QIcon>())
+        return;
+
+    // set up preview image
+    QIcon icon = var.value<QIcon>();
+    ui->imageLabel->setPixmap(icon.pixmap(64, 64));
+
+    // load the actual image inside a separate thread
     QString imagePath = m_imageListModel->filePath(index);
-    QPixmap image(imagePath);
+    QtConcurrent::run(this, &MainWindow::loadImage, imagePath);
+}
+
+void MainWindow::loadImage(const QString &path)
+{
+    QPixmap image(path);
     ui->imageLabel->setPixmap(image);
 }
 

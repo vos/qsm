@@ -27,6 +27,8 @@ private:
     ScanFolderThread *m_scanFolderThread;
     ImageListModel *m_imageListModel;
 
+    void loadImage(const QString &path);
+
 private slots:
     void folderBrowserTreeView_clicked(const QModelIndex &index);
     void scanFolderThread_started();
