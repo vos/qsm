@@ -1,6 +1,6 @@
 #include "imagelistmodel.h"
 
-#include <QtCore>
+#include <QtConcurrentMap>
 #include <QFutureWatcher>
 #include <QPixmap>
 #include <QPainter>
@@ -73,6 +73,11 @@ void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
 
 void ImageListModel::clear()
 {
+    if (m_thumbnailWatcher->isRunning()) {
+        m_thumbnailWatcher->cancel();
+        m_thumbnailWatcher->waitForFinished();
+    }
+
     beginResetModel();
     m_fileList.clear();
     m_iconList.clear();
@@ -85,7 +90,7 @@ bool ImageListModel::canFetchMore(const QModelIndex &) const
     return m_fileCount < m_fileList.size();
 }
 
-void ImageListModel::fetchMore(const QModelIndex &parent)
+void ImageListModel::fetchMore(const QModelIndex &)
 {
     int remainder = m_fileList.size() - m_fileCount;
     int itemsToFetch = qMin(100, remainder);
@@ -93,8 +98,8 @@ void ImageListModel::fetchMore(const QModelIndex &parent)
     qDebug("fetch more: from %d to %d", m_fileCount, m_fileCount + itemsToFetch - 1);
 
     if (m_thumbnailWatcher->isRunning()) {
-        m_thumbnailWatcher->cancel();
-        m_thumbnailWatcher->waitForFinished();
+        //m_thumbnailWatcher->cancel();
+        m_thumbnailWatcher->waitForFinished(); // can block the gui thread
     }
 
     m_thumbnailIndex = m_fileCount;
@@ -107,7 +112,7 @@ void ImageListModel::fetchMore(const QModelIndex &parent)
     // start multithreaded image loading
     m_thumbnailWatcher->setFuture(QtConcurrent::mapped(begin, end, ImageListModel::createThumbnail));
 
-    beginInsertRows(parent, m_fileCount, m_fileCount + itemsToFetch - 1);
+    beginInsertRows(QModelIndex(), m_fileCount, m_fileCount + itemsToFetch - 1);
     m_fileCount += itemsToFetch;
     endInsertRows();
 }
@@ -132,4 +137,5 @@ void ImageListModel::thumbnailWatcher_resultReadyAt(int index)
 void ImageListModel::thumbnailWatcher_finished()
 {
     qDebug("thumbnailWatcher_finished");
+    emit iconsLoaded();
 }

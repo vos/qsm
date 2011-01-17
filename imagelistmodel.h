@@ -20,6 +20,9 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QString filePath(const QModelIndex &index) const;
 
+signals:
+    void iconsLoaded();
+
 public slots:
     void addImageFileInfoList(const QFileInfoList &files);
     void clear();
