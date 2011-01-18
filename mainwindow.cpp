@@ -101,7 +101,7 @@ void MainWindow::on_imageListListView_clicked(QModelIndex index)
 
     // set up preview image
     QIcon icon = var.value<QIcon>();
-    //m_imageWidget->setImage(icon.pixmap(64, 64));
+    m_imageWidget->setImage(icon.pixmap(64, 64).toImage());
 
     // load the actual image inside a separate thread
     QString imagePath = m_imageListModel->filePath(index);
