@@ -17,9 +17,9 @@ ImageListModel::ImageListModel(QObject *parent) :
     if (ImageListModel::DEFAULT_ICON.isNull()) {
         QPixmap icon(64, 64);
         QPainter painter(&icon);
+        painter.setBrush(Qt::white);
         painter.setPen(Qt::red);
-        painter.fillRect(icon.rect(), Qt::white);
-        painter.drawRect(icon.rect());
+        painter.drawRect(0,0, icon.rect().width()-1, icon.rect().height()-1);
         painter.drawLine(0,0, 64,64);
         painter.drawLine(64,0, 0,64);
         ImageListModel::DEFAULT_ICON = QIcon(icon);
@@ -34,6 +34,11 @@ ImageListModel::~ImageListModel()
 int ImageListModel::rowCount(const QModelIndex &) const
 {
     return m_fileCount;
+}
+
+int ImageListModel::imageCount() const
+{
+    return m_fileList.size();
 }
 
 QVariant ImageListModel::data(const QModelIndex &index, int role) const

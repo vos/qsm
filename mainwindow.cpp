@@ -112,9 +112,6 @@ void MainWindow::on_imageListListView_clicked(QModelIndex index)
 void MainWindow::loadImage(const QString &path)
 {
     QImage image(path);
-    if (image.isNull())
-        return;
-
     m_imageWidget->setImage(image);
 }
 

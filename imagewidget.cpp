@@ -5,8 +5,8 @@ ImageWidget::ImageWidget(QWidget *parent) :
 {
     setMinimumSize(64, 64);
 
-    m_imageWidth = 512;
-    m_imageHeight = 512;
+    m_imageWidth = 0;
+    m_imageHeight = 0;
     m_imageAspectRatio = 1.0f;
 }
 
@@ -41,11 +41,11 @@ void ImageWidget::updateProjection()
 
     if (m_widgetAspectRatio < m_imageAspectRatio) {
         int projection_height = int(m_imageWidth / m_widgetAspectRatio);
-        int top = (m_imageHeight - projection_height) / 2;
+        int top = (m_imageHeight - projection_height) >> 1;
         gluOrtho2D(0, m_imageWidth, projection_height + top, top);
     } else if (m_widgetAspectRatio > m_imageAspectRatio) {
         int projection_width = int(m_imageHeight * m_widgetAspectRatio);
-        int left = (m_imageWidth - projection_width) / 2;
+        int left = (m_imageWidth - projection_width) >> 1;
         gluOrtho2D(left, projection_width + left, m_imageHeight, 0);
     } else
         gluOrtho2D(0, m_imageWidth, m_imageWidth, 0);
@@ -80,6 +80,11 @@ void ImageWidget::paintGL()
 
 void ImageWidget::setImage(const QImage &image)
 {
+    if (image.isNull())
+        return;
+
+    qDebug("image format = %d", image.format());
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.constBits());
 
     if (image.width() != m_imageWidth || image.height() != m_imageHeight) {

@@ -17,6 +17,7 @@ public:
     ~ImageListModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int imageCount() const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QString filePath(const QModelIndex &index) const;
 
