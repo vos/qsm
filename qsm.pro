@@ -13,13 +13,15 @@ TEMPLATE = app
 HEADERS += mainwindow.h \
            scanfolderthread.h \
            imagelistmodel.h \
-           imagewidget.h
+           imagewidget.h \
+           slideshowlistmodel.h
 
 SOURCES += main.cpp \
            mainwindow.cpp \
            scanfolderthread.cpp \
            imagelistmodel.cpp \
-           imagewidget.cpp
+           imagewidget.cpp \
+           slideshowlistmodel.cpp
 
 FORMS += mainwindow.ui
 

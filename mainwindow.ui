@@ -119,7 +119,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="imageListListView"/>
+      <widget class="QListView" name="imageListListView">
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -131,7 +135,11 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QListView" name="slideshowListListView"/>
+   <widget class="QListView" name="slideshowListListView">
+    <property name="selectionMode">
+     <enum>QAbstractItemView::ExtendedSelection</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QDockWidget" name="slideshowImageListDockWidget">
    <property name="windowTitle">
@@ -146,7 +154,11 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QListView" name="slideshowImageListListView"/>
+      <widget class="QListView" name="slideshowImageListListView">
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QGroupBox" name="slideshowOptionsGroupBox">

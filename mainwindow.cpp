@@ -1,8 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include "scanfolderthread.h"
 #include "imagelistmodel.h"
 #include "imagewidget.h"
+#include "slideshowlistmodel.h"
 
 #include <QMessageBox>
 #include <QFileSystemModel>
@@ -27,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuView->addMenu(menuSidebar);
     connect(ui->actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
-    m_folderBrowserModel = new QFileSystemModel;
+    m_folderBrowserModel = new QFileSystemModel(this);
     m_folderBrowserModel->setFilter(QDir::Drives | QDir::Dirs | QDir::NoDotAndDotDot);
     m_folderBrowserModel->setRootPath(m_folderBrowserModel->myComputer().toString());
 
@@ -47,7 +49,11 @@ MainWindow::MainWindow(QWidget *parent) :
     m_imageListModel = new ImageListModel(this);
     ui->imageListListView->setModel(m_imageListModel);
     ui->imageListListView->setIconSize(QSize(64, 64));
+    ui->imageListListView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->imageListListView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(imageListListView_customContextMenuRequested(QPoint)));
 
+    m_slideshowListModel = new SlideshowListModel(this);
+    ui->slideshowListListView->setModel(m_slideshowListModel); // test
     ui->slideshowImageListListView->setModel(m_imageListModel); // test
 
     m_imageWidget = new ImageWidget(this);
@@ -58,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete m_slideshowListModel;
     delete m_imageWidget;
     delete m_imageListModel;
     delete m_scanFolderThread;
@@ -79,12 +86,14 @@ void MainWindow::scanFolderThread_started()
 {
     qDebug("scanFolderThread_started");
     m_imageListModel->clear();
+    m_slideshowListModel->clear(); // test
 }
 
 void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files)
 {
     qDebug() << "folderScanned: " << folder << ", file count = " << files.size();
     m_imageListModel->addImageFileInfoList(files);
+    m_slideshowListModel->addSlideshow(folder); // test
 }
 
 void MainWindow::scanFolderThread_finished()
@@ -107,6 +116,13 @@ void MainWindow::on_imageListListView_clicked(QModelIndex index)
     QString imagePath = m_imageListModel->filePath(index);
     //QtConcurrent::run(this, &MainWindow::loadImage, imagePath);
     loadImage(imagePath);
+}
+
+void MainWindow::imageListListView_customContextMenuRequested(const QPoint &)
+{
+    QMenu menu(ui->imageListListView);
+    menu.addAction(ui->actionAboutQsm);
+    menu.exec(QCursor::pos());
 }
 
 void MainWindow::loadImage(const QString &path)
