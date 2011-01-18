@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui xml
+QT += core gui xml opengl
 
 TARGET = qsm
 TEMPLATE = app
@@ -12,12 +12,14 @@ TEMPLATE = app
 
 HEADERS += mainwindow.h \
            scanfolderthread.h \
-           imagelistmodel.h
+           imagelistmodel.h \
+           imagewidget.h
 
 SOURCES += main.cpp \
            mainwindow.cpp \
            scanfolderthread.cpp \
-           imagelistmodel.cpp
+           imagelistmodel.cpp \
+           imagewidget.cpp
 
 FORMS += mainwindow.ui
 

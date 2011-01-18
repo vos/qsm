@@ -8,6 +8,7 @@
 class QFileSystemModel;
 class ScanFolderThread;
 class ImageListModel;
+class ImageWidget;
 
 namespace Ui {
     class MainWindow;
@@ -26,6 +27,7 @@ private:
     QFileSystemModel *m_folderBrowserModel;
     ScanFolderThread *m_scanFolderThread;
     ImageListModel *m_imageListModel;
+    ImageWidget *m_imageWidget;
 
     void loadImage(const QString &path);
 

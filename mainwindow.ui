@@ -13,13 +13,7 @@
   <property name="windowTitle">
    <string notr="true">QSM - Qt SlideShow Manager</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="imageLabel"/>
-    </item>
-   </layout>
-  </widget>
+  <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>

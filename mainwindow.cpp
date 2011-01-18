@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "scanfolderthread.h"
 #include "imagelistmodel.h"
+#include "imagewidget.h"
 
 #include <QMessageBox>
 #include <QFileSystemModel>
@@ -48,6 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imageListListView->setIconSize(QSize(64, 64));
 
     ui->slideshowImageListListView->setModel(m_imageListModel); // test
+
+    m_imageWidget = new ImageWidget(this);
+    setCentralWidget(m_imageWidget);
 
     statusBar()->showMessage(tr("Ready"));
 }
@@ -96,17 +100,21 @@ void MainWindow::on_imageListListView_clicked(QModelIndex index)
 
     // set up preview image
     QIcon icon = var.value<QIcon>();
-    ui->imageLabel->setPixmap(icon.pixmap(64, 64));
+    //m_imageWidget->setImage(icon.pixmap(64, 64));
 
     // load the actual image inside a separate thread
     QString imagePath = m_imageListModel->filePath(index);
-    QtConcurrent::run(this, &MainWindow::loadImage, imagePath);
+    //QtConcurrent::run(this, &MainWindow::loadImage, imagePath);
+    loadImage(imagePath);
 }
 
 void MainWindow::loadImage(const QString &path)
 {
-    QPixmap image(path);
-    ui->imageLabel->setPixmap(image);
+    QImage image(path);
+    if (image.isNull())
+        return;
+
+    m_imageWidget->setImage(image);
 }
 
 void MainWindow::on_actionStatusbar_triggered()
