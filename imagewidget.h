@@ -4,6 +4,13 @@
 #include <QGLWidget>
 #include <QImage>
 
+#ifndef GL_BGR
+#define GL_BGR 0x80E0
+#endif
+#ifndef GL_BGRA
+#define GL_BGRA 0x80E1
+#endif
+
 class ImageWidget : public QGLWidget
 {
     Q_OBJECT

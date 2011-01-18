@@ -80,7 +80,7 @@ void ImageWidget::paintGL()
 
 void ImageWidget::setImage(const QImage &image)
 {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.constBits());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.constBits());
 
     if (image.width() != m_imageWidth || image.height() != m_imageHeight) {
         m_imageWidth = image.width();

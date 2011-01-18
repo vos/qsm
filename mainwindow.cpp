@@ -58,6 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete m_imageWidget;
     delete m_imageListModel;
     delete m_scanFolderThread;
     delete m_folderBrowserModel;
