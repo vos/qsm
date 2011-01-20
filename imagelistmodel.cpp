@@ -38,7 +38,7 @@ int ImageListModel::rowCount(const QModelIndex &) const
 
 int ImageListModel::imageCount() const
 {
-    return m_fileList.size();
+    return m_fileList.count();
 }
 
 QVariant ImageListModel::data(const QModelIndex &index, int role) const

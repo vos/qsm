@@ -6,6 +6,7 @@
 #include "imagewidget.h"
 #include "slideshowlistmodel.h"
 
+#include <QLabel>
 #include <QMessageBox>
 #include <QFileSystemModel>
 #include <QtConcurrentRun>
@@ -45,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scanFolderThread, SIGNAL(started()), SLOT(scanFolderThread_started()));
     connect(m_scanFolderThread, SIGNAL(folderScanned(QString, QFileInfoList)), SLOT(scanFolderThread_folderScanned(QString, QFileInfoList)));
     connect(m_scanFolderThread, SIGNAL(finished()), SLOT(scanFolderThread_finished()));
+    connect(m_scanFolderThread, SIGNAL(terminated()), SLOT(scanFolderThread_terminated()));
 
     m_imageListModel = new ImageListModel(this);
     ui->imageListListView->setModel(m_imageListModel);
@@ -59,6 +61,13 @@ MainWindow::MainWindow(QWidget *parent) :
     m_imageWidget = new ImageWidget(this);
     setCentralWidget(m_imageWidget);
 
+    m_scanFolderLabel = new QLabel;
+    m_scanFolderLabel->setVisible(false);
+    statusBar()->addPermanentWidget(m_scanFolderLabel);
+    m_scanFolderAbortButton = new QPushButton(tr("Abort"));
+    m_scanFolderAbortButton->setVisible(false);
+    connect(m_scanFolderAbortButton, SIGNAL(clicked()), SLOT(scanFolderCancelButton_clicked()));
+    statusBar()->addPermanentWidget(m_scanFolderAbortButton);
     statusBar()->showMessage(tr("Ready"));
 }
 
@@ -69,6 +78,8 @@ MainWindow::~MainWindow()
     delete m_imageListModel;
     delete m_scanFolderThread;
     delete m_folderBrowserModel;
+    delete m_scanFolderAbortButton;
+    delete m_scanFolderLabel;
     delete ui;
 }
 
@@ -87,6 +98,9 @@ void MainWindow::scanFolderThread_started()
     qDebug("scanFolderThread_started");
     m_imageListModel->clear();
     m_slideshowListModel->clear(); // test
+    m_scanFolderLabel->setText(tr("Scanning folder %1 ...").arg(m_scanFolderThread->getFolder()));
+    m_scanFolderLabel->setVisible(true);
+    m_scanFolderAbortButton->setVisible(true);
 }
 
 void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files)
@@ -98,9 +112,17 @@ void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFi
 
 void MainWindow::scanFolderThread_finished()
 {
-    qDebug("scanFolderThread_finished");
+    qDebug("scanFolderThread_finished: %d images found", m_imageListModel->imageCount());
+    m_scanFolderLabel->setVisible(false);
+    m_scanFolderAbortButton->setVisible(false);
 }
 
+void MainWindow::scanFolderThread_terminated()
+{
+    qDebug("scanFolderThread_terminated");
+    m_scanFolderLabel->setVisible(false);
+    m_scanFolderAbortButton->setVisible(false);
+}
 
 void MainWindow::on_imageListListView_clicked(QModelIndex index)
 {
@@ -129,6 +151,13 @@ void MainWindow::loadImage(const QString &path)
 {
     QImage image(path);
     m_imageWidget->setImage(image);
+}
+
+void MainWindow::scanFolderCancelButton_clicked()
+{
+    if (!m_scanFolderThread->isRunning())
+        return;
+    m_scanFolderThread->terminate();
 }
 
 void MainWindow::on_actionStatusbar_triggered()
