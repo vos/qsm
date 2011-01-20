@@ -13,6 +13,7 @@ class ScanFolderThread : public QThread
 public:
     explicit ScanFolderThread(QObject *parent = 0);
     void setFolder(const QString &path, bool recursive = false);
+    const QString& getFolder() const { return m_path; }
     void run();
 
 signals:
