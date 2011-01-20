@@ -140,6 +140,6 @@ void MainWindow::on_actionAboutQsm_triggered()
 {
     QMessageBox::about(this, tr("About QSM"),
             tr("<b>Qt SlideShow Manager</b> v0.1 alpha<br/><br/>"
-               "Copyright © 2011 Fachhochschule Südwestfalen<br/>"
+               "Copyright &copy; 2011 Fachhochschule S&uuml;dwestfalen<br/>"
                "Written by Alexander Vos and Till Althaus"));
 }
