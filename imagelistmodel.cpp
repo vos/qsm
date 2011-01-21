@@ -69,7 +69,7 @@ void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
     if (files.size() == 0)
         return;
 
-    beginInsertRows(QModelIndex(), m_fileList.size(), m_fileList.size() + files.size());
+    beginInsertRows(QModelIndex(), m_fileList.count(), m_fileList.count() + files.count() - 1);
     m_fileList.append(files);
     for (int i = 0; i < files.count(); ++i)
         m_iconList.append(ImageListModel::DEFAULT_ICON);
@@ -97,7 +97,7 @@ bool ImageListModel::canFetchMore(const QModelIndex &) const
 
 void ImageListModel::fetchMore(const QModelIndex &)
 {
-    int remainder = m_fileList.size() - m_fileCount;
+    int remainder = m_fileList.count() - m_fileCount;
     int itemsToFetch = qMin(100, remainder);
 
     qDebug("fetch more: from %d to %d", m_fileCount, m_fileCount + itemsToFetch - 1);
@@ -108,17 +108,15 @@ void ImageListModel::fetchMore(const QModelIndex &)
     }
 
     m_thumbnailIndex = m_fileCount;
-
     QFileInfoList::const_iterator begin = m_fileList.begin() + m_thumbnailIndex;
     QFileInfoList::const_iterator end = begin + itemsToFetch;
     if (end > m_fileList.end())
         end = m_fileList.end();
 
-    // start multithreaded image loading
-    m_thumbnailWatcher->setFuture(QtConcurrent::mapped(begin, end, ImageListModel::createThumbnail));
-
     beginInsertRows(QModelIndex(), m_fileCount, m_fileCount + itemsToFetch - 1);
     m_fileCount += itemsToFetch;
+    // start multithreaded image loading
+    m_thumbnailWatcher->setFuture(QtConcurrent::mapped(begin, end, &ImageListModel::createThumbnail));
     endInsertRows();
 }
 

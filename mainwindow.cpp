@@ -105,7 +105,7 @@ void MainWindow::scanFolderThread_started()
 
 void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files)
 {
-    qDebug() << "folderScanned: " << folder << ", file count = " << files.size();
+    qDebug() << "folderScanned: " << folder << ", images found = " << files.size();
     m_imageListModel->addImageFileInfoList(files);
     m_slideshowListModel->addSlideshow(folder); // test
 }
