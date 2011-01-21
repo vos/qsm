@@ -66,7 +66,7 @@ QString ImageListModel::filePath(const QModelIndex &index) const
 
 void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
 {
-    if (files.size() == 0)
+    if (files.count() == 0)
         return;
 
     beginInsertRows(QModelIndex(), m_fileList.count(), m_fileList.count() + files.count() - 1);
@@ -100,6 +100,9 @@ void ImageListModel::fetchMore(const QModelIndex &)
     int remainder = m_fileList.count() - m_fileCount;
     int itemsToFetch = qMin(100, remainder);
 
+    if (itemsToFetch <= 0)
+        return;
+
     qDebug("fetch more: from %d to %d", m_fileCount, m_fileCount + itemsToFetch - 1);
 
     if (m_thumbnailWatcher->isRunning()) {
@@ -108,10 +111,10 @@ void ImageListModel::fetchMore(const QModelIndex &)
     }
 
     m_thumbnailIndex = m_fileCount;
-    QFileInfoList::const_iterator begin = m_fileList.begin() + m_thumbnailIndex;
+    QFileInfoList::const_iterator begin = m_fileList.constBegin() + m_thumbnailIndex;
     QFileInfoList::const_iterator end = begin + itemsToFetch;
-    if (end > m_fileList.end())
-        end = m_fileList.end();
+    if (end > m_fileList.constEnd())
+        end = m_fileList.constEnd();
 
     beginInsertRows(QModelIndex(), m_fileCount, m_fileCount + itemsToFetch - 1);
     m_fileCount += itemsToFetch;
