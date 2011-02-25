@@ -20,7 +20,6 @@ public slots:
 
 private:
     QStringList list;
-
 };
 
 #endif // SLIDESHOWLISTMODEL_H

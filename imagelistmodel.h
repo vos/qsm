@@ -6,7 +6,9 @@
 #include <QImage>
 #include <QIcon>
 
+QT_BEGIN_NAMESPACE
 template <typename T> class QFutureWatcher;
+QT_END_NAMESPACE
 
 class ImageListModel : public QAbstractListModel
 {
@@ -46,7 +48,6 @@ private:
     QFutureWatcher<QImage> *m_thumbnailWatcher;
     static QImage createThumbnail(const QFileInfo &fileInfo);
     volatile int m_thumbnailIndex;
-
 };
 
 #endif // IMAGELISTMODEL_H

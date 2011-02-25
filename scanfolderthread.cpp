@@ -38,7 +38,7 @@ void ScanFolderThread::scanFolderRecursively(const QString &path)
     QDir dir(path);
     scanFolder(dir);
 
-    QStringList subfolders = dir.entryList(QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot);
+    QStringList subfolders = dir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot | QDir::Readable);
     foreach (const QString &folder, subfolders)
         scanFolderRecursively(dir.filePath(folder));
 }

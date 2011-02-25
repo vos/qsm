@@ -27,7 +27,6 @@ private:
 
     void scanFolder(const QDir &dir);
     void scanFolderRecursively(const QString &path);
-
 };
 
 #endif // SCANFOLDERTHREAD_H

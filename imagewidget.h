@@ -18,6 +18,7 @@ class ImageWidget : public QGLWidget
 public:
     explicit ImageWidget(QWidget *parent = 0);
 
+public slots:
     void setImage(const QImage &image);
 
 private:
@@ -30,7 +31,6 @@ private:
     void resizeGL(int width, int height);
     void updateProjection();
     void paintGL();
-
 };
 
 #endif // IMAGEWIDGET_H
