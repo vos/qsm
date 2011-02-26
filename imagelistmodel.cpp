@@ -58,7 +58,7 @@ QVariant ImageListModel::data(const QModelIndex &index, int role) const
 
 QString ImageListModel::filePath(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid() || index.row() >= m_fileList.count())
         return QString();
 
     return m_fileList.at(index.row()).filePath();
@@ -71,7 +71,7 @@ void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
 
     beginInsertRows(QModelIndex(), m_fileList.count(), m_fileList.count() + files.count() - 1);
     m_fileList.append(files);
-    for (int i = 0; i < files.count(); ++i)
+    for (int i = 0; i < files.count(); i++)
         m_iconList.append(ImageListModel::DEFAULT_ICON);
     endInsertRows();
 }

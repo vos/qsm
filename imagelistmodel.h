@@ -34,10 +34,6 @@ private slots:
     void thumbnailWatcher_resultReadyAt(int index);
     void thumbnailWatcher_finished();
 
-protected:
-    bool canFetchMore(const QModelIndex &parent) const;
-    void fetchMore(const QModelIndex &parent);
-
 private:
     static QIcon DEFAULT_ICON;
 
@@ -47,7 +43,10 @@ private:
 
     QFutureWatcher<QImage> *m_thumbnailWatcher;
     static QImage createThumbnail(const QFileInfo &fileInfo);
-    volatile int m_thumbnailIndex;
+    int m_thumbnailIndex;
+
+    bool canFetchMore(const QModelIndex &parent) const;
+    void fetchMore(const QModelIndex &parent);
 };
 
 #endif // IMAGELISTMODEL_H
