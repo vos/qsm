@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QModelIndex>
 #include <QFileInfoList>
+#include <QImage>
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -34,7 +35,8 @@ private slots:
     void scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files);
     void scanFolderThread_finished();
     void scanFolderThread_terminated();
-    void on_imageListListView_clicked(QModelIndex index);
+    void on_imageListListView_clicked(const QModelIndex &index);
+    void imageLoaded(const QImage &image, int, int, int);
     void on_imageListListView_customContextMenuRequested(const QPoint &pos);
     void scanFolderCancelButton_clicked();
     void on_actionStatusbar_triggered();
@@ -49,8 +51,6 @@ private:
     ImageListModel *m_imageListModel;
     ImageWidget *m_imageWidget;
     SlideshowListModel *m_slideshowListModel;
-
-    void loadImage(const QString &path);
 };
 
 #endif // MAINWINDOW_H

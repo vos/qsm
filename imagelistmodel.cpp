@@ -1,34 +1,14 @@
 #include "imagelistmodel.h"
 
-#include <QtConcurrentMap>
-#include <QFutureWatcher>
-#include <QPixmap>
-#include <QPainter>
+#include "imageloader.h"
 
-QIcon ImageListModel::DEFAULT_ICON;
+#include <QFileInfoList>
+#include <QPixmap>
+#include <QDateTime>
 
 ImageListModel::ImageListModel(QObject *parent) :
     QAbstractListModel(parent), m_fileCount(0)
 {
-    m_thumbnailWatcher = new QFutureWatcher<QImage>(this);
-    connect(m_thumbnailWatcher, SIGNAL(resultReadyAt(int)), SLOT(thumbnailWatcher_resultReadyAt(int)));
-    connect(m_thumbnailWatcher, SIGNAL(finished()), SLOT(thumbnailWatcher_finished()));
-
-    if (ImageListModel::DEFAULT_ICON.isNull()) {
-        QPixmap icon(64, 64);
-        QPainter painter(&icon);
-        painter.setBrush(Qt::white);
-        painter.setPen(Qt::red);
-        painter.drawRect(0,0, icon.rect().width()-1, icon.rect().height()-1);
-        painter.drawLine(0,0, 64,64);
-        painter.drawLine(64,0, 0,64);
-        ImageListModel::DEFAULT_ICON = QIcon(icon);
-    }
-}
-
-ImageListModel::~ImageListModel()
-{
-    delete m_thumbnailWatcher;
 }
 
 int ImageListModel::rowCount(const QModelIndex &) const
@@ -47,21 +27,35 @@ QVariant ImageListModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role == Qt::DisplayRole)
-        return m_fileList.at(index.row()).fileName();
+        return m_fileList.at(index.row()).fileInfo().fileName();
     else if (role == Qt::DecorationRole)
-        return m_iconList.at(index.row());
-    else if (role == Qt::ToolTipRole)
-        return m_fileList.at(index.row()).filePath();
+        return m_fileList.at(index.row()).icon();
+    else if (role == Qt::ToolTipRole) {
+        ImageInfo info = m_fileList.at(index.row());
+        return QString("<html><b>%1</b><br/><br/>Dimensions: %2<br/>Size: %3<br/>Date created: %4</html>")
+                .arg(info.imagePath())
+                .arg(info.dimensions())
+                .arg(info.size())
+                .arg(info.fileInfo().created().toString(Qt::DefaultLocaleShortDate));
+    }
 
     return QVariant();
 }
 
-QString ImageListModel::filePath(const QModelIndex &index) const
+ImageInfo ImageListModel::imageInfo(const QModelIndex &index) const
+{
+    if (!index.isValid() || index.row() >= m_fileList.count())
+        return ImageInfo();
+
+    return m_fileList.at(index.row());
+}
+
+QString ImageListModel::imagePath(const QModelIndex &index) const
 {
     if (!index.isValid() || index.row() >= m_fileList.count())
         return QString();
 
-    return m_fileList.at(index.row()).filePath();
+    return m_fileList.at(index.row()).imagePath();
 }
 
 void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
@@ -70,29 +64,23 @@ void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
         return;
 
     beginInsertRows(QModelIndex(), m_fileList.count(), m_fileList.count() + files.count() - 1);
-    m_fileList.append(files);
-    for (int i = 0; i < files.count(); i++)
-        m_iconList.append(ImageListModel::DEFAULT_ICON);
+    foreach (const QFileInfo &file, files)
+        m_fileList.append(ImageInfo(file));
     endInsertRows();
 }
 
 void ImageListModel::clear()
 {
-    if (m_thumbnailWatcher->isRunning()) {
-        m_thumbnailWatcher->cancel();
-        m_thumbnailWatcher->waitForFinished();
-    }
-
+    //m_threadPool.clear();
     beginResetModel();
     m_fileList.clear();
-    m_iconList.clear();
     m_fileCount = 0;
     endResetModel();
 }
 
 bool ImageListModel::canFetchMore(const QModelIndex &) const
 {
-    return m_fileCount < m_fileList.size();
+    return m_fileCount < m_fileList.count();
 }
 
 void ImageListModel::fetchMore(const QModelIndex &)
@@ -100,48 +88,35 @@ void ImageListModel::fetchMore(const QModelIndex &)
     int remainder = m_fileList.count() - m_fileCount;
     int itemsToFetch = qMin(100, remainder);
 
-    if (itemsToFetch <= 0)
-        return;
+    int beginIndex = m_fileCount;
+    int endIndex = beginIndex + itemsToFetch;
+    if (endIndex >= m_fileList.count())
+        endIndex = m_fileList.count() - 1;
 
-    qDebug("fetch more: from %d to %d", m_fileCount, m_fileCount + itemsToFetch - 1);
+    beginInsertRows(QModelIndex(), beginIndex, endIndex);
+    m_fileCount += itemsToFetch;
+    endInsertRows();
 
-    if (m_thumbnailWatcher->isRunning()) {
-        //m_thumbnailWatcher->cancel();
-        m_thumbnailWatcher->waitForFinished(); // can block the gui thread
+    // start multithreaded image loading
+    for (int i = beginIndex; i <= endIndex; i++) {
+        ImageLoader *imageLoader = new ImageLoader(m_fileList.at(i).imagePath(), i);
+        imageLoader->setScaleSize();
+        connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(imageLoaded(QImage, int, int, int)));
+        m_threadPool.start(imageLoader);
     }
 
-    m_thumbnailIndex = m_fileCount;
-    QFileInfoList::const_iterator begin = m_fileList.constBegin() + m_thumbnailIndex;
-    QFileInfoList::const_iterator end = begin + itemsToFetch;
-    if (end > m_fileList.constEnd())
-        end = m_fileList.constEnd();
-
-    beginInsertRows(QModelIndex(), m_fileCount, m_fileCount + itemsToFetch - 1);
-    m_fileCount += itemsToFetch;
-    // start multithreaded image loading
-    m_thumbnailWatcher->setFuture(QtConcurrent::mapped(begin, end, &ImageListModel::createThumbnail));
-    endInsertRows();
+    qDebug("ImageListModel::fetchMore(): from %d to %d", beginIndex, endIndex);
 }
 
-QImage ImageListModel::createThumbnail(const QFileInfo &fileInfo)
+void ImageListModel::imageLoaded(const QImage &image, int width, int height, int index)
 {
-    return QImage(fileInfo.filePath()).scaled(64, 64, Qt::KeepAspectRatio, Qt::FastTransformation);
-}
-
-void ImageListModel::thumbnailWatcher_resultReadyAt(int index)
-{
-    qDebug("thumbnailWatcher_resultReadyAt(%d)", index);
-
-    QImage image = m_thumbnailWatcher->resultAt(index);
-    index += m_thumbnailIndex;
-    m_iconList[index] = QIcon(QPixmap::fromImage(image));
-
     QModelIndex modelIndex = this->index(index);
-    emit dataChanged(modelIndex, modelIndex);
-}
+    if (!modelIndex.isValid() || index >= m_fileList.count())
+        return;
 
-void ImageListModel::thumbnailWatcher_finished()
-{
-    qDebug("thumbnailWatcher_finished");
-    emit iconsLoaded();
+    m_fileList[index].setIcon(QPixmap::fromImage(image));
+    m_fileList[index].setDimensions(width, height);
+    emit dataChanged(modelIndex, modelIndex);
+
+    qDebug("ImageListModel::imageLoaded(%d)", index);
 }

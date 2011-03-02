@@ -3,12 +3,10 @@
 
 #include <QAbstractListModel>
 #include <QFileInfoList>
+#include <QThreadPool>
 #include <QImage>
-#include <QIcon>
 
-QT_BEGIN_NAMESPACE
-template <typename T> class QFutureWatcher;
-QT_END_NAMESPACE
+#include "imageinfo.h"
 
 class ImageListModel : public QAbstractListModel
 {
@@ -16,34 +14,26 @@ class ImageListModel : public QAbstractListModel
 
 public:
     explicit ImageListModel(QObject *parent = 0);
-    ~ImageListModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int imageCount() const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    QString filePath(const QModelIndex &index) const;
 
-signals:
-    void iconsLoaded();
+    ImageInfo imageInfo(const QModelIndex &index) const;
+    QString imagePath(const QModelIndex &index) const;
 
 public slots:
     void addImageFileInfoList(const QFileInfoList &files);
     void clear();
 
 private slots:
-    void thumbnailWatcher_resultReadyAt(int index);
-    void thumbnailWatcher_finished();
+    void imageLoaded(const QImage &image, int width, int height, int index);
 
 private:
-    static QIcon DEFAULT_ICON;
-
-    QFileInfoList m_fileList;
-    QList<QIcon> m_iconList;
+    QList<ImageInfo> m_fileList;
     int m_fileCount;
 
-    QFutureWatcher<QImage> *m_thumbnailWatcher;
-    static QImage createThumbnail(const QFileInfo &fileInfo);
-    int m_thumbnailIndex;
+    QThreadPool m_threadPool;
 
     bool canFetchMore(const QModelIndex &parent) const;
     void fetchMore(const QModelIndex &parent);

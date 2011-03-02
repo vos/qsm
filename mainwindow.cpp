@@ -5,6 +5,7 @@
 #include "imagelistmodel.h"
 #include "imagewidget.h"
 #include "slideshowlistmodel.h"
+#include "imageloader.h"
 
 #include <QLabel>
 #include <QMessageBox>
@@ -116,24 +117,27 @@ void MainWindow::scanFolderThread_finished()
 void MainWindow::scanFolderThread_terminated()
 {
     qDebug("scanFolderThread_terminated");
-    m_scanFolderLabel->setVisible(false);
-    m_scanFolderAbortButton->setVisible(false);
 }
 
-void MainWindow::on_imageListListView_clicked(QModelIndex index)
+void MainWindow::on_imageListListView_clicked(const QModelIndex &index)
 {
     QVariant var = m_imageListModel->data(index, Qt::DecorationRole);
-    if (!var.canConvert<QIcon>())
-        return;
-
-    // set up preview image
-    QIcon icon = var.value<QIcon>();
-    m_imageWidget->setImage(icon.pixmap(64, 64).toImage());
+    if (var.canConvert<QIcon>()) {
+        // set up preview image
+        QIcon icon = var.value<QIcon>();
+        m_imageWidget->setImage(icon.pixmap(64, 64).toImage());
+    }
 
     // load the actual image inside a separate thread
-    QString imagePath = m_imageListModel->filePath(index);
-    //QtConcurrent::run(this, &MainWindow::loadImage, imagePath);
-    loadImage(imagePath);
+    QString imagePath = m_imageListModel->imagePath(index);
+    ImageLoader *imageLoader = new ImageLoader(imagePath);
+    connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(imageLoaded(QImage, int, int, int)));
+    QThreadPool::globalInstance()->start(imageLoader);
+}
+
+void MainWindow::imageLoaded(const QImage &image, int, int, int)
+{
+    m_imageWidget->setImage(image);
 }
 
 void MainWindow::on_imageListListView_customContextMenuRequested(const QPoint &)
@@ -141,12 +145,6 @@ void MainWindow::on_imageListListView_customContextMenuRequested(const QPoint &)
     QMenu menu(ui->imageListListView);
     menu.addAction(ui->actionAboutQsm);
     menu.exec(QCursor::pos());
-}
-
-void MainWindow::loadImage(const QString &path)
-{
-    QImage image(path);
-    m_imageWidget->setImage(image);
 }
 
 void MainWindow::scanFolderCancelButton_clicked()
