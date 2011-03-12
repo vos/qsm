@@ -10,7 +10,6 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QFileSystemModel>
-#include <QtConcurrentRun>
 
 #include <QDebug>
 
@@ -45,7 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scanFolderThread, SIGNAL(started()), SLOT(scanFolderThread_started()));
     connect(m_scanFolderThread, SIGNAL(folderScanned(QString, QFileInfoList)), SLOT(scanFolderThread_folderScanned(QString, QFileInfoList)));
     connect(m_scanFolderThread, SIGNAL(finished()), SLOT(scanFolderThread_finished()));
-    connect(m_scanFolderThread, SIGNAL(terminated()), SLOT(scanFolderThread_terminated()));
 
     m_imageListModel = new ImageListModel(this);
     ui->imageListListView->setModel(m_imageListModel);
@@ -83,7 +81,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_folderBrowserTreeView_clicked(const QModelIndex &index)
 {
     if (m_scanFolderThread->isRunning()) {
-        m_scanFolderThread->terminate();
+        scanFolderCancelButton_clicked();
         m_scanFolderThread->wait();
     }
     m_scanFolderThread->setFolder(m_folderBrowserModel->filePath(index), ui->includeSubfoldersCheckBox->isChecked());
@@ -97,6 +95,8 @@ void MainWindow::scanFolderThread_started()
     m_slideshowListModel->clear(); // test
     m_scanFolderLabel->setText(tr("Scanning folder %1 ...").arg(m_scanFolderThread->getFolder()));
     m_scanFolderLabel->setVisible(true);
+    m_scanFolderAbortButton->setText(tr("Abort"));
+    m_scanFolderAbortButton->setEnabled(true);
     m_scanFolderAbortButton->setVisible(true);
 }
 
@@ -112,11 +112,6 @@ void MainWindow::scanFolderThread_finished()
     qDebug("scanFolderThread_finished: %d images found", m_imageListModel->imageCount());
     m_scanFolderLabel->setVisible(false);
     m_scanFolderAbortButton->setVisible(false);
-}
-
-void MainWindow::scanFolderThread_terminated()
-{
-    qDebug("scanFolderThread_terminated");
 }
 
 void MainWindow::on_imageListListView_clicked(const QModelIndex &index)
@@ -151,7 +146,10 @@ void MainWindow::scanFolderCancelButton_clicked()
 {
     if (!m_scanFolderThread->isRunning())
         return;
-    m_scanFolderThread->terminate();
+
+    m_scanFolderAbortButton->setText(tr("aborting..."));
+    m_scanFolderAbortButton->setEnabled(false);
+    m_scanFolderThread->abort();
 }
 
 void MainWindow::on_actionStatusbar_triggered()

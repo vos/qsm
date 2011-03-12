@@ -59,7 +59,6 @@ void ImageWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT);
 
     glBegin(GL_QUADS);
-    {
         glVertex2s(0, 0);
         glTexCoord2f(0.0f, 0.0f);
 
@@ -71,7 +70,6 @@ void ImageWidget::paintGL()
 
         glVertex2s(m_imageWidth, 0);
         glTexCoord2f(0.0f, 1.0f);
-    }
     glEnd();
 
     glFlush();

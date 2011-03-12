@@ -21,6 +21,7 @@ void ScanFolderThread::setFolder(const QString &path, bool recursive)
 
 void ScanFolderThread::run()
 {
+    m_abort = false;
     if (m_recursive)
         scanFolderRecursively(m_path);
     else
@@ -35,10 +36,18 @@ void ScanFolderThread::scanFolder(const QDir &dir)
 
 void ScanFolderThread::scanFolderRecursively(const QString &path)
 {
+    if (m_abort)
+        return;
+
     QDir dir(path);
     scanFolder(dir);
 
     QStringList subfolders = dir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot | QDir::Readable);
     foreach (const QString &folder, subfolders)
         scanFolderRecursively(dir.filePath(folder));
+}
+
+void ScanFolderThread::abort()
+{
+    m_abort = true;
 }

@@ -13,8 +13,9 @@ class ScanFolderThread : public QThread
 public:
     explicit ScanFolderThread(QObject *parent = 0);
     void setFolder(const QString &path, bool recursive = false);
-    const QString& getFolder() const { return m_path; }
+    inline const QString& getFolder() const { return m_path; }
     void run();
+    void abort();
 
 signals:
     void folderScanned(const QString &folder, const QFileInfoList &files);
@@ -24,6 +25,7 @@ private:
 
     QString m_path;
     bool m_recursive;
+    bool m_abort;
 
     void scanFolder(const QDir &dir);
     void scanFolderRecursively(const QString &path);
