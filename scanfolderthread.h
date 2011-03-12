@@ -14,6 +14,7 @@ public:
     explicit ScanFolderThread(QObject *parent = 0);
     void setFolder(const QString &path, bool recursive = false);
     inline const QString& getFolder() const { return m_path; }
+    inline int count() const { return m_count; }
     void run();
     void abort();
 
@@ -25,7 +26,8 @@ private:
 
     QString m_path;
     bool m_recursive;
-    bool m_abort;
+    volatile int m_count;
+    volatile bool m_abort;
 
     void scanFolder(const QDir &dir);
     void scanFolderRecursively(const QString &path);

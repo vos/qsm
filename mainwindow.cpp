@@ -93,7 +93,8 @@ void MainWindow::scanFolderThread_started()
     qDebug("scanFolderThread_started");
     m_imageListModel->clear();
     m_slideshowListModel->clear(); // test
-    m_scanFolderLabel->setText(tr("Scanning folder %1 ...").arg(m_scanFolderThread->getFolder()));
+    statusBar()->showMessage(tr("Scanning folder %1 ...").arg(m_scanFolderThread->getFolder()));
+    m_scanFolderLabel->clear();
     m_scanFolderLabel->setVisible(true);
     m_scanFolderAbortButton->setText(tr("Abort"));
     m_scanFolderAbortButton->setEnabled(true);
@@ -103,6 +104,7 @@ void MainWindow::scanFolderThread_started()
 void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files)
 {
     qDebug() << "folderScanned: " << folder << ", images found = " << files.size();
+    m_scanFolderLabel->setText(tr("Scanning folder %1 ...").arg(folder));
     m_imageListModel->addImageFileInfoList(files);
     m_slideshowListModel->addSlideshow(folder); // test
 }
@@ -110,6 +112,7 @@ void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFi
 void MainWindow::scanFolderThread_finished()
 {
     qDebug("scanFolderThread_finished: %d images found", m_imageListModel->imageCount());
+    statusBar()->showMessage(tr("%1 images found, %2 folders scanned").arg(m_imageListModel->imageCount()).arg(m_scanFolderThread->count()));
     m_scanFolderLabel->setVisible(false);
     m_scanFolderAbortButton->setVisible(false);
 }

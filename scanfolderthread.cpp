@@ -21,7 +21,9 @@ void ScanFolderThread::setFolder(const QString &path, bool recursive)
 
 void ScanFolderThread::run()
 {
+    m_count = 0;
     m_abort = false;
+
     if (m_recursive)
         scanFolderRecursively(m_path);
     else
@@ -31,6 +33,7 @@ void ScanFolderThread::run()
 void ScanFolderThread::scanFolder(const QDir &dir)
 {
     QFileInfoList files = dir.entryInfoList(ScanFolderThread::FILE_FILTERS, QDir::Files | QDir::Readable, QDir::Name);
+    m_count++;
     emit folderScanned(dir.path(), files);
 }
 

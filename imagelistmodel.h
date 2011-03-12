@@ -27,11 +27,11 @@ public slots:
     void clear();
 
 private slots:
-    void imageLoaded(const QImage &image, int width, int height, int index);
+    void thumbnailLoaded(const QImage &image, int width, int height, int index);
 
 private:
-    QList<ImageInfo> m_fileList;
-    int m_fileCount;
+    QList<ImageInfo> m_imageInfoList;
+    int m_imageInfoCount;
 
     QThreadPool m_threadPool;
 
