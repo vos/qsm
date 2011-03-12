@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scanFolderThread, SIGNAL(finished()), SLOT(scanFolderThread_finished()));
 
     m_imageListModel = new ImageListModel(this);
+    connect(m_imageListModel, SIGNAL(changed()), SLOT(imageListModel_changed()));
     ui->imageListListView->setModel(m_imageListModel);
     ui->imageListListView->setIconSize(QSize(64, 64));
 
@@ -131,6 +132,11 @@ void MainWindow::on_imageListListView_clicked(const QModelIndex &index)
     ImageLoader *imageLoader = new ImageLoader(imagePath);
     connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(imageLoaded(QImage, int, int, int)));
     QThreadPool::globalInstance()->start(imageLoader);
+}
+
+void MainWindow::imageListModel_changed()
+{
+    ui->imageListDockWidget->setWindowTitle(tr("Image List %1/%2").arg(m_imageListModel->rowCount()).arg(m_imageListModel->imageCount()));
 }
 
 void MainWindow::imageLoaded(const QImage &image, int, int, int)

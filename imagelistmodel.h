@@ -22,6 +22,9 @@ public:
     ImageInfo imageInfo(const QModelIndex &index) const;
     QString imagePath(const QModelIndex &index) const;
 
+signals:
+    void changed();
+
 public slots:
     void addImageFileInfoList(const QFileInfoList &files);
     void clear();

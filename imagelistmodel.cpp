@@ -67,15 +67,20 @@ void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
     foreach (const QFileInfo &file, files)
         m_imageInfoList.append(ImageInfo(file));
     endInsertRows();
+
+    emit changed();
 }
 
 void ImageListModel::clear()
 {
     // TODO m_threadPool.clear();
+
     beginResetModel();
     m_imageInfoList.clear();
     m_imageInfoCount = 0;
     endResetModel();
+
+    emit changed();
 }
 
 bool ImageListModel::canFetchMore(const QModelIndex &) const
@@ -105,6 +110,7 @@ void ImageListModel::fetchMore(const QModelIndex &)
         m_threadPool.start(imageLoader);
     }
 
+    emit changed();
     qDebug("ImageListModel::fetchMore(): from %d to %d", beginIndex, endIndex);
 }
 

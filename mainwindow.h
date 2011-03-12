@@ -35,6 +35,7 @@ private slots:
     void scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files);
     void scanFolderThread_finished();
     void on_imageListListView_clicked(const QModelIndex &index);
+    void imageListModel_changed();
     void imageLoaded(const QImage &image, int, int, int);
     void on_imageListListView_customContextMenuRequested(const QPoint &pos);
     void scanFolderCancelButton_clicked();
