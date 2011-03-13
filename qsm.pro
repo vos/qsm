@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui xml opengl
+QT += core gui opengl xml
 
 TARGET = qsm
 TEMPLATE = app
@@ -15,6 +15,7 @@ HEADERS += mainwindow.h \
            imageinfo.h \
            imagelistmodel.h \
            imageloader.h \
+           imageloaderpool.h \
            imagewidget.h \
            slideshowlistmodel.h
 
@@ -24,6 +25,7 @@ SOURCES += main.cpp \
            imageinfo.cpp \
            imagelistmodel.cpp \
            imageloader.cpp \
+           imageloaderpool.cpp \
            imagewidget.cpp \
            slideshowlistmodel.cpp
 

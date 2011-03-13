@@ -3,10 +3,10 @@
 
 #include <QAbstractListModel>
 #include <QFileInfoList>
-#include <QThreadPool>
 #include <QImage>
 
 #include "imageinfo.h"
+#include "imageloaderpool.h"
 
 class ImageListModel : public QAbstractListModel
 {
@@ -36,7 +36,7 @@ private:
     QList<ImageInfo> m_imageInfoList;
     int m_imageInfoCount;
 
-    QThreadPool m_threadPool;
+    ImageLoaderPool m_imageLoaderPool;
 
     bool canFetchMore(const QModelIndex &parent) const;
     void fetchMore(const QModelIndex &parent);

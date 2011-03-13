@@ -73,7 +73,7 @@ void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
 
 void ImageListModel::clear()
 {
-    // TODO m_threadPool.clear();
+    m_imageLoaderPool.clear();
 
     beginResetModel();
     m_imageInfoList.clear();
@@ -107,7 +107,7 @@ void ImageListModel::fetchMore(const QModelIndex &)
         ImageLoader *imageLoader = new ImageLoader(m_imageInfoList.at(i).imagePath(), i);
         imageLoader->setScaleSize();
         connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(thumbnailLoaded(QImage, int, int, int)));
-        m_threadPool.start(imageLoader);
+        m_imageLoaderPool.start(imageLoader);
     }
 
     emit changed();
