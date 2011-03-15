@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QFileSystemModel>
+#include <QThreadPool>
 
 #include <QDebug>
 

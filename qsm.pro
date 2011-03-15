@@ -16,6 +16,7 @@ HEADERS += mainwindow.h \
            imagelistmodel.h \
            imageloader.h \
            imageloaderpool.h \
+           imageloaderthread.h \
            imagewidget.h \
            slideshowlistmodel.h
 
@@ -26,6 +27,7 @@ SOURCES += main.cpp \
            imagelistmodel.cpp \
            imageloader.cpp \
            imageloaderpool.cpp \
+           imageloaderthread.cpp \
            imagewidget.cpp \
            slideshowlistmodel.cpp
 
