@@ -1,5 +1,7 @@
 #include "imageloaderthread.h"
 
+#include "imageloader.h"
+
 ImageLoaderThread::ImageLoaderThread(ImageLoader *loader, QObject *parent) :
     QThread(parent), m_loader(loader)
 {

@@ -3,7 +3,7 @@
 
 #include <QThread>
 
-#include "imageloader.h"
+class ImageLoader;
 
 class ImageLoaderThread : public QThread
 {

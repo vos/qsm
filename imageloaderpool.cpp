@@ -10,6 +10,7 @@ ImageLoaderPool::ImageLoaderPool(QObject *parent) :
 
 ImageLoaderPool::~ImageLoaderPool()
 {
+    clear();
     qDeleteAll(m_activeThreads);
 }
 
@@ -25,6 +26,7 @@ void ImageLoaderPool::thread_finished()
 {
     ImageLoaderThread *thread = qobject_cast<ImageLoaderThread*>(sender());
     Q_ASSERT(thread);
+
     m_activeThreads.remove(thread);
     delete thread;
 
@@ -41,7 +43,7 @@ void ImageLoaderPool::clear()
     }
     m_queue.clear();
 
-    // terminate all runing thread (not possible without memory leaks)
+    // terminate all runing threads (not possible without memory leaks)
 //    foreach (ImageLoaderThread *thread, m_activeThreads) {
 //        thread->terminate();
 //        thread->wait();
