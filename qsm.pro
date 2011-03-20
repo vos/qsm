@@ -38,6 +38,8 @@ SOURCES += main.cpp \
 
 FORMS += mainwindow.ui
 
+OTHER_FILES += README.md
+
 
 TRANSLATIONS = qsm_de.ts
 CODECFORTR = ISO-8859-15
