@@ -10,25 +10,30 @@ TARGET = qsm
 TEMPLATE = app
 
 
-HEADERS += mainwindow.h \
+HEADERS += qsm.h \
+           mainwindow.h \
            scanfolderthread.h \
            imageinfo.h \
-           imagelistmodel.h \
            imageloader.h \
-           imageloaderpool.h \
            imageloaderthread.h \
+           imageloaderpool.h \
+           imagelistmodel.h \
            imagewidget.h \
+           slideshowimage.h \
+           slideshow.h \
            slideshowlistmodel.h
 
 SOURCES += main.cpp \
            mainwindow.cpp \
            scanfolderthread.cpp \
            imageinfo.cpp \
-           imagelistmodel.cpp \
            imageloader.cpp \
-           imageloaderpool.cpp \
            imageloaderthread.cpp \
+           imageloaderpool.cpp \
+           imagelistmodel.cpp \
            imagewidget.cpp \
+           slideshowimage.cpp \
+           slideshow.cpp \
            slideshowlistmodel.cpp
 
 FORMS += mainwindow.ui
