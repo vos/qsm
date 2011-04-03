@@ -8,8 +8,9 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setOrganizationName("Fachhochschule Südwestfalen");
-    app.setApplicationName("QSM - Qt SlideShow Manager");
+    app.setOrganizationName("FH-SWF");
+    app.setOrganizationDomain("fh-swf.de");
+    app.setApplicationName("Qt SlideShow Manager");
 
     QTranslator translator;
     if (QLocale::system().language() == QLocale::German) {
