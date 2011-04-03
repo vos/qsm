@@ -1,18 +1,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "scanfolderthread.h"
-#include "imagelistmodel.h"
-#include "imagewidget.h"
-#include "slideshowlistmodel.h"
-#include "imageloader.h"
-
 #include <QLabel>
 #include <QMessageBox>
 #include <QFileSystemModel>
 #include <QThreadPool>
 
 #include <QDebug>
+
+#include "scanfolderthread.h"
+#include "imagelistmodel.h"
+#include "imagewidget.h"
+#include "slideshowlistmodel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -108,7 +107,7 @@ void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFi
     qDebug() << "folderScanned: " << folder << ", images found = " << files.size();
     m_scanFolderLabel->setText(tr("Scanning folder %1 ...").arg(folder));
     m_imageListModel->addImageFileInfoList(files);
-    m_slideshowListModel->addSlideshow(folder); // test
+    m_slideshowListModel->addSlideshow(Slideshow(folder)); // test
 }
 
 void MainWindow::scanFolderThread_finished()

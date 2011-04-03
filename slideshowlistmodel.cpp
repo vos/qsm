@@ -7,29 +7,50 @@ SlideshowListModel::SlideshowListModel(QObject *parent) :
 
 int SlideshowListModel::rowCount(const QModelIndex &) const
 {
-    return list.count();
+    return m_slideshowList.count();
 }
 
 QVariant SlideshowListModel::data(const QModelIndex &index, int role) const
 {
-    if (index.row() < 0 || index.row() >= list.size())
+    if (!index.isValid() || index.row() >= m_slideshowList.count())
         return QVariant();
 
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole || role == Qt::EditRole)
-        return list.at(index.row());
+        return QString("%1: ").arg(index.row()) + m_slideshowList.at(index.row()).path();
 
     return QVariant();
 }
 
-void SlideshowListModel::addSlideshow(const QString &slideshow)
+void SlideshowListModel::addSlideshow(const Slideshow &slideshow)
 {
-    beginInsertRows(QModelIndex(), list.count(), list.count());
-    list.append(slideshow);
+    beginInsertRows(QModelIndex(), m_slideshowList.count(), m_slideshowList.count());
+    m_slideshowList.append(slideshow);
     endInsertRows();
+}
+
+Slideshow* SlideshowListModel::slideshow(const QModelIndex &index) const
+{
+    if (!index.isValid() || index.row() >= m_slideshowList.count())
+        return NULL;
+
+    return const_cast<Slideshow*>(&m_slideshowList[index.row()]);
+}
+
+bool SlideshowListModel::removeSlideshow(const QModelIndex &index)
+{
+    if (!index.isValid() || index.row() >= m_slideshowList.count())
+        return false;
+
+    beginRemoveRows(QModelIndex(), index.row(), index.row());
+    m_slideshowList.removeAt(index.row());
+    endRemoveRows();
+
+    return true;
 }
 
 void SlideshowListModel::clear()
 {
-    list.clear();
-    reset();
+    beginResetModel();
+    m_slideshowList.clear();
+    endResetModel();
 }

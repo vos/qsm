@@ -2,7 +2,9 @@
 #define SLIDESHOWLISTMODEL_H
 
 #include <QAbstractListModel>
-#include <QStringList>
+#include <QList>
+
+#include "slideshow.h"
 
 class SlideshowListModel : public QAbstractListModel
 {
@@ -14,12 +16,15 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
+    Slideshow* slideshow(const QModelIndex &index) const;
+    bool removeSlideshow(const QModelIndex &index);
+
 public slots:
-    void addSlideshow(const QString &slideshow);
+    void addSlideshow(const Slideshow &slideshow);
     void clear();
 
 private:
-    QStringList list;
+    QList<Slideshow> m_slideshowList;
 };
 
 #endif // SLIDESHOWLISTMODEL_H
