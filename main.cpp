@@ -1,7 +1,8 @@
 #include <QApplication>
+#include <QSettings>
 #include <QLocale>
-#include <QTextCodec>
 #include <QTranslator>
+#include <QTextCodec>
 
 #include "mainwindow.h"
 
@@ -12,8 +13,12 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("fh-swf.de");
     app.setApplicationName("Qt SlideShow Manager");
 
+    QSettings settings;
+    QLocale::Language language = (QLocale::Language)settings.value("language",
+        (int)QLocale::system().language()).toInt();
+
     QTranslator translator;
-    if (QLocale::system().language() == QLocale::German) {
+    if (language == QLocale::German) {
         QTextCodec::setCodecForTr(QTextCodec::codecForName("ISO-8859-15"));
         translator.load("qsm_de");
     }
