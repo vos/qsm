@@ -27,6 +27,8 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="actionNewSlideshow"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -265,6 +267,20 @@
    </property>
    <property name="statusTip">
     <string>Show the application's About box</string>
+   </property>
+  </action>
+  <action name="actionNewSlideshow">
+   <property name="text">
+    <string>&amp;New Slideshow</string>
+   </property>
+   <property name="toolTip">
+    <string>Creates an empty Slideshow</string>
+   </property>
+   <property name="statusTip">
+    <string>Creates an empty Slideshow</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>

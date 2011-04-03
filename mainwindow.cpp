@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QSettings>
 #include <QLabel>
 #include <QMessageBox>
 #include <QFileSystemModel>
@@ -51,8 +52,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imageListListView->setIconSize(QSize(64, 64));
 
     m_slideshowListModel = new SlideshowListModel(this);
-    ui->slideshowListListView->setModel(m_slideshowListModel); // test
-    ui->slideshowImageListListView->setModel(m_imageListModel); // test
+    ui->slideshowListListView->setModel(m_slideshowListModel);
+    m_slideshowImageListModel = new ImageListModel(this);
+    connect(m_slideshowImageListModel, SIGNAL(changed()), SLOT(slideshowImageListModel_changed()));
+    ui->slideshowImageListListView->setModel(m_slideshowImageListModel);
 
     m_imageWidget = new ImageWidget(this);
     setCentralWidget(m_imageWidget);
@@ -69,8 +72,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete m_slideshowListModel;
     delete m_imageWidget;
+    delete m_slideshowImageListModel;
+    delete m_slideshowListModel;
     delete m_imageListModel;
     delete m_scanFolderThread;
     delete m_folderBrowserModel;
@@ -93,7 +97,6 @@ void MainWindow::scanFolderThread_started()
 {
     qDebug("scanFolderThread_started");
     m_imageListModel->clear();
-    m_slideshowListModel->clear(); // test
     statusBar()->showMessage(tr("Scanning folder %1 ...").arg(m_scanFolderThread->getFolder()));
     m_scanFolderLabel->clear();
     m_scanFolderLabel->setVisible(true);
@@ -107,7 +110,6 @@ void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFi
     qDebug() << "folderScanned: " << folder << ", images found = " << files.size();
     m_scanFolderLabel->setText(tr("Scanning folder %1 ...").arg(folder));
     m_imageListModel->addImageFileInfoList(files);
-    m_slideshowListModel->addSlideshow(Slideshow(folder)); // test
 }
 
 void MainWindow::scanFolderThread_finished()
@@ -139,6 +141,11 @@ void MainWindow::imageListModel_changed()
     ui->imageListDockWidget->setWindowTitle(tr("Image List %1/%2").arg(m_imageListModel->rowCount()).arg(m_imageListModel->imageCount()));
 }
 
+void MainWindow::slideshowImageListModel_changed()
+{
+    ui->slideshowImageListDockWidget->setWindowTitle(tr("Image List %1/%2").arg(m_slideshowImageListModel->rowCount()).arg(m_slideshowImageListModel->imageCount()));
+}
+
 void MainWindow::imageLoaded(const QImage &image, int, int, int)
 {
     m_imageWidget->setImage(image);
@@ -159,6 +166,11 @@ void MainWindow::scanFolderCancelButton_clicked()
     m_scanFolderAbortButton->setText(tr("aborting..."));
     m_scanFolderAbortButton->setEnabled(false);
     m_scanFolderThread->abort();
+}
+
+void MainWindow::on_actionNewSlideshow_triggered()
+{
+    m_slideshowListModel->addSlideshow(Slideshow("New Slideshow"));
 }
 
 void MainWindow::on_actionStatusbar_triggered()

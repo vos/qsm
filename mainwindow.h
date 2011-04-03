@@ -36,9 +36,12 @@ private slots:
     void scanFolderThread_finished();
     void on_imageListListView_clicked(const QModelIndex &index);
     void imageListModel_changed();
+    void slideshowImageListModel_changed();
     void imageLoaded(const QImage &image, int, int, int);
     void on_imageListListView_customContextMenuRequested(const QPoint &pos);
     void scanFolderCancelButton_clicked();
+
+    void on_actionNewSlideshow_triggered();
     void on_actionStatusbar_triggered();
     void on_actionAboutQsm_triggered();
 
@@ -49,8 +52,9 @@ private:
     QFileSystemModel *m_folderBrowserModel;
     ScanFolderThread *m_scanFolderThread;
     ImageListModel *m_imageListModel;
-    ImageWidget *m_imageWidget;
     SlideshowListModel *m_slideshowListModel;
+    ImageListModel *m_slideshowImageListModel;
+    ImageWidget *m_imageWidget;
 };
 
 #endif // MAINWINDOW_H
