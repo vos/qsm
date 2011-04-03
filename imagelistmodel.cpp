@@ -58,7 +58,16 @@ QString ImageListModel::imagePath(const QModelIndex &index) const
     return m_imageInfoList.at(index.row()).imagePath();
 }
 
-void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
+void ImageListModel::addImage(const ImageInfo &imageInfo)
+{
+    beginInsertRows(QModelIndex(), m_imageInfoList.count(), m_imageInfoList.count() + 1);
+    m_imageInfoList.append(imageInfo);
+    endInsertRows();
+
+    emit changed();
+}
+
+void ImageListModel::addImages(const QFileInfoList &files)
 {
     if (files.count() == 0)
         return;
@@ -67,6 +76,33 @@ void ImageListModel::addImageFileInfoList(const QFileInfoList &files)
     foreach (const QFileInfo &file, files)
         m_imageInfoList.append(ImageInfo(file));
     endInsertRows();
+
+    emit changed();
+}
+
+void ImageListModel::removeImage(const QModelIndex &index)
+{
+    if (!index.isValid() || index.row() >= m_imageInfoList.count())
+        return;
+
+    beginRemoveRows(QModelIndex(), index.row(), index.row());
+    m_imageInfoList.removeAt(index.row());
+    endRemoveRows();
+
+    emit changed();
+}
+
+void ImageListModel::removeImages(const QModelIndex &startIndex, const QModelIndex &endIndex)
+{
+    if (!startIndex.isValid() || startIndex.row() >= m_imageInfoList.count() ||
+            !endIndex.isValid() || endIndex.row() >= m_imageInfoList.count() ||
+            startIndex.row() > endIndex.row())
+        return;
+
+    beginRemoveRows(QModelIndex(), startIndex.row(), endIndex.row());
+    for (int i = startIndex.row(); i <= endIndex.row(); i++)
+        m_imageInfoList.removeAt(i);
+    endRemoveRows();
 
     emit changed();
 }

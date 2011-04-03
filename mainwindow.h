@@ -16,6 +16,7 @@ class ScanFolderThread;
 class ImageListModel;
 class ImageWidget;
 class SlideshowListModel;
+class Slideshow;
 
 namespace Ui {
     class MainWindow;
@@ -35,7 +36,10 @@ private slots:
     void scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files);
     void scanFolderThread_finished();
     void on_imageListListView_clicked(const QModelIndex &index);
+    void on_imageListListView_doubleClicked(const QModelIndex &index);
     void imageListModel_changed();
+    void on_slideshowListListView_activated(const QModelIndex &index);
+    void on_slideshowImageListListView_clicked(const QModelIndex &index);
     void slideshowImageListModel_changed();
     void imageLoaded(const QImage &image, int, int, int);
     void on_imageListListView_customContextMenuRequested(const QPoint &pos);
@@ -55,6 +59,11 @@ private:
     SlideshowListModel *m_slideshowListModel;
     ImageListModel *m_slideshowImageListModel;
     ImageWidget *m_imageWidget;
+
+    QString m_currentImagePath;
+    Slideshow *m_currentSlideshow;
+
+    void prepareImage(const ImageListModel *model, const QModelIndex &index);
 };
 
 #endif // MAINWINDOW_H

@@ -13,6 +13,7 @@
 #include "imagelistmodel.h"
 #include "imagewidget.h"
 #include "slideshowlistmodel.h"
+#include "slideshow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -67,6 +68,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_scanFolderAbortButton->setVisible(false);
     connect(m_scanFolderAbortButton, SIGNAL(clicked()), SLOT(scanFolderCancelButton_clicked()));
     statusBar()->addPermanentWidget(m_scanFolderAbortButton);
+
+    m_currentSlideshow = NULL;
+
     statusBar()->showMessage(tr("Ready"));
 }
 
@@ -109,7 +113,7 @@ void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFi
 {
     qDebug() << "folderScanned: " << folder << ", images found = " << files.size();
     m_scanFolderLabel->setText(tr("Scanning folder %1 ...").arg(folder));
-    m_imageListModel->addImageFileInfoList(files);
+    m_imageListModel->addImages(files);
 }
 
 void MainWindow::scanFolderThread_finished()
@@ -120,9 +124,17 @@ void MainWindow::scanFolderThread_finished()
     m_scanFolderAbortButton->setVisible(false);
 }
 
-void MainWindow::on_imageListListView_clicked(const QModelIndex &index)
+void MainWindow::prepareImage(const ImageListModel *model, const QModelIndex &index)
 {
-    QVariant var = m_imageListModel->data(index, Qt::DecorationRole);
+    Q_ASSERT(model);
+
+    QString imagePath = model->imagePath(index);
+    if (imagePath == m_currentImagePath)
+        return;
+
+    m_currentImagePath = imagePath;
+
+    QVariant var = model->data(index, Qt::DecorationRole);
     if (var.canConvert<QIcon>()) {
         // set up preview image
         QIcon icon = var.value<QIcon>();
@@ -130,15 +142,47 @@ void MainWindow::on_imageListListView_clicked(const QModelIndex &index)
     }
 
     // load the actual image inside a separate thread
-    QString imagePath = m_imageListModel->imagePath(index);
     ImageLoader *imageLoader = new ImageLoader(imagePath);
     connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(imageLoaded(QImage, int, int, int)));
     QThreadPool::globalInstance()->start(imageLoader);
 }
 
+void MainWindow::on_imageListListView_clicked(const QModelIndex &index)
+{
+    prepareImage(m_imageListModel, index);
+}
+
+void MainWindow::on_imageListListView_doubleClicked(const QModelIndex &index)
+{
+    if (!m_currentSlideshow)
+        return;
+
+    m_currentSlideshow->addImage(SlideshowImage(m_imageListModel->imagePath(index)));
+    m_slideshowImageListModel->addImage(m_imageListModel->imageInfo(index));
+}
+
 void MainWindow::imageListModel_changed()
 {
     ui->imageListDockWidget->setWindowTitle(tr("Image List %1/%2").arg(m_imageListModel->rowCount()).arg(m_imageListModel->imageCount()));
+}
+
+void MainWindow::on_slideshowListListView_activated(const QModelIndex &index)
+{
+    m_currentSlideshow = m_slideshowListModel->slideshow(index);
+    if (!m_currentSlideshow)
+        return;
+
+    // prepare slideshow image list
+    m_slideshowImageListModel->clear();
+    QFileInfoList imageInfoList;
+    foreach (const SlideshowImage &image, m_currentSlideshow->images())
+        imageInfoList.append(image.fileInfo());
+    m_slideshowImageListModel->addImages(imageInfoList);
+}
+
+void MainWindow::on_slideshowImageListListView_clicked(const QModelIndex &index)
+{
+    prepareImage(m_slideshowImageListModel, index);
 }
 
 void MainWindow::slideshowImageListModel_changed()

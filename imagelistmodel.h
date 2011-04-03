@@ -26,7 +26,10 @@ signals:
     void changed();
 
 public slots:
-    void addImageFileInfoList(const QFileInfoList &files);
+    void addImage(const ImageInfo &imageInfo);
+    void addImages(const QFileInfoList &files);
+    void removeImage(const QModelIndex &index);
+    void removeImages(const QModelIndex &startIndex, const QModelIndex &endIndex);
     void clear();
 
 private slots:

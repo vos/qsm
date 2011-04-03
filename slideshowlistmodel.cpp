@@ -15,8 +15,8 @@ QVariant SlideshowListModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || index.row() >= m_slideshowList.count())
         return QVariant();
 
-    if (role == Qt::DisplayRole || role == Qt::ToolTipRole || role == Qt::EditRole)
-        return QString("%1: ").arg(index.row()) + m_slideshowList.at(index.row()).name();
+    if (role == Qt::DisplayRole || role == Qt::EditRole)
+        return m_slideshowList.at(index.row()).name();
 
     return QVariant();
 }
