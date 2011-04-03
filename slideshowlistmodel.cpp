@@ -5,6 +5,14 @@ SlideshowListModel::SlideshowListModel(QObject *parent) :
 {
 }
 
+Qt::ItemFlags SlideshowListModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::ItemIsEnabled;
+
+    return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
+}
+
 int SlideshowListModel::rowCount(const QModelIndex &) const
 {
     return m_slideshowList.count();
@@ -19,6 +27,19 @@ QVariant SlideshowListModel::data(const QModelIndex &index, int role) const
         return m_slideshowList.at(index.row()).name();
 
     return QVariant();
+}
+
+bool SlideshowListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (!index.isValid() || index.row() >= m_slideshowList.count())
+        return false;
+
+    if (role == Qt::EditRole) {
+        m_slideshowList[index.row()].setName(value.toString());
+        emit dataChanged(index, index);
+        return true;
+    }
+    return false;
 }
 
 void SlideshowListModel::addSlideshow(const Slideshow &slideshow)

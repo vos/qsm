@@ -11,9 +11,8 @@
 
 #include "scanfolderthread.h"
 #include "imagelistmodel.h"
-#include "imagewidget.h"
 #include "slideshowlistmodel.h"
-#include "slideshow.h"
+#include "imagewidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
