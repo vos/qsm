@@ -192,7 +192,7 @@ void MainWindow::on_slideshowImageListListView_clicked(const QModelIndex &index)
 
 void MainWindow::slideshowImageListModel_changed()
 {
-    ui->slideshowImageListDockWidget->setWindowTitle(tr("Image List %1/%2").arg(m_slideshowImageListModel->rowCount()).arg(m_slideshowImageListModel->imageCount()));
+    ui->slideshowImageListDockWidget->setWindowTitle(tr("Slideshow Image List %1/%2").arg(m_slideshowImageListModel->rowCount()).arg(m_slideshowImageListModel->imageCount()));
 }
 
 void MainWindow::imageLoaded(const QImage &image, int, int, int)

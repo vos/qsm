@@ -38,6 +38,8 @@ SOURCES += main.cpp \
 
 FORMS += mainwindow.ui
 
+RESOURCES += icons.qrc
+
 OTHER_FILES += README.md
 
 

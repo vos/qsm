@@ -29,6 +29,8 @@
     </property>
     <addaction name="actionNewSlideshow"/>
     <addaction name="separator"/>
+    <addaction name="action_SaveAllSlideshows"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -72,6 +74,13 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNewSlideshow"/>
+   <addaction name="action_SaveAllSlideshows"/>
+   <addaction name="separator"/>
+   <addaction name="actionOptions"/>
+   <addaction name="separator"/>
+   <addaction name="actionQsmHelp"/>
+   <addaction name="actionAboutQsm"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="folderBrowserDockWidget">
@@ -123,12 +132,12 @@
           </item>
           <item>
            <property name="text">
-            <string>Date</string>
+            <string>Name Desc</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Name Desc</string>
+            <string>Date</string>
            </property>
           </item>
           <item>
@@ -204,21 +213,11 @@
         <item>
          <widget class="QComboBox" name="slideshowSortComboBox">
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <item>
            <property name="text">
             <string>Name</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Date</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Unsorted</string>
            </property>
           </item>
           <item>
@@ -228,13 +227,26 @@
           </item>
           <item>
            <property name="text">
+            <string>Date</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>Date Desc</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Unsorted</string>
            </property>
           </item>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="slideshowStartPushButton">
+          <property name="statusTip">
+           <string>Starts the Slideshow</string>
+          </property>
           <property name="text">
            <string>Start</string>
           </property>
@@ -285,6 +297,10 @@
    </property>
   </action>
   <action name="actionOptions">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/spanner_48.png</normaloff>:/icons/spanner_48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Options...</string>
    </property>
@@ -293,6 +309,10 @@
    </property>
   </action>
   <action name="actionQsmHelp">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/question_48.png</normaloff>:/icons/question_48.png</iconset>
+   </property>
    <property name="text">
     <string>QSM &amp;Help</string>
    </property>
@@ -304,6 +324,10 @@
    </property>
   </action>
   <action name="actionAboutQt">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/info_48.png</normaloff>:/icons/info_48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;About Qt...</string>
    </property>
@@ -315,6 +339,10 @@
    </property>
   </action>
   <action name="actionAboutQsm">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/info_48.png</normaloff>:/icons/info_48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;About QSM...</string>
    </property>
@@ -326,6 +354,10 @@
    </property>
   </action>
   <action name="actionNewSlideshow">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/add_48.png</normaloff>:/icons/add_48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;New Slideshow</string>
    </property>
@@ -339,9 +371,26 @@
     <string>Ctrl+N</string>
    </property>
   </action>
+  <action name="action_SaveAllSlideshows">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/floppy_disk_48.png</normaloff>:/icons/floppy_disk_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save all Slideshows</string>
+   </property>
+   <property name="statusTip">
+    <string>Save all Slideshows</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionExit</sender>

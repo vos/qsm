@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/add_48.png</file>
+        <file>icons/floppy_disk_48.png</file>
+        <file>icons/info_48.png</file>
+        <file>icons/question_48.png</file>
+        <file>icons/spanner_48.png</file>
+    </qresource>
+</RCC>
