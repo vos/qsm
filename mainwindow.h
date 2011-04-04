@@ -49,6 +49,8 @@ private slots:
     void on_actionStatusbar_triggered();
     void on_actionAboutQsm_triggered();
 
+    void on_includeSubfoldersCheckBox_toggled(bool checked);
+
 private:
     Ui::MainWindow *ui;
     QLabel *m_scanFolderLabel;
@@ -63,6 +65,7 @@ private:
     QString m_currentImagePath;
     Slideshow *m_currentSlideshow;
 
+    void scanFolder(const QModelIndex &index, bool includeSubfolders = false);
     void prepareImage(const ImageListModel *model, const QModelIndex &index);
 };
 

@@ -86,14 +86,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_folderBrowserTreeView_clicked(const QModelIndex &index)
+void MainWindow::scanFolder(const QModelIndex &index, bool includeSubfolders)
 {
     if (m_scanFolderThread->isRunning()) {
         scanFolderCancelButton_clicked();
         m_scanFolderThread->wait();
     }
-    m_scanFolderThread->setFolder(m_folderBrowserModel->filePath(index), ui->includeSubfoldersCheckBox->isChecked());
+    m_scanFolderThread->setFolder(m_folderBrowserModel->filePath(index), includeSubfolders);
     m_scanFolderThread->start(QThread::NormalPriority);
+}
+
+void MainWindow::on_folderBrowserTreeView_clicked(const QModelIndex &index)
+{
+    if (index.isValid())
+        scanFolder(index, ui->includeSubfoldersCheckBox->isChecked());
 }
 
 void MainWindow::scanFolderThread_started()
@@ -227,4 +233,11 @@ void MainWindow::on_actionAboutQsm_triggered()
             tr("<b>Qt SlideShow Manager</b> v0.1 alpha<br/><br/>"
                "Copyright &copy; 2011 Fachhochschule S&uuml;dwestfalen<br/>"
                "Written by Alexander Vos and Till Althaus"));
+}
+
+void MainWindow::on_includeSubfoldersCheckBox_toggled(bool checked)
+{
+    QModelIndex index = ui->folderBrowserTreeView->currentIndex();
+    if (index.isValid())
+        scanFolder(index, checked);
 }

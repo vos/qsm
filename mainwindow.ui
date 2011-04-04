@@ -112,7 +112,31 @@
          <number>5</number>
         </property>
         <item>
-         <widget class="QComboBox" name="imageListSortComboBox"/>
+         <widget class="QComboBox" name="imageListSortComboBox">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>Name</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Date</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Name Desc</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Date Desc</string>
+           </property>
+          </item>
+         </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="includeSubfoldersCheckBox">
@@ -178,7 +202,36 @@
          <number>5</number>
         </property>
         <item>
-         <widget class="QComboBox" name="slideshowSortComboBox"/>
+         <widget class="QComboBox" name="slideshowSortComboBox">
+          <property name="currentIndex">
+           <number>2</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>Name</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Date</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Unsorted</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Name Desc</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Date Desc</string>
+           </property>
+          </item>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="slideshowStartPushButton">
