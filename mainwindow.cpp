@@ -219,7 +219,7 @@ void MainWindow::scanFolderCancelButton_clicked()
 
 void MainWindow::on_actionNewSlideshow_triggered()
 {
-    m_slideshowListModel->addSlideshow(Slideshow("New Slideshow"));
+    m_slideshowListModel->addSlideshow(Slideshow(tr("New Slideshow")));
 }
 
 void MainWindow::on_actionStatusbar_triggered()
