@@ -5,5 +5,11 @@
         <file>icons/info_48.png</file>
         <file>icons/question_48.png</file>
         <file>icons/spanner_48.png</file>
+        <file>icons/begin.png</file>
+        <file>icons/down.png</file>
+        <file>icons/end.png</file>
+        <file>icons/multipleDown.png</file>
+        <file>icons/multipleUp.png</file>
+        <file>icons/up.png</file>
     </qresource>
 </RCC>

@@ -117,7 +117,7 @@ void MainWindow::scanFolderThread_started()
 void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFileInfoList &files)
 {
     qDebug() << "folderScanned: " << folder << ", images found = " << files.size();
-    m_scanFolderLabel->setText(tr("Scanning folder %1 ...").arg(folder));
+    m_scanFolderLabel->setText(tr("Scanning folder %1 ...").arg(folder.left(100)));
     m_imageListModel->addImages(files);
 }
 
