@@ -49,6 +49,9 @@ SlideshowImage* Slideshow::image(int index)
 
 void Slideshow::removeImage(int index)
 {
+    if (index < 0 || index >= imageCount())
+        return;
+
     m_images.removeAt(index);
 }
 

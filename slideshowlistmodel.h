@@ -19,14 +19,23 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     Slideshow* slideshow(const QModelIndex &index) const;
-    bool removeSlideshow(const QModelIndex &index);
+
+    inline const QList<Slideshow>& slideshowList() const { return m_slideshowList; }
+    inline Slideshow* currentSlideshow() const { return m_currentSlideshow; }
+    inline const QModelIndex& currentSlideshowIndex() const { return m_currentSlideshowIndex; }
 
 public slots:
-    void addSlideshow(const Slideshow &slideshow);
+    QModelIndex addSlideshow(const Slideshow &slideshow);
+    bool removeSlideshow(const QModelIndex &index);
     void clear();
+    void addImage(const SlideshowImage &image);
+    void removeImage(const QModelIndex &index);
+    bool setCurrentSlideshow(const QModelIndex &index);
 
 private:
     QList<Slideshow> m_slideshowList;
+    Slideshow *m_currentSlideshow;
+    QModelIndex m_currentSlideshowIndex;
 };
 
 #endif // SLIDESHOWLISTMODEL_H

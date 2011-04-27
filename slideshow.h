@@ -24,7 +24,7 @@ public:
 
     void addImage(const SlideshowImage &image);
     SlideshowImage* image(int index);
-    const QList<SlideshowImage>& images() { return m_images; }
+    inline const QList<SlideshowImage>& images() { return m_images; }
     void removeImage(int index);
     void removeImage(const SlideshowImage &image);
     inline int imageCount() const { return m_images.count(); }
