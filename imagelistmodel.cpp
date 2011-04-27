@@ -87,6 +87,8 @@ void ImageListModel::removeImage(const QModelIndex &index)
 
     beginRemoveRows(QModelIndex(), index.row(), index.row());
     m_imageInfoList.removeAt(index.row());
+    if (m_imageInfoCount > m_imageInfoList.count())
+        m_imageInfoCount = m_imageInfoList.count();
     endRemoveRows();
 
     emit changed();
@@ -102,6 +104,8 @@ void ImageListModel::removeImages(const QModelIndex &startIndex, const QModelInd
     beginRemoveRows(QModelIndex(), startIndex.row(), endIndex.row());
     for (int i = startIndex.row(); i <= endIndex.row(); i++)
         m_imageInfoList.removeAt(i);
+    if (m_imageInfoCount > m_imageInfoList.count())
+        m_imageInfoCount = m_imageInfoList.count();
     endRemoveRows();
 
     emit changed();

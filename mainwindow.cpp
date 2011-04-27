@@ -62,6 +62,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_slideshowImageListModel, SIGNAL(changed()), SLOT(slideshowImageListModel_changed()));
     ui->slideshowImageListView->setModel(m_slideshowImageListModel);
     ui->slideshowImageListView->setIconSize(QSize(64, 64));
+    m_actionRemoveSlideshowImage = new QAction(tr("Remove Image From Slideshow"), ui->slideshowImageListView);
+    m_actionRemoveSlideshowImage->setShortcut(Qt::Key_Delete);
+    m_actionRemoveSlideshowImage->setShortcutContext(Qt::WidgetShortcut);
+    connect(m_actionRemoveSlideshowImage, SIGNAL(triggered()), SLOT(actionRemoveSlideshowImage_triggered()));
+    ui->slideshowImageListView->addAction(m_actionRemoveSlideshowImage);
 
     m_imageWidget = new ImageWidget(this);
     setCentralWidget(m_imageWidget);
@@ -80,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete m_imageWidget;
+    delete m_actionRemoveSlideshowImage;
     delete m_slideshowImageListModel;
     delete m_actionRemoveSlideshow;
     delete m_slideshowListModel;
@@ -220,9 +226,12 @@ void MainWindow::on_slideshowImageListView_clicked(const QModelIndex &index)
 
 void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoint &pos)
 {
-    QMenu menu(ui->slideshowImageListView);
-    menu.addAction(tr("Remove Image"));
-    menu.exec(ui->slideshowImageListView->mapToGlobal(pos));
+    if (ui->slideshowImageListView->currentIndex().isValid()) {
+        QMenu menu(ui->slideshowImageListView);
+        menu.addAction(m_actionRemoveSlideshowImage);
+        menu.addAction(tr("Remove Image From File System"));
+        menu.exec(ui->slideshowImageListView->mapToGlobal(pos));
+    }
 }
 
 void MainWindow::slideshowImageListModel_changed()
@@ -268,6 +277,12 @@ void MainWindow::on_actionAboutQsm_triggered()
 void MainWindow::actionRemoveSlideshow_triggered()
 {
     m_slideshowListModel->removeSlideshow(ui->slideshowListView->currentIndex());
+}
+
+void MainWindow::actionRemoveSlideshowImage_triggered()
+{
+    m_slideshowListModel->removeImage(ui->slideshowImageListView->currentIndex());
+    m_slideshowImageListModel->removeImage(ui->slideshowImageListView->currentIndex());
 }
 
 void MainWindow::on_includeSubfoldersCheckBox_toggled(bool checked)

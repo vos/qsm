@@ -51,6 +51,7 @@ private slots:
     void on_actionAboutQsm_triggered();
 
     void actionRemoveSlideshow_triggered();
+    void actionRemoveSlideshowImage_triggered();
 
     void on_includeSubfoldersCheckBox_toggled(bool checked);
 
@@ -64,6 +65,7 @@ private:
     SlideshowListModel *m_slideshowListModel;
     QAction *m_actionRemoveSlideshow;
     ImageListModel *m_slideshowImageListModel;
+    QAction *m_actionRemoveSlideshowImage;
     ImageWidget *m_imageWidget;
 
     QString m_currentImagePath;
