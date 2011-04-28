@@ -29,6 +29,7 @@
     </property>
     <addaction name="actionNewSlideshow"/>
     <addaction name="separator"/>
+    <addaction name="actionReloadAllSlideshows"/>
     <addaction name="actionSaveAllSlideshows"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -180,9 +181,6 @@
    <widget class="SlideshowListView" name="slideshowListView">
     <property name="contextMenuPolicy">
      <enum>Qt::CustomContextMenu</enum>
-    </property>
-    <property name="editTriggers">
-     <set>QAbstractItemView::EditKeyPressed</set>
     </property>
    </widget>
   </widget>
@@ -364,9 +362,6 @@
    <property name="statusTip">
     <string>Exit the application</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+Q</string>
-   </property>
   </action>
   <action name="actionStatusbar">
    <property name="checkable">
@@ -400,13 +395,10 @@
      <normaloff>:/icons/question_48.png</normaloff>:/icons/question_48.png</iconset>
    </property>
    <property name="text">
-    <string>QSM &amp;Help</string>
+    <string>QSM &amp;Help...</string>
    </property>
    <property name="statusTip">
     <string>QSM Help</string>
-   </property>
-   <property name="shortcut">
-    <string>F1</string>
    </property>
   </action>
   <action name="actionAboutQt">
@@ -453,9 +445,6 @@
    <property name="statusTip">
     <string>Creates an empty Slideshow</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+N</string>
-   </property>
   </action>
   <action name="actionSaveAllSlideshows">
    <property name="icon">
@@ -463,7 +452,7 @@
      <normaloff>:/icons/floppy_disk_48.png</normaloff>:/icons/floppy_disk_48.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Save all Slideshows</string>
+    <string>&amp;Save All Slideshows</string>
    </property>
    <property name="iconText">
     <string>Save All Slideshows</string>
@@ -474,12 +463,80 @@
    <property name="statusTip">
     <string>Save All Slideshows</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
+  </action>
+  <action name="actionReloadAllSlideshows">
+   <property name="text">
+    <string>Re&amp;load All Slideshows</string>
+   </property>
+   <property name="statusTip">
+    <string>Reload All Slideshows</string>
+   </property>
+  </action>
+  <action name="actionRemoveSlideshow">
+   <property name="text">
+    <string>&amp;Remove Slideshow</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRemoveImage">
+   <property name="text">
+    <string>&amp;Remove Image</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRenameSlideshow">
+   <property name="text">
+    <string>Re&amp;name Slideshow</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionReloadSlideshow">
+   <property name="text">
+    <string>Re&amp;load Slideshow</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSaveSlideshow">
+   <property name="text">
+    <string>&amp;Save Slideshow</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCopyImagesToSlideshow">
+   <property name="text">
+    <string>&amp;Copy Images to Slideshow...</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRemoveImageFromFileSystem">
+   <property name="text">
+    <string>Remove Image from &amp;File System</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>SlideshowListView</class>
+   <extends>QListView</extends>
+   <header>slideshowlistview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="icons.qrc"/>
  </resources>

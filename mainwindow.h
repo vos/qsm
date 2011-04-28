@@ -50,8 +50,9 @@ private slots:
     void on_actionStatusbar_triggered();
     void on_actionAboutQsm_triggered();
 
-    void actionRemoveSlideshow_triggered();
-    void actionRemoveSlideshowImage_triggered();
+    void on_actionRenameSlideshow_triggered();
+    void on_actionRemoveSlideshow_triggered();
+    void on_actionRemoveImage_triggered();
 
     void on_includeSubfoldersCheckBox_toggled(bool checked);
 
@@ -63,13 +64,12 @@ private:
     ScanFolderThread *m_scanFolderThread;
     ImageListModel *m_imageListModel;
     SlideshowListModel *m_slideshowListModel;
-    QAction *m_actionRemoveSlideshow;
     ImageListModel *m_slideshowImageListModel;
-    QAction *m_actionRemoveSlideshowImage;
     ImageWidget *m_imageWidget;
 
     QString m_currentImagePath;
 
+    void setShortcuts();
     void scanFolder(const QModelIndex &index, bool includeSubfolders = false);
     void prepareImage(const ImageListModel *model, const QModelIndex &index);
 };

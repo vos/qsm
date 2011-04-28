@@ -115,10 +115,6 @@ bool SlideshowListModel::setCurrentSlideshow(const QModelIndex &index)
         return false;
 
     m_currentSlideshow = &m_slideshowList[index.row()];
-    if (m_currentSlideshowIndex.isValid())
-        emit dataChanged(m_currentSlideshowIndex, m_currentSlideshowIndex);
     m_currentSlideshowIndex = index;
-    emit dataChanged(m_currentSlideshowIndex, m_currentSlideshowIndex);
-
     return true;
 }

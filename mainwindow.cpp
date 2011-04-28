@@ -53,20 +53,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_slideshowListModel = new SlideshowListModel(this);
     ui->slideshowListView->setModel(m_slideshowListModel);
-    m_actionRemoveSlideshow = new QAction(tr("Remove Slideshow"), ui->slideshowListView);
-    m_actionRemoveSlideshow->setShortcut(Qt::Key_Delete);
-    m_actionRemoveSlideshow->setShortcutContext(Qt::WidgetShortcut);
-    connect(m_actionRemoveSlideshow, SIGNAL(triggered()), SLOT(actionRemoveSlideshow_triggered()));
-    ui->slideshowListView->addAction(m_actionRemoveSlideshow);
+    ui->slideshowListView->addAction(ui->actionRemoveSlideshow);
     m_slideshowImageListModel = new ImageListModel(this);
     connect(m_slideshowImageListModel, SIGNAL(changed()), SLOT(slideshowImageListModel_changed()));
     ui->slideshowImageListView->setModel(m_slideshowImageListModel);
     ui->slideshowImageListView->setIconSize(QSize(64, 64));
-    m_actionRemoveSlideshowImage = new QAction(tr("Remove Image From Slideshow"), ui->slideshowImageListView);
-    m_actionRemoveSlideshowImage->setShortcut(Qt::Key_Delete);
-    m_actionRemoveSlideshowImage->setShortcutContext(Qt::WidgetShortcut);
-    connect(m_actionRemoveSlideshowImage, SIGNAL(triggered()), SLOT(actionRemoveSlideshowImage_triggered()));
-    ui->slideshowImageListView->addAction(m_actionRemoveSlideshowImage);
+    ui->slideshowImageListView->addAction(ui->actionRemoveImage);
 
     m_imageWidget = new ImageWidget(this);
     setCentralWidget(m_imageWidget);
@@ -79,15 +71,36 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scanFolderAbortButton, SIGNAL(clicked()), SLOT(scanFolderCancelButton_clicked()));
     statusBar()->addPermanentWidget(m_scanFolderAbortButton);
 
+    setShortcuts();
     statusBar()->showMessage(tr("Ready"));
+}
+
+void MainWindow::setShortcuts()
+{
+    // window shortcuts
+    ui->actionNewSlideshow->setShortcut(QKeySequence::New);
+    ui->actionReloadAllSlideshows->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F5);
+    ui->actionSaveAllSlideshows->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    ui->actionExit->setShortcut(QKeySequence::Quit);
+    ui->actionOptions->setShortcut(QKeySequence::Preferences);
+    ui->actionQsmHelp->setShortcut(QKeySequence::HelpContents);
+
+    // slideshow shortcuts
+    ui->actionRenameSlideshow->setShortcut(Qt::Key_F2);
+    ui->actionRemoveSlideshow->setShortcut(QKeySequence::Delete);
+    ui->actionReloadSlideshow->setShortcut(QKeySequence::Refresh);
+    ui->actionSaveSlideshow->setShortcut(QKeySequence::Save);
+    ui->actionCopyImagesToSlideshow->setShortcut(QKeySequence::Copy);
+
+    // image shortcuts
+    ui->actionRemoveImage->setShortcut(QKeySequence::Delete);
+    ui->actionRemoveImageFromFileSystem->setShortcut(Qt::ALT + Qt::Key_Delete);
 }
 
 MainWindow::~MainWindow()
 {
     delete m_imageWidget;
-    delete m_actionRemoveSlideshowImage;
     delete m_slideshowImageListModel;
-    delete m_actionRemoveSlideshow;
     delete m_slideshowListModel;
     delete m_imageListModel;
     delete m_scanFolderThread;
@@ -205,18 +218,20 @@ void MainWindow::on_slideshowListView_selectionChanged(const QModelIndex &index)
 void MainWindow::on_slideshowListView_customContextMenuRequested(const QPoint &pos)
 {
     QMenu menu(ui->slideshowListView);
-    QAction renameAction(tr("Rename Slideshow"), &menu);
     if (ui->slideshowListView->currentIndex().isValid()) {
-        menu.addAction(&renameAction);
-        menu.addAction(m_actionRemoveSlideshow);
+        menu.addAction(ui->actionRenameSlideshow);
+        menu.addAction(ui->actionRemoveSlideshow);
+        menu.addAction(ui->actionReloadSlideshow);
+        menu.addAction(ui->actionSaveSlideshow);
+        ui->actionCopyImagesToSlideshow->setEnabled(m_slideshowListModel->currentSlideshow()->imageCount() > 0);
+        menu.addAction(ui->actionCopyImagesToSlideshow);
     }
     menu.addSeparator();
     menu.addAction(ui->actionNewSlideshow);
     menu.addSeparator();
+    menu.addAction(ui->actionReloadAllSlideshows);
     menu.addAction(ui->actionSaveAllSlideshows);
-    QAction *action = menu.exec(ui->slideshowListView->mapToGlobal(pos));
-    if (action == &renameAction)
-        ui->slideshowListView->edit(ui->slideshowListView->currentIndex());
+    menu.exec(ui->slideshowListView->mapToGlobal(pos));
 }
 
 void MainWindow::on_slideshowImageListView_clicked(const QModelIndex &index)
@@ -228,8 +243,8 @@ void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoi
 {
     if (ui->slideshowImageListView->currentIndex().isValid()) {
         QMenu menu(ui->slideshowImageListView);
-        menu.addAction(m_actionRemoveSlideshowImage);
-        menu.addAction(tr("Remove Image From File System"));
+        menu.addAction(ui->actionRemoveImage);
+        menu.addAction(ui->actionRemoveImageFromFileSystem);
         menu.exec(ui->slideshowImageListView->mapToGlobal(pos));
     }
 }
@@ -274,12 +289,17 @@ void MainWindow::on_actionAboutQsm_triggered()
                "Written by Alexander Vos and Till Althaus"));
 }
 
-void MainWindow::actionRemoveSlideshow_triggered()
+void MainWindow::on_actionRenameSlideshow_triggered()
+{
+    ui->slideshowListView->edit(ui->slideshowListView->currentIndex());
+}
+
+void MainWindow::on_actionRemoveSlideshow_triggered()
 {
     m_slideshowListModel->removeSlideshow(ui->slideshowListView->currentIndex());
 }
 
-void MainWindow::actionRemoveSlideshowImage_triggered()
+void MainWindow::on_actionRemoveImage_triggered()
 {
     m_slideshowListModel->removeImage(ui->slideshowImageListView->currentIndex());
     m_slideshowImageListModel->removeImage(ui->slideshowImageListView->currentIndex());
