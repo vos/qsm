@@ -352,85 +352,6 @@
     </layout>
    </widget>
   </widget>
-  <action name="actionExit">
-   <property name="text">
-    <string>&amp;Exit</string>
-   </property>
-   <property name="toolTip">
-    <string>Exit the application</string>
-   </property>
-   <property name="statusTip">
-    <string>Exit the application</string>
-   </property>
-  </action>
-  <action name="actionStatusbar">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Statusbar</string>
-   </property>
-   <property name="statusTip">
-    <string>Statusbar</string>
-   </property>
-  </action>
-  <action name="actionOptions">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/icons/spanner_48.png</normaloff>:/icons/spanner_48.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Options...</string>
-   </property>
-   <property name="statusTip">
-    <string>Options</string>
-   </property>
-  </action>
-  <action name="actionQsmHelp">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/icons/question_48.png</normaloff>:/icons/question_48.png</iconset>
-   </property>
-   <property name="text">
-    <string>QSM &amp;Help...</string>
-   </property>
-   <property name="statusTip">
-    <string>QSM Help</string>
-   </property>
-  </action>
-  <action name="actionAboutQt">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/icons/info_48.png</normaloff>:/icons/info_48.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;About Qt...</string>
-   </property>
-   <property name="toolTip">
-    <string>Show the Qt library's About box</string>
-   </property>
-   <property name="statusTip">
-    <string>Show the Qt library's About box</string>
-   </property>
-  </action>
-  <action name="actionAboutQsm">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/icons/info_48.png</normaloff>:/icons/info_48.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;About QSM...</string>
-   </property>
-   <property name="toolTip">
-    <string>Show the application's About box</string>
-   </property>
-   <property name="statusTip">
-    <string>Show the application's About box</string>
-   </property>
-  </action>
   <action name="actionNewSlideshow">
    <property name="icon">
     <iconset resource="icons.qrc">
@@ -440,10 +361,24 @@
     <string>&amp;New Slideshow</string>
    </property>
    <property name="toolTip">
-    <string>Creates an empty Slideshow</string>
+    <string>Create an empty Slideshow</string>
    </property>
    <property name="statusTip">
-    <string>Creates an empty Slideshow</string>
+    <string>Create an empty Slideshow</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::ApplicationSpecificRole</enum>
+   </property>
+  </action>
+  <action name="actionReloadAllSlideshows">
+   <property name="text">
+    <string>Re&amp;load All Slideshows</string>
+   </property>
+   <property name="statusTip">
+    <string>Reload All Slideshows</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::ApplicationSpecificRole</enum>
    </property>
   </action>
   <action name="actionSaveAllSlideshows">
@@ -463,18 +398,148 @@
    <property name="statusTip">
     <string>Save All Slideshows</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::ApplicationSpecificRole</enum>
+   </property>
   </action>
-  <action name="actionReloadAllSlideshows">
+  <action name="actionExit">
    <property name="text">
-    <string>Re&amp;load All Slideshows</string>
+    <string>&amp;Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit the application</string>
    </property>
    <property name="statusTip">
-    <string>Reload All Slideshows</string>
+    <string>Exit the application</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
    </property>
   </action>
-  <action name="actionRemoveSlideshow">
+  <action name="actionStatusbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>&amp;Remove Slideshow</string>
+    <string>&amp;Statusbar</string>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/spanner_48.png</normaloff>:/icons/spanner_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Options...</string>
+   </property>
+   <property name="statusTip">
+    <string>Open the Options Dialog</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionQsmHelp">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/question_48.png</normaloff>:/icons/question_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>QSM &amp;Help...</string>
+   </property>
+   <property name="statusTip">
+    <string>QSM Help</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::ApplicationSpecificRole</enum>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/info_48.png</normaloff>:/icons/info_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About Qt...</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the Qt library's About box</string>
+   </property>
+   <property name="statusTip">
+    <string>Show the Qt library's About box</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutQtRole</enum>
+   </property>
+  </action>
+  <action name="actionAboutQsm">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/info_48.png</normaloff>:/icons/info_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About QSM...</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the application's About box</string>
+   </property>
+   <property name="statusTip">
+    <string>Show the application's About box</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionAddToSlideshow">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/add_48.png</normaloff>:/icons/add_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Add to Slideshow</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionImageEditComment">
+   <property name="text">
+    <string>&amp;Edit Comment...</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRenameImage">
+   <property name="text">
+    <string>Re&amp;name...</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCutImage">
+   <property name="text">
+    <string>Cu&amp;t</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCopyImage">
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPasteImage">
+   <property name="text">
+    <string>&amp;Paste</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>
@@ -482,39 +547,7 @@
   </action>
   <action name="actionRemoveImage">
    <property name="text">
-    <string>&amp;Remove Image</string>
-   </property>
-   <property name="shortcutContext">
-    <enum>Qt::WidgetShortcut</enum>
-   </property>
-  </action>
-  <action name="actionRenameSlideshow">
-   <property name="text">
-    <string>Re&amp;name Slideshow</string>
-   </property>
-   <property name="shortcutContext">
-    <enum>Qt::WidgetShortcut</enum>
-   </property>
-  </action>
-  <action name="actionReloadSlideshow">
-   <property name="text">
-    <string>Re&amp;load Slideshow</string>
-   </property>
-   <property name="shortcutContext">
-    <enum>Qt::WidgetShortcut</enum>
-   </property>
-  </action>
-  <action name="actionSaveSlideshow">
-   <property name="text">
-    <string>&amp;Save Slideshow</string>
-   </property>
-   <property name="shortcutContext">
-    <enum>Qt::WidgetShortcut</enum>
-   </property>
-  </action>
-  <action name="actionCopyImagesToSlideshow">
-   <property name="text">
-    <string>&amp;Copy Images to Slideshow...</string>
+    <string>&amp;Remove</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>
@@ -522,7 +555,71 @@
   </action>
   <action name="actionRemoveImageFromFileSystem">
    <property name="text">
-    <string>Remove Image from &amp;File System</string>
+    <string>Remove from &amp;File System</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionPreloadAllImages">
+   <property name="text">
+    <string>Preload &amp;All Images</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSlideshowEditComment">
+   <property name="text">
+    <string>&amp;Edit Comment...</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRenameSlideshow">
+   <property name="text">
+    <string>Re&amp;name</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRemoveSlideshow">
+   <property name="text">
+    <string>&amp;Remove</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCopyImagesToSlideshow">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/add_48.png</normaloff>:/icons/add_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Copy Images to Slideshow...</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionReloadSlideshow">
+   <property name="text">
+    <string>Re&amp;load</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSaveSlideshow">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/floppy_disk_48.png</normaloff>:/icons/floppy_disk_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>

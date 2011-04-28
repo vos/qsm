@@ -85,16 +85,24 @@ void MainWindow::setShortcuts()
     ui->actionOptions->setShortcut(QKeySequence::Preferences);
     ui->actionQsmHelp->setShortcut(QKeySequence::HelpContents);
 
-    // slideshow shortcuts
-    ui->actionRenameSlideshow->setShortcut(Qt::Key_F2);
-    ui->actionRemoveSlideshow->setShortcut(QKeySequence::Delete);
-    ui->actionReloadSlideshow->setShortcut(QKeySequence::Refresh);
-    ui->actionSaveSlideshow->setShortcut(QKeySequence::Save);
-    ui->actionCopyImagesToSlideshow->setShortcut(QKeySequence::Copy);
-
     // image shortcuts
+    ui->actionAddToSlideshow->setShortcut(Qt::Key_Space);
+    ui->actionImageEditComment->setShortcut(Qt::Key_Insert);
+    ui->actionRenameImage->setShortcut(Qt::Key_F2);
+    ui->actionCutImage->setShortcut(QKeySequence::Cut);
+    ui->actionCopyImage->setShortcut(QKeySequence::Copy);
+    ui->actionPasteImage->setShortcut(QKeySequence::Paste);
     ui->actionRemoveImage->setShortcut(QKeySequence::Delete);
     ui->actionRemoveImageFromFileSystem->setShortcut(Qt::ALT + Qt::Key_Delete);
+    ui->actionPreloadAllImages->setShortcut(QKeySequence::SelectAll);
+
+    // slideshow shortcuts
+    ui->actionSlideshowEditComment->setShortcut(Qt::Key_Insert);
+    ui->actionRenameSlideshow->setShortcut(Qt::Key_F2);
+    ui->actionRemoveSlideshow->setShortcut(QKeySequence::Delete);
+    ui->actionCopyImagesToSlideshow->setShortcut(QKeySequence::Copy);
+    ui->actionReloadSlideshow->setShortcut(QKeySequence::Refresh);
+    ui->actionSaveSlideshow->setShortcut(QKeySequence::Save);
 }
 
 MainWindow::~MainWindow()
@@ -193,7 +201,17 @@ void MainWindow::on_imageListView_doubleClicked(const QModelIndex &index)
 void MainWindow::on_imageListView_customContextMenuRequested(const QPoint &pos)
 {
     QMenu menu(ui->imageListView);
-    menu.addAction(ui->actionAboutQsm);
+    if (ui->imageListView->currentIndex().isValid()) {
+        ui->actionAddToSlideshow->setEnabled(m_slideshowListModel->currentSlideshow());
+        menu.addAction(ui->actionAddToSlideshow);
+        menu.addAction(ui->actionRenameImage);
+        menu.addAction(ui->actionCutImage);
+        menu.addAction(ui->actionCopyImage);
+        menu.addAction(ui->actionPasteImage);
+        menu.addAction(ui->actionRemoveImageFromFileSystem);
+        menu.addSeparator();
+    }
+    menu.addAction(ui->actionPreloadAllImages);
     menu.exec(ui->imageListView->mapToGlobal(pos));
 }
 
@@ -219,12 +237,13 @@ void MainWindow::on_slideshowListView_customContextMenuRequested(const QPoint &p
 {
     QMenu menu(ui->slideshowListView);
     if (ui->slideshowListView->currentIndex().isValid()) {
+        menu.addAction(ui->actionSlideshowEditComment);
         menu.addAction(ui->actionRenameSlideshow);
         menu.addAction(ui->actionRemoveSlideshow);
-        menu.addAction(ui->actionReloadSlideshow);
-        menu.addAction(ui->actionSaveSlideshow);
         ui->actionCopyImagesToSlideshow->setEnabled(m_slideshowListModel->currentSlideshow()->imageCount() > 0);
         menu.addAction(ui->actionCopyImagesToSlideshow);
+        menu.addAction(ui->actionReloadSlideshow);
+        menu.addAction(ui->actionSaveSlideshow);
     }
     menu.addSeparator();
     menu.addAction(ui->actionNewSlideshow);
@@ -241,12 +260,19 @@ void MainWindow::on_slideshowImageListView_clicked(const QModelIndex &index)
 
 void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoint &pos)
 {
+    QMenu menu(ui->slideshowImageListView);
     if (ui->slideshowImageListView->currentIndex().isValid()) {
-        QMenu menu(ui->slideshowImageListView);
+        menu.addAction(ui->actionImageEditComment);
+        menu.addAction(ui->actionRenameImage);
+        menu.addAction(ui->actionCutImage);
+        menu.addAction(ui->actionCopyImage);
+        menu.addAction(ui->actionPasteImage);
         menu.addAction(ui->actionRemoveImage);
         menu.addAction(ui->actionRemoveImageFromFileSystem);
-        menu.exec(ui->slideshowImageListView->mapToGlobal(pos));
+        menu.addSeparator();
     }
+    menu.addAction(ui->actionPreloadAllImages);
+    menu.exec(ui->slideshowImageListView->mapToGlobal(pos));
 }
 
 void MainWindow::slideshowImageListModel_changed()
