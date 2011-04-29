@@ -44,6 +44,7 @@ private slots:
     void on_slideshowImageListView_customContextMenuRequested(const QPoint &pos);
     void slideshowImageListModel_changed();
     void imageLoaded(const QImage &image, int, int, int);
+    void on_imageWidget_customContextMenuRequested(const QPoint &pos);
     void scanFolderCancelButton_clicked();
 
     void on_actionNewSlideshow_triggered();
@@ -65,7 +66,6 @@ private:
     ImageListModel *m_imageListModel;
     SlideshowListModel *m_slideshowListModel;
     ImageListModel *m_slideshowImageListModel;
-    ImageWidget *m_imageWidget;
 
     QString m_currentImagePath;
 

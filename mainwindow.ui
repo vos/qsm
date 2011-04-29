@@ -13,7 +13,11 @@
   <property name="windowTitle">
    <string notr="true">QSM - Qt SlideShow Manager</string>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="ImageWidget" name="imageWidget">
+   <property name="contextMenuPolicy">
+    <enum>Qt::CustomContextMenu</enum>
+   </property>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -515,7 +519,7 @@
   </action>
   <action name="actionRenameImage">
    <property name="text">
-    <string>Re&amp;name...</string>
+    <string>Re&amp;name</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>
@@ -553,9 +557,17 @@
     <enum>Qt::WidgetShortcut</enum>
    </property>
   </action>
-  <action name="actionRemoveImageFromFileSystem">
+  <action name="actionRemoveImageFromDisk">
    <property name="text">
-    <string>Remove from &amp;File System</string>
+    <string>Remove from &amp;Disk</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionCopyPath">
+   <property name="text">
+    <string>Copy Full &amp;Path</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>
@@ -625,6 +637,36 @@
     <enum>Qt::WidgetShortcut</enum>
    </property>
   </action>
+  <action name="actionRotateClockwise">
+   <property name="text">
+    <string>Rotate Clockwise</string>
+   </property>
+  </action>
+  <action name="actionRotateCounterclockwise">
+   <property name="text">
+    <string>Rotate Counterclockwise</string>
+   </property>
+  </action>
+  <action name="actionZoomFit">
+   <property name="text">
+    <string>&amp;Fit to Widget</string>
+   </property>
+  </action>
+  <action name="actionZoomOriginal">
+   <property name="text">
+    <string>&amp;Original Size</string>
+   </property>
+  </action>
+  <action name="actionZoomIn">
+   <property name="text">
+    <string>&amp;In</string>
+   </property>
+  </action>
+  <action name="actionZoomOut">
+   <property name="text">
+    <string>O&amp;ut</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -632,6 +674,11 @@
    <class>SlideshowListView</class>
    <extends>QListView</extends>
    <header>slideshowlistview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ImageWidget</class>
+   <extends>QWidget</extends>
+   <header>imagewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

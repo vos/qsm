@@ -21,8 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->menuView->addAction(ui->mainToolBar->toggleViewAction());
     ui->menuView->addAction(ui->actionStatusbar);
-    QMenu *menuSidebar = new QMenu(ui->menuBar);
-    menuSidebar->setTitle(tr("&Sidebar"));
+    QMenu *menuSidebar = new QMenu(tr("&Sidebar"), ui->menuBar);
     menuSidebar->addAction(ui->folderBrowserDockWidget->toggleViewAction());
     menuSidebar->addAction(ui->imageListDockWidget->toggleViewAction());
     menuSidebar->addAction(ui->slideshowListDockWidget->toggleViewAction());
@@ -60,9 +59,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->slideshowImageListView->setIconSize(QSize(64, 64));
     ui->slideshowImageListView->addAction(ui->actionRemoveImage);
 
-    m_imageWidget = new ImageWidget(this);
-    setCentralWidget(m_imageWidget);
-
     m_scanFolderLabel = new QLabel;
     m_scanFolderLabel->setVisible(false);
     statusBar()->addPermanentWidget(m_scanFolderLabel);
@@ -93,8 +89,9 @@ void MainWindow::setShortcuts()
     ui->actionCopyImage->setShortcut(QKeySequence::Copy);
     ui->actionPasteImage->setShortcut(QKeySequence::Paste);
     ui->actionRemoveImage->setShortcut(QKeySequence::Delete);
-    ui->actionRemoveImageFromFileSystem->setShortcut(Qt::ALT + Qt::Key_Delete);
-    ui->actionPreloadAllImages->setShortcut(QKeySequence::SelectAll);
+    ui->actionRemoveImageFromDisk->setShortcut(Qt::ALT + Qt::Key_Delete);
+    ui->actionCopyPath->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+    ui->actionPreloadAllImages->setShortcut(QKeySequence::Print);
 
     // slideshow shortcuts
     ui->actionSlideshowEditComment->setShortcut(Qt::Key_Insert);
@@ -103,11 +100,18 @@ void MainWindow::setShortcuts()
     ui->actionCopyImagesToSlideshow->setShortcut(QKeySequence::Copy);
     ui->actionReloadSlideshow->setShortcut(QKeySequence::Refresh);
     ui->actionSaveSlideshow->setShortcut(QKeySequence::Save);
+
+    // image view shortcuts
+    ui->actionRotateClockwise->setShortcut(Qt::CTRL + Qt::Key_R);
+    ui->actionRotateCounterclockwise->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R);
+    ui->actionZoomFit->setShortcut(Qt::CTRL + Qt::Key_0);
+    ui->actionZoomOriginal->setShortcut(Qt::CTRL + Qt::Key_1);
+    ui->actionZoomIn->setShortcut(QKeySequence::ZoomIn);
+    ui->actionZoomOut->setShortcut(QKeySequence::ZoomOut);
 }
 
 MainWindow::~MainWindow()
 {
-    delete m_imageWidget;
     delete m_slideshowImageListModel;
     delete m_slideshowListModel;
     delete m_imageListModel;
@@ -156,7 +160,9 @@ void MainWindow::scanFolderThread_folderScanned(const QString &folder, const QFi
 void MainWindow::scanFolderThread_finished()
 {
     qDebug("scanFolderThread_finished: %d images found", m_imageListModel->imageCount());
-    statusBar()->showMessage(tr("%1 images found, %2 folders scanned").arg(m_imageListModel->imageCount()).arg(m_scanFolderThread->count()));
+    statusBar()->showMessage(tr("%1 images found, %2 folders scanned")
+                             .arg(m_imageListModel->imageCount())
+                             .arg(m_scanFolderThread->count()));
     m_scanFolderLabel->setVisible(false);
     m_scanFolderAbortButton->setVisible(false);
 }
@@ -175,7 +181,7 @@ void MainWindow::prepareImage(const ImageListModel *model, const QModelIndex &in
     if (var.canConvert<QIcon>()) {
         // set up preview image
         QIcon icon = var.value<QIcon>();
-        m_imageWidget->setImage(icon.pixmap(64, 64).toImage());
+        ui->imageWidget->setImage(icon.pixmap(64, 64).toImage());
     }
 
     // load the actual image inside a separate thread
@@ -208,7 +214,8 @@ void MainWindow::on_imageListView_customContextMenuRequested(const QPoint &pos)
         menu.addAction(ui->actionCutImage);
         menu.addAction(ui->actionCopyImage);
         menu.addAction(ui->actionPasteImage);
-        menu.addAction(ui->actionRemoveImageFromFileSystem);
+        menu.addAction(ui->actionRemoveImageFromDisk);
+        menu.addAction(ui->actionCopyPath);
         menu.addSeparator();
     }
     menu.addAction(ui->actionPreloadAllImages);
@@ -217,7 +224,9 @@ void MainWindow::on_imageListView_customContextMenuRequested(const QPoint &pos)
 
 void MainWindow::imageListModel_changed()
 {
-    ui->imageListDockWidget->setWindowTitle(tr("Image List %1/%2").arg(m_imageListModel->rowCount()).arg(m_imageListModel->imageCount()));
+    ui->imageListDockWidget->setWindowTitle(tr("Image List %1/%2")
+                                            .arg(m_imageListModel->rowCount())
+                                            .arg(m_imageListModel->imageCount()));
 }
 
 void MainWindow::on_slideshowListView_selectionChanged(const QModelIndex &index)
@@ -268,7 +277,8 @@ void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoi
         menu.addAction(ui->actionCopyImage);
         menu.addAction(ui->actionPasteImage);
         menu.addAction(ui->actionRemoveImage);
-        menu.addAction(ui->actionRemoveImageFromFileSystem);
+        menu.addAction(ui->actionRemoveImageFromDisk);
+        menu.addAction(ui->actionCopyPath);
         menu.addSeparator();
     }
     menu.addAction(ui->actionPreloadAllImages);
@@ -284,7 +294,33 @@ void MainWindow::slideshowImageListModel_changed()
 
 void MainWindow::imageLoaded(const QImage &image, int, int, int)
 {
-    m_imageWidget->setImage(image);
+    ui->imageWidget->setImage(image);
+}
+
+void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
+{
+    if (QFile::exists(m_currentImagePath)) {
+        QMenu menu(ui->imageWidget);
+        if (m_slideshowListModel->currentSlideshow())
+            menu.addAction(ui->actionAddToSlideshow);
+        menu.addSeparator();
+        menu.addAction(ui->actionRotateClockwise);
+        menu.addAction(ui->actionRotateCounterclockwise);
+        QMenu zoomMenu(tr("Zoom"), &menu);
+        zoomMenu.addAction(ui->actionZoomFit);
+        zoomMenu.addAction(ui->actionZoomOriginal);
+        zoomMenu.addAction(ui->actionZoomIn);
+        zoomMenu.addAction(ui->actionZoomOut);
+        menu.addMenu(&zoomMenu);
+        menu.addSeparator();
+        if (true) // TODO check for slideshow image
+            menu.addAction(ui->actionImageEditComment);
+        menu.addAction(ui->actionCutImage);
+        menu.addAction(ui->actionCopyImage);
+        menu.addAction(ui->actionRemoveImageFromDisk);
+        menu.addAction(ui->actionCopyPath);
+        menu.exec(ui->imageWidget->mapToGlobal(pos));
+    }
 }
 
 void MainWindow::scanFolderCancelButton_clicked()
