@@ -13,6 +13,7 @@
 #include "imagelistmodel.h"
 #include "slideshowlistmodel.h"
 #include "imagewidget.h"
+#include "optionsdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -64,19 +65,24 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->addPermanentWidget(m_scanFolderLabel);
     m_scanFolderAbortButton = new QPushButton(tr("Abort"));
     m_scanFolderAbortButton->setVisible(false);
-    connect(m_scanFolderAbortButton, SIGNAL(clicked()), SLOT(scanFolderCancelButton_clicked()));
+    connect(m_scanFolderAbortButton, SIGNAL(clicked()), SLOT(scanFolderAbortButton_clicked()));
     statusBar()->addPermanentWidget(m_scanFolderAbortButton);
 
-    setShortcuts();
+    readSettings();
     statusBar()->showMessage(tr("Ready"));
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings;
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("windowState").toByteArray());
+    setShortcuts();
 }
 
 void MainWindow::setShortcuts()
 {
     // window shortcuts
-    ui->actionNewSlideshow->setShortcut(QKeySequence::New);
-    ui->actionReloadAllSlideshows->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F5);
-    ui->actionSaveAllSlideshows->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
     ui->actionExit->setShortcut(QKeySequence::Quit);
     ui->actionOptions->setShortcut(QKeySequence::Preferences);
     ui->actionQsmHelp->setShortcut(QKeySequence::HelpContents);
@@ -94,6 +100,9 @@ void MainWindow::setShortcuts()
     ui->actionPreloadAllImages->setShortcut(QKeySequence::Print);
 
     // slideshow shortcuts
+    ui->actionNewSlideshow->setShortcut(QKeySequence::New);
+    ui->actionReloadAllSlideshows->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F5);
+    ui->actionSaveAllSlideshows->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
     ui->actionSlideshowEditComment->setShortcut(Qt::Key_Insert);
     ui->actionRenameSlideshow->setShortcut(Qt::Key_F2);
     ui->actionRemoveSlideshow->setShortcut(QKeySequence::Delete);
@@ -108,6 +117,19 @@ void MainWindow::setShortcuts()
     ui->actionZoomOriginal->setShortcut(Qt::CTRL + Qt::Key_1);
     ui->actionZoomIn->setShortcut(QKeySequence::ZoomIn);
     ui->actionZoomOut->setShortcut(QKeySequence::ZoomOut);
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings;
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    writeSettings();
+    QMainWindow::closeEvent(event);
 }
 
 MainWindow::~MainWindow()
@@ -125,7 +147,7 @@ MainWindow::~MainWindow()
 void MainWindow::scanFolder(const QModelIndex &index, bool includeSubfolders)
 {
     if (m_scanFolderThread->isRunning()) {
-        scanFolderCancelButton_clicked();
+        scanFolderAbortButton_clicked();
         m_scanFolderThread->wait();
     }
     m_scanFolderThread->setFolder(m_folderBrowserModel->filePath(index), includeSubfolders);
@@ -301,8 +323,8 @@ void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
 {
     if (QFile::exists(m_currentImagePath)) {
         QMenu menu(ui->imageWidget);
-        if (m_slideshowListModel->currentSlideshow())
-            menu.addAction(ui->actionAddToSlideshow);
+        ui->actionAddToSlideshow->setEnabled(m_slideshowListModel->currentSlideshow());
+        menu.addAction(ui->actionAddToSlideshow);
         menu.addSeparator();
         menu.addAction(ui->actionRotateClockwise);
         menu.addAction(ui->actionRotateCounterclockwise);
@@ -313,7 +335,7 @@ void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
         zoomMenu.addAction(ui->actionZoomOut);
         menu.addMenu(&zoomMenu);
         menu.addSeparator();
-        if (true) // TODO check for slideshow image
+        if (ui->slideshowImageListView->currentIndex().isValid()) // TODO: check for slideshow image
             menu.addAction(ui->actionImageEditComment);
         menu.addAction(ui->actionCutImage);
         menu.addAction(ui->actionCopyImage);
@@ -323,7 +345,7 @@ void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
     }
 }
 
-void MainWindow::scanFolderCancelButton_clicked()
+void MainWindow::scanFolderAbortButton_clicked()
 {
     if (!m_scanFolderThread->isRunning())
         return;
@@ -338,9 +360,56 @@ void MainWindow::on_actionNewSlideshow_triggered()
     ui->slideshowListView->setCurrentIndex(m_slideshowListModel->addSlideshow(Slideshow(tr("New Slideshow"))));
 }
 
+void MainWindow::on_actionReloadAllSlideshows_triggered()
+{
+}
+
+void MainWindow::on_actionSaveAllSlideshows_triggered()
+{
+}
+
 void MainWindow::on_actionStatusbar_triggered()
 {
     ui->statusBar->setVisible(ui->actionStatusbar->isChecked());
+}
+
+void MainWindow::on_actionOptions_triggered()
+{
+    QList<QPair<QString, QList<QAction*> > > actions;
+
+    // window shortcuts
+    QList<QAction*> windowActions;
+    windowActions << ui->actionExit << ui->actionOptions << ui->actionQsmHelp;
+    actions.append(qMakePair(tr("Window"), windowActions));
+
+    // image shortcuts
+    QList<QAction*> imageActions;
+    imageActions << ui->actionAddToSlideshow << ui->actionImageEditComment << ui->actionRenameImage
+                 << ui->actionCutImage << ui->actionCopyImage << ui->actionPasteImage
+                 << ui->actionRemoveImage <<  ui->actionRemoveImageFromDisk << ui->actionCopyPath
+                 << ui->actionPreloadAllImages;
+    actions.append(qMakePair(tr("Image"), imageActions));
+
+    // slideshow shortcuts
+    QList<QAction*> slideshowActions;
+    slideshowActions << ui->actionNewSlideshow << ui->actionReloadAllSlideshows << ui->actionSaveAllSlideshows
+                     << ui->actionSlideshowEditComment << ui->actionRenameSlideshow << ui->actionRemoveSlideshow
+                     << ui->actionCopyImagesToSlideshow << ui->actionReloadSlideshow << ui->actionSaveSlideshow;
+    actions.append(qMakePair(tr("Slideshow"), slideshowActions));
+
+    // image view shortcuts
+    QList<QAction*> imageViewActions;
+    imageViewActions << ui->actionRotateClockwise << ui->actionRotateCounterclockwise << ui->actionZoomFit
+                     << ui->actionZoomOriginal << ui->actionZoomIn << ui->actionZoomOut;
+    actions.append(qMakePair(tr("Image View"), imageViewActions));
+
+    // open options dialog
+    OptionsDialog options(&actions, this);
+    options.exec();
+}
+
+void MainWindow::on_actionQsmHelp_triggered()
+{
 }
 
 void MainWindow::on_actionAboutQsm_triggered()

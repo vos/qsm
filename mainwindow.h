@@ -45,10 +45,14 @@ private slots:
     void slideshowImageListModel_changed();
     void imageLoaded(const QImage &image, int, int, int);
     void on_imageWidget_customContextMenuRequested(const QPoint &pos);
-    void scanFolderCancelButton_clicked();
+    void scanFolderAbortButton_clicked();
 
     void on_actionNewSlideshow_triggered();
+    void on_actionReloadAllSlideshows_triggered();
+    void on_actionSaveAllSlideshows_triggered();
     void on_actionStatusbar_triggered();
+    void on_actionOptions_triggered();
+    void on_actionQsmHelp_triggered();
     void on_actionAboutQsm_triggered();
 
     void on_actionRenameSlideshow_triggered();
@@ -69,9 +73,14 @@ private:
 
     QString m_currentImagePath;
 
+    void readSettings();
+    void writeSettings();
     void setShortcuts();
+
     void scanFolder(const QModelIndex &index, bool includeSubfolders = false);
     void prepareImage(const ImageListModel *model, const QModelIndex &index);
+
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H
