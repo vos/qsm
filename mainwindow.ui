@@ -661,10 +661,16 @@
    <property name="text">
     <string>&amp;In</string>
    </property>
+   <property name="toolTip">
+    <string>Zoom In</string>
+   </property>
   </action>
   <action name="actionZoomOut">
    <property name="text">
     <string>O&amp;ut</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom Out</string>
    </property>
   </action>
  </widget>

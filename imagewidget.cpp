@@ -75,6 +75,12 @@ void ImageWidget::paintGL()
     glFlush();
 }
 
+void ImageWidget::setBackgroundColor(const QColor &color)
+{
+    qglClearColor(color);
+    updateGL();
+}
+
 void ImageWidget::setImage(const QImage &image)
 {
     if (image.isNull())

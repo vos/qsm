@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QSettings>
 #include <QLabel>
 #include <QMessageBox>
 #include <QFileSystemModel>
@@ -68,58 +67,66 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scanFolderAbortButton, SIGNAL(clicked()), SLOT(scanFolderAbortButton_clicked()));
     statusBar()->addPermanentWidget(m_scanFolderAbortButton);
 
-    readSettings();
+    loadSettings();
     statusBar()->showMessage(tr("Ready"));
 }
 
-void MainWindow::readSettings()
+void MainWindow::loadShortcut(QAction *action, const QSettings &settings, const QKeySequence &defaultKeySequence)
+{
+    Q_ASSERT(action);
+    action->setShortcut(settings.value("shortcuts/" + action->objectName(), defaultKeySequence).value<QKeySequence>());
+}
+
+void MainWindow::loadSettings()
 {
     QSettings settings;
+
+    // window geometry and state
     restoreGeometry(settings.value("geometry").toByteArray());
     restoreState(settings.value("windowState").toByteArray());
-    setShortcuts();
-}
 
-void MainWindow::setShortcuts()
-{
+    ui->imageWidget->setBackgroundColor(settings.value("backgroundColor", OptionsDialog::DEFAULT_BACKGROUND_COLOR).value<QColor>());
+    m_slideshowsDirectory = settings.value("slideshowsDirectory", OptionsDialog::DEFAULT_SLIDESHOWS_DIRECTORY).toString();
+    m_imagesDirectory = settings.value("imagesDirectory", OptionsDialog::DEFAULT_IMAGES_DIRECTORY).toString();
+
     // window shortcuts
-    ui->actionExit->setShortcut(QKeySequence::Quit);
-    ui->actionOptions->setShortcut(QKeySequence::Preferences);
-    ui->actionQsmHelp->setShortcut(QKeySequence::HelpContents);
+    loadShortcut(ui->actionExit, settings, QKeySequence::Quit);
+    loadShortcut(ui->actionOptions, settings, QKeySequence::Preferences);
+    loadShortcut(ui->actionQsmHelp, settings, QKeySequence::HelpContents);
 
     // image shortcuts
-    ui->actionAddToSlideshow->setShortcut(Qt::Key_Space);
-    ui->actionImageEditComment->setShortcut(Qt::Key_Insert);
-    ui->actionRenameImage->setShortcut(Qt::Key_F2);
-    ui->actionCutImage->setShortcut(QKeySequence::Cut);
-    ui->actionCopyImage->setShortcut(QKeySequence::Copy);
-    ui->actionPasteImage->setShortcut(QKeySequence::Paste);
-    ui->actionRemoveImage->setShortcut(QKeySequence::Delete);
-    ui->actionRemoveImageFromDisk->setShortcut(Qt::ALT + Qt::Key_Delete);
-    ui->actionCopyPath->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
-    ui->actionPreloadAllImages->setShortcut(QKeySequence::Print);
+    loadShortcut(ui->actionAddToSlideshow, settings, Qt::Key_Space);
+    loadShortcut(ui->actionImageEditComment, settings, Qt::Key_Insert);
+    loadShortcut(ui->actionRenameImage, settings, Qt::Key_F2);
+    loadShortcut(ui->actionCutImage, settings, QKeySequence::Cut);
+    loadShortcut(ui->actionCopyImage, settings, QKeySequence::Copy);
+    loadShortcut(ui->actionPasteImage, settings, QKeySequence::Paste);
+    loadShortcut(ui->actionRemoveImage, settings, QKeySequence::Delete);
+    loadShortcut(ui->actionRemoveImageFromDisk, settings, Qt::ALT + Qt::Key_Delete);
+    loadShortcut(ui->actionCopyPath, settings, Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+    loadShortcut(ui->actionPreloadAllImages, settings, QKeySequence::Print);
 
     // slideshow shortcuts
-    ui->actionNewSlideshow->setShortcut(QKeySequence::New);
-    ui->actionReloadAllSlideshows->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F5);
-    ui->actionSaveAllSlideshows->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-    ui->actionSlideshowEditComment->setShortcut(Qt::Key_Insert);
-    ui->actionRenameSlideshow->setShortcut(Qt::Key_F2);
-    ui->actionRemoveSlideshow->setShortcut(QKeySequence::Delete);
-    ui->actionCopyImagesToSlideshow->setShortcut(QKeySequence::Copy);
-    ui->actionReloadSlideshow->setShortcut(QKeySequence::Refresh);
-    ui->actionSaveSlideshow->setShortcut(QKeySequence::Save);
+    loadShortcut(ui->actionNewSlideshow, settings,QKeySequence::New);
+    loadShortcut(ui->actionReloadAllSlideshows, settings, Qt::CTRL + Qt::SHIFT + Qt::Key_F5);
+    loadShortcut(ui->actionSaveAllSlideshows, settings, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    loadShortcut(ui->actionSlideshowEditComment, settings, Qt::Key_Insert);
+    loadShortcut(ui->actionRenameSlideshow, settings, Qt::Key_F2);
+    loadShortcut(ui->actionRemoveSlideshow, settings, QKeySequence::Delete);
+    loadShortcut(ui->actionCopyImagesToSlideshow, settings, QKeySequence::Copy);
+    loadShortcut(ui->actionReloadSlideshow, settings, QKeySequence::Refresh);
+    loadShortcut(ui->actionSaveSlideshow, settings, QKeySequence::Save);
 
     // image view shortcuts
-    ui->actionRotateClockwise->setShortcut(Qt::CTRL + Qt::Key_R);
-    ui->actionRotateCounterclockwise->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R);
-    ui->actionZoomFit->setShortcut(Qt::CTRL + Qt::Key_0);
-    ui->actionZoomOriginal->setShortcut(Qt::CTRL + Qt::Key_1);
-    ui->actionZoomIn->setShortcut(QKeySequence::ZoomIn);
-    ui->actionZoomOut->setShortcut(QKeySequence::ZoomOut);
+    loadShortcut(ui->actionRotateClockwise, settings, Qt::CTRL + Qt::Key_R);
+    loadShortcut(ui->actionRotateCounterclockwise, settings, Qt::CTRL + Qt::SHIFT + Qt::Key_R);
+    loadShortcut(ui->actionZoomFit, settings, Qt::CTRL + Qt::Key_0);
+    loadShortcut(ui->actionZoomOriginal, settings, Qt::CTRL + Qt::Key_1);
+    loadShortcut(ui->actionZoomIn, settings, QKeySequence::ZoomIn);
+    loadShortcut(ui->actionZoomOut, settings, QKeySequence::ZoomOut);
 }
 
-void MainWindow::writeSettings()
+void MainWindow::saveSettings()
 {
     QSettings settings;
     settings.setValue("geometry", saveGeometry());
@@ -128,7 +135,7 @@ void MainWindow::writeSettings()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    writeSettings();
+    saveSettings();
     QMainWindow::closeEvent(event);
 }
 
@@ -405,7 +412,11 @@ void MainWindow::on_actionOptions_triggered()
 
     // open options dialog
     OptionsDialog options(&actions, this);
-    options.exec();
+    if (options.exec() == QDialog::Accepted) {
+        ui->imageWidget->setBackgroundColor(options.backgroundColor());
+        m_slideshowsDirectory = options.slideshowsDirectory();
+        m_imagesDirectory = options.imagesDirectory();
+    }
 }
 
 void MainWindow::on_actionQsmHelp_triggered()

@@ -19,6 +19,7 @@ public:
     explicit ImageWidget(QWidget *parent = 0);
 
 public slots:
+    void setBackgroundColor(const QColor &color);
     void setImage(const QImage &image);
 
 private:

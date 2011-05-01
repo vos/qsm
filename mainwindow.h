@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSettings>
 #include <QModelIndex>
 #include <QFileInfoList>
 #include <QImage>
@@ -71,11 +72,14 @@ private:
     SlideshowListModel *m_slideshowListModel;
     ImageListModel *m_slideshowImageListModel;
 
+    QString m_slideshowsDirectory;
+    QString m_imagesDirectory;
     QString m_currentImagePath;
 
-    void readSettings();
-    void writeSettings();
-    void setShortcuts();
+    inline static void loadShortcut(QAction *action, const QSettings &settings,
+                                    const QKeySequence &defaultKeySequence = QKeySequence());
+    void loadSettings();
+    void saveSettings();
 
     void scanFolder(const QModelIndex &index, bool includeSubfolders = false);
     void prepareImage(const ImageListModel *model, const QModelIndex &index);
