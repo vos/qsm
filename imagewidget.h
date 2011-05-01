@@ -23,6 +23,7 @@ public slots:
     void setImage(const QImage &image);
 
 private:
+    QColor m_backgroundColor;
     float m_widgetAspectRatio;
     int m_imageWidth;
     int m_imageHeight;

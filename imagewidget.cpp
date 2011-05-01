@@ -8,11 +8,13 @@ ImageWidget::ImageWidget(QWidget *parent) :
     m_imageWidth = 0;
     m_imageHeight = 0;
     m_imageAspectRatio = 1.0f;
+
+    m_backgroundColor = Qt::black;
 }
 
 void ImageWidget::initializeGL()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    qglClearColor(m_backgroundColor);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
@@ -77,6 +79,7 @@ void ImageWidget::paintGL()
 
 void ImageWidget::setBackgroundColor(const QColor &color)
 {
+    m_backgroundColor = color;
     qglClearColor(color);
     updateGL();
 }
