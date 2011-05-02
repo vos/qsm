@@ -343,6 +343,16 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="removePushButton">
+            <property name="toolTip">
+             <string>Remove the shortcut</string>
+            </property>
+            <property name="text">
+             <string>Remove</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

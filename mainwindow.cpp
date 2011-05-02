@@ -71,12 +71,6 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->showMessage(tr("Ready"));
 }
 
-void MainWindow::loadShortcut(QAction *action, const QSettings &settings, const QKeySequence &defaultKeySequence)
-{
-    Q_ASSERT(action);
-    action->setShortcut(settings.value("shortcuts/" + action->objectName(), defaultKeySequence).value<QKeySequence>());
-}
-
 void MainWindow::loadSettings()
 {
     QSettings settings;
@@ -90,40 +84,42 @@ void MainWindow::loadSettings()
     m_imagesDirectory = settings.value("imagesDirectory", OptionsDialog::DEFAULT_IMAGES_DIRECTORY).toString();
 
     // window shortcuts
-    loadShortcut(ui->actionExit, settings, QKeySequence::Quit);
-    loadShortcut(ui->actionOptions, settings, QKeySequence::Preferences);
-    loadShortcut(ui->actionQsmHelp, settings, QKeySequence::HelpContents);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionExit, QKeySequence::Quit);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionOptions, QKeySequence::Preferences);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionQsmHelp, QKeySequence::HelpContents);
 
     // image shortcuts
-    loadShortcut(ui->actionAddToSlideshow, settings, Qt::Key_Space);
-    loadShortcut(ui->actionImageEditComment, settings, Qt::Key_Insert);
-    loadShortcut(ui->actionRenameImage, settings, Qt::Key_F2);
-    loadShortcut(ui->actionCutImage, settings, QKeySequence::Cut);
-    loadShortcut(ui->actionCopyImage, settings, QKeySequence::Copy);
-    loadShortcut(ui->actionPasteImage, settings, QKeySequence::Paste);
-    loadShortcut(ui->actionRemoveImage, settings, QKeySequence::Delete);
-    loadShortcut(ui->actionRemoveImageFromDisk, settings, Qt::ALT + Qt::Key_Delete);
-    loadShortcut(ui->actionCopyPath, settings, Qt::CTRL + Qt::SHIFT + Qt::Key_C);
-    loadShortcut(ui->actionPreloadAllImages, settings, QKeySequence::Print);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionAddToSlideshow, Qt::Key_Space);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionImageEditComment, Qt::Key_Insert);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionRenameImage, Qt::Key_F2);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionCutImage, QKeySequence::Cut);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionCopyImage, QKeySequence::Copy);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionPasteImage, QKeySequence::Paste);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionRemoveImage, QKeySequence::Delete);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionRemoveImageFromDisk, Qt::ALT + Qt::Key_Delete);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionCopyPath, Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionPreloadAllImages, QKeySequence::Print);
 
     // slideshow shortcuts
-    loadShortcut(ui->actionNewSlideshow, settings,QKeySequence::New);
-    loadShortcut(ui->actionReloadAllSlideshows, settings, Qt::CTRL + Qt::SHIFT + Qt::Key_F5);
-    loadShortcut(ui->actionSaveAllSlideshows, settings, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-    loadShortcut(ui->actionSlideshowEditComment, settings, Qt::Key_Insert);
-    loadShortcut(ui->actionRenameSlideshow, settings, Qt::Key_F2);
-    loadShortcut(ui->actionRemoveSlideshow, settings, QKeySequence::Delete);
-    loadShortcut(ui->actionCopyImagesToSlideshow, settings, QKeySequence::Copy);
-    loadShortcut(ui->actionReloadSlideshow, settings, QKeySequence::Refresh);
-    loadShortcut(ui->actionSaveSlideshow, settings, QKeySequence::Save);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionNewSlideshow,QKeySequence::New);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionReloadAllSlideshows, Qt::CTRL + Qt::SHIFT + Qt::Key_F5);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionSaveAllSlideshows, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionSlideshowEditComment, Qt::Key_Insert);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionRenameSlideshow, Qt::Key_F2);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionRemoveSlideshow, QKeySequence::Delete);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionCopyImagesToSlideshow, QKeySequence::Copy);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionReloadSlideshow, QKeySequence::Refresh);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionSaveSlideshow, QKeySequence::Save);
 
     // image view shortcuts
-    loadShortcut(ui->actionRotateClockwise, settings, Qt::CTRL + Qt::Key_R);
-    loadShortcut(ui->actionRotateCounterclockwise, settings, Qt::CTRL + Qt::SHIFT + Qt::Key_R);
-    loadShortcut(ui->actionZoomFit, settings, Qt::CTRL + Qt::Key_0);
-    loadShortcut(ui->actionZoomOriginal, settings, Qt::CTRL + Qt::Key_1);
-    loadShortcut(ui->actionZoomIn, settings, QKeySequence::ZoomIn);
-    loadShortcut(ui->actionZoomOut, settings, QKeySequence::ZoomOut);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionRotateClockwise, Qt::CTRL + Qt::Key_R);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionRotateCounterclockwise, Qt::CTRL + Qt::SHIFT + Qt::Key_R);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionZoomFit, Qt::CTRL + Qt::Key_0);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionZoomOriginal, Qt::CTRL + Qt::Key_1);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionZoomIn, QKeySequence::ZoomIn);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionZoomOut, QKeySequence::ZoomOut);
+
+    OptionsDialog::loadAllShortcuts(settings);
 }
 
 void MainWindow::saveSettings()

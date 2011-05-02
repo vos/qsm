@@ -1,7 +1,6 @@
 #include "optionsdialog.h"
 #include "ui_optionsdialog.h"
 
-#include <QSettings>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QKeyEvent>
@@ -12,6 +11,16 @@ const QColor OptionsDialog::DEFAULT_BACKGROUND_COLOR = Qt::black;
 const QString OptionsDialog::DEFAULT_APPLICATION_DIRECTORY = QDir::homePath() + "/.qsm";
 const QString OptionsDialog::DEFAULT_SLIDESHOWS_DIRECTORY = OptionsDialog::DEFAULT_APPLICATION_DIRECTORY + "/slideshows";
 const QString OptionsDialog::DEFAULT_IMAGES_DIRECTORY = OptionsDialog::DEFAULT_APPLICATION_DIRECTORY + "/images";
+
+QHash<QAction*, QKeySequence> OptionsDialog::DefaultShortcuts;
+
+void OptionsDialog::loadAllShortcuts(const QSettings &settings)
+{
+    foreach (QAction *action, OptionsDialog::DefaultShortcuts.keys()) {
+        action->setShortcut(settings.value("shortcuts/" + action->objectName(),
+            OptionsDialog::DefaultShortcuts.value(action)).value<QKeySequence>());
+    }
+}
 
 OptionsDialog::OptionsDialog(QList<QPair<QString, QList<QAction*> > > *actions, QWidget *parent) :
     QDialog(parent),
@@ -28,20 +37,20 @@ OptionsDialog::OptionsDialog(QList<QPair<QString, QList<QAction*> > > *actions, 
     static const QString windowContext(tr("Window Context"));
     static const QString widgetContext(tr("Widget Context"));
     for (int i = 0; i < actions->count(); ++i) {
-        QPair<QString, QList<QAction*> > actionGroup = actions->at(i);
+        const QPair<QString, QList<QAction*> > actionGroup = actions->at(i);
         QTreeWidgetItem *itemGroup = new QTreeWidgetItem(ui->shortcutsTreeWidget, QStringList(actionGroup.first));
         QFont font = itemGroup->font(0);
         font.setBold(true);
         itemGroup->setFont(0, font);
         items.append(itemGroup);
         for (int j = 0; j < actionGroup.second.count(); ++j) {
-            QAction *action = actionGroup.second.at(j);
+            const QAction *action = actionGroup.second.at(j);
             QStringList itemText(action->text().replace('&', ""));
             itemText.append(action->toolTip());
             itemText.append(action->shortcut().toString(QKeySequence::NativeText));
             QTreeWidgetItem *item = new QTreeWidgetItem(itemGroup, itemText);
-            item->setToolTip(2, action->shortcutContext() == Qt::WindowShortcut ? windowContext : widgetContext);
             item->setIcon(0, action->icon());
+            item->setToolTip(2, action->shortcutContext() == Qt::WindowShortcut ? windowContext : widgetContext);
             items.append(item);
         }
     }
@@ -74,10 +83,10 @@ void OptionsDialog::loadSettings()
     ui->backgroundColorPushButton->setPalette(palette);
 
     QString slideshowsDirectory = settings.value("slideshowsDirectory", OptionsDialog::DEFAULT_SLIDESHOWS_DIRECTORY).toString();
-    ui->slideshowsDirectoryLineEdit->setText(slideshowsDirectory);
+    ui->slideshowsDirectoryLineEdit->setText(QDir::toNativeSeparators(slideshowsDirectory));
 
     QString imagesDirectory = settings.value("imagesDirectory", OptionsDialog::DEFAULT_IMAGES_DIRECTORY).toString();
-    ui->imagesDirectoryLineEdit->setText(imagesDirectory);
+    ui->imagesDirectoryLineEdit->setText(QDir::toNativeSeparators(imagesDirectory));
 }
 
 void OptionsDialog::saveSettings()
@@ -85,8 +94,11 @@ void OptionsDialog::saveSettings()
     QSettings settings;
 
     QLocale::Language lang = language();
-    if (lang != (QLocale::Language)settings.value("language", (int)lang).toInt()) {
-        settings.setValue("language", (int)lang);
+    if (lang != (QLocale::Language)settings.value("language", (int)OptionsDialog::DEFAULT_LANGUAGE).toInt()) {
+        if (lang == OptionsDialog::DEFAULT_LANGUAGE)
+            settings.remove("language");
+        else
+            settings.setValue("language", (int)lang);
         QMessageBox::information(this, tr("Restart required"),
             tr("The language change will take effect after a restart of Qt SlideShow Manager."));
     }
@@ -96,9 +108,12 @@ void OptionsDialog::saveSettings()
 
     settings.beginGroup("shortcuts");
     for (int i = 0; i < m_actions->count(); ++i) {
-        const QPair<QString, QList<QAction*> > actionGroup = m_actions->at(i);
+        const QTreeWidgetItem *shortcutGroup = ui->shortcutsTreeWidget->topLevelItem(i);
+        QPair<QString, QList<QAction*> > actionGroup = m_actions->at(i);
         for (int j = 0; j < actionGroup.second.count(); ++j) {
-            const QAction *action = actionGroup.second[j];
+            const QTreeWidgetItem *shortcutItem = shortcutGroup->child(j);
+            QAction *action = actionGroup.second.at(j);
+            action->setShortcut(shortcutItem->text(2));
             settings.setValue(action->objectName(), action->shortcut());
         }
     }
@@ -150,54 +165,63 @@ void OptionsDialog::on_imagesDirectoryPushButton_clicked()
 
 void OptionsDialog::on_shortcutsTreeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *)
 {
-    ui->shortcutGroupBox->setEnabled(current->childCount() == 0);
+    ui->shortcutGroupBox->setEnabled(current->parent());
     ui->keyLineEdit->setText(current->text(2));
 }
 
 void OptionsDialog::on_resetAllPushButton_clicked()
 {
-    for (int i = 0; i < m_actions->count(); ++i) {
-        QPair<QString, QList<QAction*> > actionGroup = m_actions->at(i);
+    for (int i = 0; i < ui->shortcutsTreeWidget->topLevelItemCount(); ++i) {
         QTreeWidgetItem *item = ui->shortcutsTreeWidget->topLevelItem(i);
-        for (int j = 0; j < actionGroup.second.count(); ++j) {
-            // TODO: reset to default shortcut
-            actionGroup.second[j]->setShortcut(QKeySequence());
-            item->child(j)->setText(2, "");
+        for (int j = 0; j < item->childCount(); ++j) {
+            QAction *action = m_actions->at(i).second.at(j);
+            QString keySequence = OptionsDialog::DefaultShortcuts.value(action).toString(QKeySequence::NativeText);
+            item->child(j)->setText(2, keySequence);
         }
     }
-    ui->keyLineEdit->clear();
+    QTreeWidgetItem *item = ui->shortcutsTreeWidget->currentItem();
+    if (item && item->parent())
+        ui->keyLineEdit->setText(item->text(2));
     checkShortcuts();
 }
 
 void OptionsDialog::on_resetPushButton_clicked()
 {
     QTreeWidgetItem *item = ui->shortcutsTreeWidget->currentItem();
-    if (item) {
+    if (item && item->parent()) {
         QModelIndex index = ui->shortcutsTreeWidget->currentIndex();
-        if (index.parent().isValid()) {
-            // TODO: reset to default shortcut
-            m_actions->value(index.parent().row()).second.value(index.row())->setShortcut(QKeySequence());
-        }
-        item->setText(2, "");
+        QAction *action = m_actions->at(index.parent().row()).second.at(index.row());
+        QString keySequence = OptionsDialog::DefaultShortcuts.value(action).toString(QKeySequence::NativeText);
+        item->setText(2, keySequence);
+        ui->keyLineEdit->setText(keySequence);
+        checkShortcuts();
     }
-    ui->keyLineEdit->clear();
-    checkShortcuts();
+}
+
+void OptionsDialog::on_removePushButton_clicked()
+{
+    QTreeWidgetItem *item = ui->shortcutsTreeWidget->currentItem();
+    if (item && item->parent()) {
+        item->setText(2, "");
+        ui->keyLineEdit->clear();
+        checkShortcuts();
+    }
 }
 
 bool OptionsDialog::checkShortcuts()
 {
     bool multipleUsage = false;
-    for (int i = 0; i < m_actions->count(); ++i) {
-        QPair<QString, QList<QAction*> > actionGroup = m_actions->at(i);
-        for (int j = 0; j < actionGroup.second.count(); ++j) {
-            ui->shortcutsTreeWidget->topLevelItem(i)->child(j)->setForeground(2, Qt::black); // reset color
-            for (int k = 0; k < m_actions->count(); ++k) {
-                QPair<QString, QList<QAction*> > actionGroup2 = m_actions->at(k);
-                for (int l = 0; l < actionGroup2.second.count(); ++l) {
-                    if (i == k && j == l)
-                        continue;
-                    if (actionGroup.second.at(j)->shortcut() == actionGroup2.second.at(l)->shortcut()) {
-                        ui->shortcutsTreeWidget->topLevelItem(i)->child(j)->setForeground(2, Qt::red);
+    for (int i = 0; i < ui->shortcutsTreeWidget->topLevelItemCount(); ++i) {
+        QTreeWidgetItem *shortcutGroup = ui->shortcutsTreeWidget->topLevelItem(i);
+        for (int j = 0; j < shortcutGroup->childCount(); ++j) {
+            QTreeWidgetItem *shortcutItem = shortcutGroup->child(j);
+            shortcutItem->setForeground(2, Qt::black); // reset color
+            for (int k = 0; k < ui->shortcutsTreeWidget->topLevelItemCount(); ++k) {
+                QTreeWidgetItem *shortcutGroup2 = ui->shortcutsTreeWidget->topLevelItem(k);
+                for (int l = 0; l < shortcutGroup2->childCount(); ++l) {
+                    QTreeWidgetItem *shortcutItem2 = shortcutGroup2->child(l);
+                    if (shortcutItem != shortcutItem2 && shortcutItem->text(2) == shortcutItem2->text(2)) {
+                        shortcutItem->setForeground(2, Qt::red);
                         multipleUsage = true;
                     }
                 }
@@ -218,7 +242,6 @@ bool OptionsDialog::eventFilter(QObject *obj, QEvent *event)
                 if (key < Qt::Key_Shift || key > Qt::Key_ScrollLock) {
                     QKeySequence keySequence(key + keyEvent->modifiers());
                     QString keySequenceString = keySequence.toString(QKeySequence::NativeText);
-                    m_actions->value(index.parent().row()).second.value(index.row())->setShortcut(keySequence);
                     ui->shortcutsTreeWidget->topLevelItem(index.parent().row())->child(index.row())->setText(2, keySequenceString);
                     ui->keyLineEdit->setText(keySequenceString);
                     checkShortcuts();

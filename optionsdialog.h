@@ -2,6 +2,7 @@
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
+#include <QSettings>
 #include <QLocale>
 #include <QDir>
 
@@ -25,6 +26,9 @@ public:
     static const QString DEFAULT_SLIDESHOWS_DIRECTORY;
     static const QString DEFAULT_IMAGES_DIRECTORY;
 
+    static QHash<QAction*, QKeySequence> DefaultShortcuts;
+    static void loadAllShortcuts(const QSettings &settings);
+
     explicit OptionsDialog(QList<QPair<QString, QList<QAction*> > > *actions, QWidget *parent = 0);
     ~OptionsDialog();
 
@@ -42,6 +46,7 @@ private slots:
     void on_shortcutsTreeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void on_resetAllPushButton_clicked();
     void on_resetPushButton_clicked();
+    void on_removePushButton_clicked();
 
     void on_buttonBox_accepted();
 

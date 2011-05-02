@@ -76,8 +76,6 @@ private:
     QString m_imagesDirectory;
     QString m_currentImagePath;
 
-    inline static void loadShortcut(QAction *action, const QSettings &settings,
-                                    const QKeySequence &defaultKeySequence = QKeySequence());
     void loadSettings();
     void saveSettings();
 
