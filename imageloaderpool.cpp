@@ -25,10 +25,10 @@ void ImageLoaderPool::start(ImageLoader *imageLoader)
 void ImageLoaderPool::thread_finished()
 {
     ImageLoaderThread *thread = qobject_cast<ImageLoaderThread*>(sender());
-    Q_ASSERT(thread);
+    if (!thread) return;
 
     m_activeThreads.remove(thread);
-    delete thread;
+    thread->deleteLater();
 
     if (m_queue.count() > 0)
         addThread(m_queue.dequeue());
