@@ -370,9 +370,6 @@
    <property name="statusTip">
     <string>Create an empty Slideshow</string>
    </property>
-   <property name="menuRole">
-    <enum>QAction::ApplicationSpecificRole</enum>
-   </property>
   </action>
   <action name="actionReloadAllSlideshows">
    <property name="text">
@@ -380,9 +377,6 @@
    </property>
    <property name="statusTip">
     <string>Reload All Slideshows</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::ApplicationSpecificRole</enum>
    </property>
   </action>
   <action name="actionSaveAllSlideshows">
@@ -401,9 +395,6 @@
    </property>
    <property name="statusTip">
     <string>Save All Slideshows</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::ApplicationSpecificRole</enum>
    </property>
   </action>
   <action name="actionExit">
@@ -456,9 +447,6 @@
    </property>
    <property name="statusTip">
     <string>QSM Help</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::ApplicationSpecificRole</enum>
    </property>
   </action>
   <action name="actionAboutQt">
