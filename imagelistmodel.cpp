@@ -5,6 +5,7 @@
 #include <QFileInfoList>
 #include <QPixmap>
 #include <QDateTime>
+#include <QDir>
 
 ImageListModel::ImageListModel(QObject *parent) :
     QAbstractListModel(parent), m_imageInfoCount(0)
@@ -33,7 +34,7 @@ QVariant ImageListModel::data(const QModelIndex &index, int role) const
     else if (role == Qt::ToolTipRole) {
         ImageInfo info = m_imageInfoList.at(index.row());
         return QString(tr("<html><b>%1</b><br/><br/>Dimensions: %2<br/>Size: %3<br/>Date created: %4</html>"))
-                .arg(info.imagePath())
+                .arg(QDir::toNativeSeparators(info.imagePath()))
                 .arg(info.dimensions())
                 .arg(info.size())
                 .arg(info.fileInfo().created().toString(Qt::DefaultLocaleShortDate));
