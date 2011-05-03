@@ -44,7 +44,6 @@ bool SlideshowListModel::setData(const QModelIndex &index, const QVariant &value
 
     if (role == Qt::EditRole) {
         m_slideshowList[index.row()].setName(value.toString());
-        emit dataChanged(index, index);
         return true;
     }
     return false;

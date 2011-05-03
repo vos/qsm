@@ -10,17 +10,20 @@
 class Slideshow
 {
 public:
-    Slideshow(const QString &name, Qsm::SortFlags sort = Qsm::Name, const QString &comment = QString());
+    static const QString FILE_EXTENSION;
+
+    Slideshow(const QString &name = QString(), Qsm::SortFlags sort = Qsm::Unsorted, const QString &comment = QString());
     Slideshow(const Slideshow &slideshow);
 
     Slideshow& operator =(const Slideshow &image);
 
     inline const QString& name() const { return m_name; }
-    inline void setName(const QString &name) { m_name = name; }
+    void setName(const QString &name);
+    QString path(const QString &dir) const;
     inline Qsm::SortFlags sort() const { return m_sort; }
     void setSort(Qsm::SortFlags sort = Qsm::Name);
     inline const QString& comment() const { return m_comment; }
-    inline void setComment(const QString &comment = QString()) { m_comment = comment; }
+    void setComment(const QString &comment = QString());
 
     void addImage(const SlideshowImage &image);
     SlideshowImage* image(int index);
@@ -28,13 +31,17 @@ public:
     void removeImage(int index);
     void removeImage(const SlideshowImage &image);
     inline int imageCount() const { return m_images.count(); }
-    inline void clearImages() { m_images.clear(); }
+    void clearImages();
+
+    inline void resetChanged() { m_changed = false; }
+    inline bool hasChanged() const { return m_changed; }
 
 private:
     QString m_name;
     Qsm::SortFlags m_sort;
     QString m_comment;
     QList<SlideshowImage> m_images;
+    bool m_changed;
 };
 
 #endif // SLIDESHOW_H

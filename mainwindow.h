@@ -2,10 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSettings>
 #include <QModelIndex>
 #include <QFileInfoList>
 #include <QImage>
+
+#include "slideshow.h"
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -17,6 +18,7 @@ class ScanFolderThread;
 class ImageListModel;
 class ImageWidget;
 class SlideshowListModel;
+class SlideshowFileManager;
 
 namespace Ui {
     class MainWindow;
@@ -44,7 +46,9 @@ private slots:
     void on_slideshowImageListView_clicked(const QModelIndex &index);
     void on_slideshowImageListView_customContextMenuRequested(const QPoint &pos);
     void slideshowImageListModel_changed();
-    void imageLoaded(const QImage &image, int, int, int);
+    void imageLoaded(const QImage &image, int width, int height, int index);
+    void slideshowFileManager_started();
+    void slideshowFileManager_finished();
     void on_imageWidget_customContextMenuRequested(const QPoint &pos);
     void scanFolderAbortButton_clicked();
 
@@ -56,9 +60,13 @@ private slots:
     void on_actionQsmHelp_triggered();
     void on_actionAboutQsm_triggered();
 
+    void on_actionRenameImage_triggered();
+    void on_actionRemoveImage_triggered();
+
     void on_actionRenameSlideshow_triggered();
     void on_actionRemoveSlideshow_triggered();
-    void on_actionRemoveImage_triggered();
+    void on_actionReloadSlideshow_triggered();
+    void on_actionSaveSlideshow_triggered();
 
     void on_includeSubfoldersCheckBox_toggled(bool checked);
 
@@ -71,6 +79,7 @@ private:
     ImageListModel *m_imageListModel;
     SlideshowListModel *m_slideshowListModel;
     ImageListModel *m_slideshowImageListModel;
+    SlideshowFileManager *m_slideshowFileManager;
 
     QString m_slideshowsDirectory;
     QString m_imagesDirectory;
