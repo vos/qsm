@@ -28,15 +28,51 @@ void SlideshowFileManager::loadAllSlideshows(const QString &directory)
     start();
 }
 
-void SlideshowFileManager::saveSlideshow(const Slideshow &slideshow, const QString &directory)
+void SlideshowFileManager::saveSlideshow(Slideshow &slideshow, const QString &directory)
 {
-    qDebug() << slideshow.path(directory) << slideshow.hasChanged();
+    if (!slideshow.hasChanged())
+        return;
+
+    QFile file(slideshow.path(directory));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning("SlideshowFileManager::saveSlideshow(Slideshow, QString): cannot open file \"%s\" (%s).",
+                 qPrintable(file.fileName()), qPrintable(file.errorString()));
+        return;
+    }
+
+    QXmlStreamWriter xml(&file);
+    xml.setAutoFormatting(true);
+    xml.writeStartDocument("1.0", true);
+    xml.writeStartElement("slideshow");
+    Qsm::SortFlags sort = slideshow.sort();
+    if (sort.testFlag(Qsm::Name) || sort.testFlag(Qsm::Date)) {
+        xml.writeAttribute("sort", sort.testFlag(Qsm::Name) ? "name" : "date");
+        if (sort.testFlag(Qsm::Reversed))
+            xml.writeAttribute("sortOrdner", "desc");
+    }
+    if (!slideshow.comment().isEmpty())
+        xml.writeAttribute("comment", slideshow.comment());
+    foreach (const SlideshowImage &image, slideshow.images()) {
+        xml.writeStartElement("image");
+        xml.writeAttribute("path", QDir::toNativeSeparators(image.path()));
+        if (image.randomFactor() > 1)
+            xml.writeAttribute("randomFactor", QString::number(image.randomFactor()));
+        if (!image.comment().isEmpty())
+            xml.writeAttribute("comment", image.comment());
+        xml.writeEndElement();
+    }
+    xml.writeEndElement();
+    xml.writeEndDocument();
+    file.close();
+
+    slideshow.resetChanged();
 }
 
-void SlideshowFileManager::saveAllSlideshows(const QList<Slideshow> &slideshowList, const QString &directory)
+void SlideshowFileManager::saveAllSlideshows(QList<Slideshow> &slideshowList, const QString &directory)
 {
-    foreach (const Slideshow &slideshow, slideshowList)
-        saveSlideshow(slideshow, directory);
+    QList<Slideshow>::iterator slideshow;
+    for (slideshow = slideshowList.begin(); slideshow != slideshowList.end(); ++slideshow)
+        saveSlideshow(*slideshow, directory);
 }
 
 void SlideshowFileManager::run()

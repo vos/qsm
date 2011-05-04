@@ -32,12 +32,16 @@ QVariant ImageListModel::data(const QModelIndex &index, int role) const
     else if (role == Qt::DecorationRole)
         return m_imageInfoList.at(index.row()).icon();
     else if (role == Qt::ToolTipRole) {
-        ImageInfo info = m_imageInfoList.at(index.row());
-        return QString(tr("<html><b>%1</b><br/><br/>Dimensions: %2<br/>Size: %3<br/>Date created: %4</html>"))
-                .arg(QDir::toNativeSeparators(info.imagePath()))
-                .arg(info.dimensions())
-                .arg(info.size())
-                .arg(info.fileInfo().created().toString(Qt::DefaultLocaleShortDate));
+        const ImageInfo info = m_imageInfoList.at(index.row());
+        if (info.exists())
+            return QString(tr("<html><b>%1</b><br/><br/>Dimensions: %2<br/>Size: %3<br/>Date created: %4</html>"))
+                    .arg(QDir::toNativeSeparators(info.imagePath()))
+                    .arg(info.dimensions())
+                    .arg(info.size())
+                    .arg(info.fileInfo().created().toString(Qt::DefaultLocaleShortDate));
+        else
+            return QString(tr("<html><b>%1<br/><br/><span style=\"color: red;\">IMAGE NOT FOUND</span></b></html>"))
+                    .arg(QDir::toNativeSeparators(info.imagePath()));
     }
 
     return QVariant();
@@ -145,10 +149,13 @@ void ImageListModel::fetchMore(const QModelIndex &)
 
     // start multithreaded image loading
     for (int i = beginIndex; i <= endIndex; i++) {
-        ImageLoader *imageLoader = new ImageLoader(m_imageInfoList.at(i).imagePath(), i);
-        imageLoader->setScaleSize();
-        connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(thumbnailLoaded(QImage, int, int, int)));
-        m_imageLoaderPool.start(imageLoader);
+        const ImageInfo imageInfo = m_imageInfoList.at(i);
+        if (imageInfo.exists()) {
+            ImageLoader *imageLoader = new ImageLoader(imageInfo.imagePath(), i);
+            imageLoader->setScaleSize();
+            connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(thumbnailLoaded(QImage, int, int, int)));
+            m_imageLoaderPool.start(imageLoader);
+        }
     }
 
     emit changed();

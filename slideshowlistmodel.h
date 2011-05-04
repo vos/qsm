@@ -20,7 +20,7 @@ public:
 
     Slideshow* slideshow(const QModelIndex &index) const;
 
-    inline const QList<Slideshow>& slideshowList() const { return m_slideshowList; }
+    inline QList<Slideshow>& slideshowList() { return m_slideshowList; }
     inline Slideshow* currentSlideshow() const { return m_currentSlideshow; }
     inline const QModelIndex& currentSlideshowIndex() const { return m_currentSlideshowIndex; }
 

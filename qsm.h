@@ -6,10 +6,12 @@
 namespace Qsm
 {
     enum SortFlag {
-        Name = 0x1, Date = 0x2, Unsorted = 0x3, // sort order
-        Reversed = 0x4                          // reverse sort order
+        Name = 0x1, Date = 0x2, Unsorted = 0x4, // sort order
+        Reversed = 0x8                          // reverse sort order
     };
     Q_DECLARE_FLAGS(SortFlags, SortFlag)
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Qsm::SortFlags)
 
 #endif // QSM_H

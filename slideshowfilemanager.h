@@ -14,8 +14,8 @@ public:
 
     void loadSlideshow(const QString &file);
     void loadAllSlideshows(const QString &directory);
-    void saveSlideshow(const Slideshow &slideshow, const QString &directory);
-    void saveAllSlideshows(const QList<Slideshow> &slideshowList, const QString &directory);
+    void saveSlideshow(Slideshow &slideshow, const QString &directory);
+    void saveAllSlideshows(QList<Slideshow> &slideshowList, const QString &directory);
 
     inline bool isLoading() const { return isRunning(); }
 

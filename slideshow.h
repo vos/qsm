@@ -21,13 +21,13 @@ public:
     void setName(const QString &name);
     QString path(const QString &dir) const;
     inline Qsm::SortFlags sort() const { return m_sort; }
-    void setSort(Qsm::SortFlags sort = Qsm::Name);
+    void setSort(Qsm::SortFlags sort = Qsm::Unsorted);
     inline const QString& comment() const { return m_comment; }
     void setComment(const QString &comment = QString());
 
     void addImage(const SlideshowImage &image);
     SlideshowImage* image(int index);
-    inline const QList<SlideshowImage>& images() { return m_images; }
+    inline QList<SlideshowImage>& images() { return m_images; }
     void removeImage(int index);
     void removeImage(const SlideshowImage &image);
     inline int imageCount() const { return m_images.count(); }
