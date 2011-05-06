@@ -4,7 +4,6 @@
 #include <QDialog>
 #include <QSettings>
 #include <QLocale>
-#include <QDir>
 
 QT_BEGIN_NAMESPACE
 class QTreeWidgetItem;
@@ -29,6 +28,8 @@ public:
     static QHash<QAction*, QKeySequence> DefaultShortcuts;
     static void loadAllShortcuts(const QSettings &settings);
 
+    static bool checkDirectory(const QString &directory, bool create = true, bool warningOnFailure = true);
+
     explicit OptionsDialog(QList<QPair<QString, QList<QAction*> > > *actions, QWidget *parent = 0);
     ~OptionsDialog();
 
@@ -42,6 +43,8 @@ private slots:
     void on_backgroundColorResetPushButton_clicked();
     void on_slideshowsDirectoryPushButton_clicked();
     void on_imagesDirectoryPushButton_clicked();
+
+    void directoryLineEdit_textChanged(const QString &text);
 
     void on_shortcutsTreeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void on_resetAllPushButton_clicked();

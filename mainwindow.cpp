@@ -125,7 +125,9 @@ void MainWindow::loadSettings()
 
     ui->imageWidget->setBackgroundColor(settings.value("backgroundColor", OptionsDialog::DEFAULT_BACKGROUND_COLOR).value<QColor>());
     m_slideshowsDirectory = settings.value("slideshowsDirectory", OptionsDialog::DEFAULT_SLIDESHOWS_DIRECTORY).toString();
+    OptionsDialog::checkDirectory(m_slideshowsDirectory);
     m_imagesDirectory = settings.value("imagesDirectory", OptionsDialog::DEFAULT_IMAGES_DIRECTORY).toString();
+    OptionsDialog::checkDirectory(m_imagesDirectory, true, false);
 
     // window shortcuts
     OptionsDialog::DefaultShortcuts.insert(ui->actionExit, QKeySequence::Quit);

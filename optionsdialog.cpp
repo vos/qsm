@@ -1,6 +1,7 @@
 #include "optionsdialog.h"
 #include "ui_optionsdialog.h"
 
+#include <QDir>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QKeyEvent>
@@ -22,6 +23,21 @@ void OptionsDialog::loadAllShortcuts(const QSettings &settings)
     }
 }
 
+bool OptionsDialog::checkDirectory(const QString &directory, bool create, bool warningOnFailure)
+{
+    QDir dir(directory);
+    if (dir.exists())
+        return true;
+    else if (create) {
+        bool ok = dir.mkpath(directory);
+        if (!ok && warningOnFailure)
+            QMessageBox::warning(NULL, tr("Failed to create directory"),
+                                 tr("Could not create directory \"%1\".").arg(directory));
+        return ok;
+    } else
+        return false;
+}
+
 OptionsDialog::OptionsDialog(QList<QPair<QString, QList<QAction*> > > *actions, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::OptionsDialog),
@@ -29,6 +45,9 @@ OptionsDialog::OptionsDialog(QList<QPair<QString, QList<QAction*> > > *actions, 
 {
     Q_ASSERT(actions);
     ui->setupUi(this);
+
+    connect(ui->slideshowsDirectoryLineEdit, SIGNAL(textChanged(QString)), SLOT(directoryLineEdit_textChanged(QString)));
+    connect(ui->imagesDirectoryLineEdit, SIGNAL(textChanged(QString)), SLOT(directoryLineEdit_textChanged(QString)));
 
     loadSettings();
 
@@ -140,6 +159,18 @@ void OptionsDialog::on_backgroundColorResetPushButton_clicked()
     QPalette palette = ui->backgroundColorPushButton->palette();
     palette.setColor(QPalette::Button, OptionsDialog::DEFAULT_BACKGROUND_COLOR);
     ui->backgroundColorPushButton->setPalette(palette);
+}
+
+void OptionsDialog::directoryLineEdit_textChanged(const QString &text)
+{
+    QLineEdit *lineEdit = qobject_cast<QLineEdit*>(sender());
+    if (!lineEdit) return;
+
+    bool dirExists = QDir(lineEdit->text()).exists();
+
+    QPalette palette = lineEdit->palette();
+    palette.setColor(QPalette::Text, dirExists ? Qt::black : Qt::red);
+    lineEdit->setPalette(palette);
 }
 
 void OptionsDialog::chooseDirectory(QLineEdit *lineEdit, const QString &defaultDirectory)
@@ -285,7 +316,8 @@ QString OptionsDialog::imagesDirectory() const
 
 void OptionsDialog::on_buttonBox_accepted()
 {
-    // TODO: check for valid slideshows and images directories
-    saveSettings();
-    accept();
+    if (OptionsDialog::checkDirectory(slideshowsDirectory()) && OptionsDialog::checkDirectory(imagesDirectory())) {
+        saveSettings();
+        accept();
+    }
 }
