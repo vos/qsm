@@ -263,6 +263,15 @@ void MainWindow::prepareImage(const ImageListModel *model, const QModelIndex &in
     QThreadPool::globalInstance()->start(imageLoader);
 }
 
+QWidget* MainWindow::activeWidget(QAction *action)
+{
+    Q_ASSERT(action);
+    foreach (QWidget* widget, action->associatedWidgets())
+        if (widget->hasFocus())
+            return widget;
+    return NULL;
+}
+
 void MainWindow::on_imageListView_clicked(const QModelIndex &index)
 {
     prepareImage(m_imageListModel, index);
@@ -338,13 +347,23 @@ void MainWindow::on_slideshowListView_customContextMenuRequested(const QPoint &p
 void MainWindow::on_slideshowImageListView_clicked(const QModelIndex &index)
 {
     prepareImage(m_slideshowImageListModel, index);
+    ui->imageWidget->setText(m_slideshowListModel->currentSlideshow()->image(index.row())->comment());
 }
 
 void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoint &pos)
 {
     QMenu menu(ui->slideshowImageListView);
+    QMenu randomFactorMenu(tr("Random Factor"), &menu);
     if (ui->slideshowImageListView->currentIndex().isValid()) {
         menu.addAction(ui->actionImageEditComment);
+        // TODO
+        randomFactorMenu.addAction("1");
+        randomFactorMenu.addAction("2");
+        randomFactorMenu.addAction("3");
+        randomFactorMenu.addAction("4");
+        randomFactorMenu.addAction("5");
+        randomFactorMenu.addAction("10");
+        menu.addMenu(&randomFactorMenu);
         menu.addAction(ui->actionRenameImage);
         menu.addAction(ui->actionCutImage);
         menu.addAction(ui->actionCopyImage);
@@ -352,6 +371,7 @@ void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoi
         menu.addAction(ui->actionRemoveImage);
         menu.addAction(ui->actionRemoveImageFromDisk);
         menu.addAction(ui->actionCopyPath);
+        menu.addAction(tr("Export to Images Directory"));
         menu.addSeparator();
     }
     menu.addAction(ui->actionPreloadAllImages);
@@ -498,15 +518,76 @@ void MainWindow::on_actionAboutQsm_triggered()
                "Written by Alexander Vos and Till Althaus"));
 }
 
+void MainWindow::on_actionAddToSlideshow_triggered()
+{
+    QWidget *widget = activeWidget(ui->actionAddToSlideshow);
+    if (!widget) return;
+
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow) return;
+
+    if (widget == ui->imageListView) {
+        QString path = m_imageListModel->imagePath(ui->imageListView->currentIndex());
+        m_slideshowListModel->addImage(path);
+        m_slideshowImageListModel->addImage(ImageInfo(path));
+    } else if (widget == ui->imageWidget) {
+        m_slideshowListModel->addImage(m_currentImagePath);
+        m_slideshowImageListModel->addImage(ImageInfo(m_currentImagePath));
+    }
+}
+
+void MainWindow::on_actionImageEditComment_triggered()
+{
+}
+
 void MainWindow::on_actionRenameImage_triggered()
 {
-    sender()->dumpObjectInfo();
+}
+
+void MainWindow::on_actionCutImage_triggered()
+{
+}
+
+void MainWindow::on_actionCopyImage_triggered()
+{
+}
+
+void MainWindow::on_actionPasteImage_triggered()
+{
 }
 
 void MainWindow::on_actionRemoveImage_triggered()
 {
     m_slideshowListModel->removeImage(ui->slideshowImageListView->currentIndex());
     m_slideshowImageListModel->removeImage(ui->slideshowImageListView->currentIndex());
+}
+
+void MainWindow::on_actionRemoveImageFromDisk_triggered()
+{
+    QWidget *widget = activeWidget(ui->actionRemoveImageFromDisk);
+    if (!widget) return;
+
+    QString path;
+    if (widget == ui->imageListView)
+        path = m_imageListModel->imagePath(ui->imageListView->currentIndex());
+    else if (widget == ui->slideshowImageListView)
+        path = m_slideshowImageListModel->imagePath(ui->slideshowImageListView->currentIndex());
+    else if (widget == ui->imageWidget)
+        path = m_currentImagePath;
+
+    qDebug() << path;
+}
+
+void MainWindow::on_actionCopyPath_triggered()
+{
+}
+
+void MainWindow::on_actionPreloadAllImages_triggered()
+{
+}
+
+void MainWindow::on_actionSlideshowEditComment_triggered()
+{
 }
 
 void MainWindow::on_actionRenameSlideshow_triggered()
@@ -517,6 +598,10 @@ void MainWindow::on_actionRenameSlideshow_triggered()
 void MainWindow::on_actionRemoveSlideshow_triggered()
 {
     m_slideshowListModel->removeSlideshow(ui->slideshowListView->currentIndex());
+}
+
+void MainWindow::on_actionCopyImagesToSlideshow_triggered()
+{
 }
 
 void MainWindow::on_actionReloadSlideshow_triggered()

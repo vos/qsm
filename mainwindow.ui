@@ -14,8 +14,20 @@
    <string notr="true">QSM - Qt SlideShow Manager</string>
   </property>
   <widget class="ImageWidget" name="imageWidget">
+   <property name="minimumSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::WheelFocus</enum>
+   </property>
    <property name="contextMenuPolicy">
     <enum>Qt::CustomContextMenu</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QMenuBar" name="menuBar">

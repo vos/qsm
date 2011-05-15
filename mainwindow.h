@@ -60,11 +60,21 @@ private slots:
     void on_actionQsmHelp_triggered();
     void on_actionAboutQsm_triggered();
 
+    void on_actionAddToSlideshow_triggered();
+    void on_actionImageEditComment_triggered();
     void on_actionRenameImage_triggered();
+    void on_actionCutImage_triggered();
+    void on_actionCopyImage_triggered();
+    void on_actionPasteImage_triggered();
     void on_actionRemoveImage_triggered();
+    void on_actionRemoveImageFromDisk_triggered();
+    void on_actionCopyPath_triggered();
+    void on_actionPreloadAllImages_triggered();
 
+    void on_actionSlideshowEditComment_triggered();
     void on_actionRenameSlideshow_triggered();
     void on_actionRemoveSlideshow_triggered();
+    void on_actionCopyImagesToSlideshow_triggered();
     void on_actionReloadSlideshow_triggered();
     void on_actionSaveSlideshow_triggered();
 
@@ -90,6 +100,8 @@ private:
 
     void scanFolder(const QModelIndex &index, bool includeSubfolders = false);
     void prepareImage(const ImageListModel *model, const QModelIndex &index);
+
+    QWidget* activeWidget(QAction *action);
 
     void closeEvent(QCloseEvent *event);
 };

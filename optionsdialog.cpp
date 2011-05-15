@@ -166,7 +166,7 @@ void OptionsDialog::directoryLineEdit_textChanged(const QString &text)
     QLineEdit *lineEdit = qobject_cast<QLineEdit*>(sender());
     if (!lineEdit) return;
 
-    bool dirExists = QDir(lineEdit->text()).exists();
+    bool dirExists = QDir(text).exists();
 
     QPalette palette = lineEdit->palette();
     palette.setColor(QPalette::Text, dirExists ? Qt::black : Qt::red);

@@ -1,87 +1,121 @@
 #include "imagewidget.h"
 
 ImageWidget::ImageWidget(QWidget *parent) :
-    QGLWidget(parent)
+    QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
-    setMinimumSize(64, 64);
-
+    m_backgroundColor = Qt::black;
+    m_textureId = 0;
     m_imageWidth = 0;
     m_imageHeight = 0;
-    m_imageAspectRatio = 1.0f;
+    m_zoomMode = FitToWidget;
+    m_textBackgroundColor = QColor(0, 0, 0, 127);
+    m_textColor = Qt::white;
+    m_textVisible = true;
+}
 
-    m_backgroundColor = Qt::black;
+ImageWidget::~ImageWidget()
+{
+    if (m_textureId > 0)
+        deleteTexture(m_textureId);
 }
 
 void ImageWidget::initializeGL()
 {
     qglClearColor(m_backgroundColor);
 
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_CULL_FACE);
-
-    GLuint textureIds[1];
-    glGenTextures(1, textureIds);
-
-    glBindTexture(GL_TEXTURE_2D, textureIds[0]);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
 
-void ImageWidget::resizeGL(int width, int height)
+void ImageWidget::setupViewport(int width, int height)
 {
-    glViewport(0, 0, width, height);
-    m_widgetAspectRatio = (float)width / (float)height;
+    GLint x = 0, y = 0;
+    GLsizei w = width, h = height;
 
-    updateProjection();
-}
+    if (m_zoomMode == FitToWidget) {
+        double wr = (double)width / m_imageWidth;
+        double hr = (double)height / m_imageHeight;
+        if (wr < hr) { // full width
+            h = int(wr * m_imageHeight);
+            y = (height - h) / 2;
+        } else if (wr > hr) { // full height
+            w = int(hr * m_imageWidth);
+            x = (width - w) / 2;
+        }
+    } else {
+        // TODO
+    }
 
-void ImageWidget::updateProjection()
-{
+    glViewport(x, y, w, h);
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-
-    if (m_widgetAspectRatio < m_imageAspectRatio) {
-        int projectionHeight = int(m_imageWidth / m_widgetAspectRatio);
-        int top = (m_imageHeight - projectionHeight) >> 1;
-        gluOrtho2D(0, m_imageWidth, projectionHeight + top, top);
-    } else if (m_widgetAspectRatio > m_imageAspectRatio) {
-        int projectionWidth = int(m_imageHeight * m_widgetAspectRatio);
-        int left = (m_imageWidth - projectionWidth) >> 1;
-        gluOrtho2D(left, projectionWidth + left, m_imageHeight, 0);
-    } else
-        gluOrtho2D(0, m_imageWidth, m_imageWidth, 0);
+    glOrtho(0, m_imageWidth, m_imageHeight, 0, -1.0, 1.0);
 
     glMatrixMode(GL_MODELVIEW);
-    updateGL();
 }
 
-void ImageWidget::paintGL()
+void ImageWidget::paintEvent(QPaintEvent *)
 {
+    makeCurrent();
+    setupViewport(width(), height());
+
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
+
     glClear(GL_COLOR_BUFFER_BIT);
+    glLoadIdentity();
 
     glBegin(GL_QUADS);
-        glVertex2s(0, 0);
+        glVertex2i(0, 0);
         glTexCoord2f(0.0f, 0.0f);
 
-        glVertex2s(0, m_imageHeight);
+        glVertex2i(0, m_imageHeight);
         glTexCoord2f(1.0f, 0.0f);
 
-        glVertex2s(m_imageWidth, m_imageHeight);
+        glVertex2i(m_imageWidth, m_imageHeight);
         glTexCoord2f(1.0f, 1.0f);
 
-        glVertex2s(m_imageWidth, 0);
+        glVertex2i(m_imageWidth, 0);
         glTexCoord2f(0.0f, 1.0f);
     glEnd();
 
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_CULL_FACE);
+
+    QPainter painter(this);
+    if (m_textVisible && !m_text.isEmpty())
+        drawText(&painter, m_text);
+    painter.end();
+
     glFlush();
+}
+
+void ImageWidget::drawText(QPainter *painter, const QString &text)
+{
+    QFontMetrics metrics = QFontMetrics(font());
+    int border = qMax(4, metrics.leading());
+
+    QRect rect = metrics.boundingRect(0, 0, width() - 2 * border, int(height() * 0.25),
+                                      Qt::AlignCenter | Qt::TextWordWrap, text);
+    painter->setRenderHint(QPainter::TextAntialiasing);
+    int rectHeight = rect.height() + 2 * border;
+    painter->fillRect(0, height() - rectHeight, width(), rectHeight,
+                      m_textBackgroundColor);
+    painter->setPen(m_textColor);
+    painter->drawText((width() - rect.width()) / 2, height() - rectHeight + border,
+                      rect.width(), rect.height(),
+                      Qt::AlignCenter | Qt::TextWordWrap, text);
 }
 
 void ImageWidget::setBackgroundColor(const QColor &color)
 {
     m_backgroundColor = color;
     qglClearColor(color);
-    updateGL();
+    update();
 }
 
 void ImageWidget::setImage(const QImage &image)
@@ -89,14 +123,38 @@ void ImageWidget::setImage(const QImage &image)
     if (image.isNull())
         return;
 
-    QImage texture = QGLWidget::convertToGLFormat(image);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.constBits());
+    m_textureId = bindTexture(image);
+    m_imageWidth = image.width();
+    m_imageHeight = image.height();
+    update();
+}
 
-    if (image.width() != m_imageWidth || image.height() != m_imageHeight) {
-        m_imageWidth = image.width();
-        m_imageHeight = image.height();
-        m_imageAspectRatio = (float)m_imageWidth / (float)m_imageHeight;
-        updateProjection();
-    } else
-        updateGL();
+void ImageWidget::setZoomMode(ImageWidget::ZoomMode zoomMode)
+{
+    m_zoomMode = zoomMode;
+    update();
+}
+
+void ImageWidget::setText(const QString &text)
+{
+    m_text = text;
+    update();
+}
+
+void ImageWidget::setTextBackgroundColor(const QColor &color)
+{
+    m_textBackgroundColor = color;
+    update();
+}
+
+void ImageWidget::setTextColor(const QColor &color)
+{
+    m_textColor = color;
+    update();
+}
+
+void ImageWidget::setTextVisible(bool visible)
+{
+    m_textVisible = visible;
+    update();
 }
