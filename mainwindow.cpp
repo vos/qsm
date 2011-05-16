@@ -406,6 +406,11 @@ void MainWindow::slideshowFileManager_finished()
     ui->actionSaveSlideshow->setEnabled(true);
 }
 
+void MainWindow::on_imageWidget_viewportChanged()
+{
+    statusBar()->showMessage("Zoom: " + QString::number(ui->imageWidget->zoomFactor() * 100, 'f', 0) + " %");
+}
+
 void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
 {
     if (QFile::exists(m_currentImagePath)) {

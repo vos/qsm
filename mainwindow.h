@@ -49,6 +49,7 @@ private slots:
     void imageLoaded(const QImage &image, int width, int height, int index);
     void slideshowFileManager_started();
     void slideshowFileManager_finished();
+    void on_imageWidget_viewportChanged();
     void on_imageWidget_customContextMenuRequested(const QPoint &pos);
     void scanFolderAbortButton_clicked();
 

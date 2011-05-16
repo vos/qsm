@@ -20,6 +20,9 @@
      <height>64</height>
     </size>
    </property>
+   <property name="cursor">
+    <cursorShape>OpenHandCursor</cursorShape>
+   </property>
    <property name="focusPolicy">
     <enum>Qt::WheelFocus</enum>
    </property>
@@ -659,18 +662,12 @@
   </action>
   <action name="actionZoomIn">
    <property name="text">
-    <string>&amp;In</string>
-   </property>
-   <property name="toolTip">
-    <string>Zoom In</string>
+    <string>Zoom &amp;In</string>
    </property>
   </action>
   <action name="actionZoomOut">
    <property name="text">
-    <string>O&amp;ut</string>
-   </property>
-   <property name="toolTip">
-    <string>Zoom Out</string>
+    <string>Zoom O&amp;ut</string>
    </property>
   </action>
  </widget>
@@ -685,6 +682,14 @@
    <class>ImageWidget</class>
    <extends>QWidget</extends>
    <header>imagewidget.h</header>
+   <slots>
+    <slot>zoomTo()</slot>
+    <slot>zoomIn()</slot>
+    <slot>zoomOut()</slot>
+    <slot>setImageMode()</slot>
+    <slot>rotateClockwise()</slot>
+    <slot>rotateCounterclockwise()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources>
@@ -704,6 +709,102 @@
     <hint type="destinationlabel">
      <x>399</x>
      <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoomOriginal</sender>
+   <signal>triggered()</signal>
+   <receiver>imageWidget</receiver>
+   <slot>zoomTo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoomIn</sender>
+   <signal>triggered()</signal>
+   <receiver>imageWidget</receiver>
+   <slot>zoomIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoomOut</sender>
+   <signal>triggered()</signal>
+   <receiver>imageWidget</receiver>
+   <slot>zoomOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoomFit</sender>
+   <signal>triggered()</signal>
+   <receiver>imageWidget</receiver>
+   <slot>setImageMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRotateClockwise</sender>
+   <signal>triggered()</signal>
+   <receiver>imageWidget</receiver>
+   <slot>rotateClockwise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRotateCounterclockwise</sender>
+   <signal>triggered()</signal>
+   <receiver>imageWidget</receiver>
+   <slot>rotateCounterclockwise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>317</y>
     </hint>
    </hints>
   </connection>
