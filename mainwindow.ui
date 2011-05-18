@@ -576,6 +576,14 @@
     <enum>Qt::WidgetShortcut</enum>
    </property>
   </action>
+  <action name="actionExportImages">
+   <property name="text">
+    <string>Export to Images Directory</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
   <action name="actionPreloadAllImages">
    <property name="text">
     <string>Preload &amp;All Images</string>
@@ -615,6 +623,20 @@
    </property>
    <property name="text">
     <string>&amp;Copy Images to Slideshow...</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionExportAllImages">
+   <property name="text">
+    <string>Export All Images</string>
+   </property>
+   <property name="toolTip">
+    <string>Export All Images to the Images Directory</string>
+   </property>
+   <property name="statusTip">
+    <string>Export All Images to the Images Directory</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>

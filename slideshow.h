@@ -33,6 +33,7 @@ public:
     inline int imageCount() const { return m_images.count(); }
     void clearImages();
 
+    inline void setChanged() { m_changed = true; }
     inline void resetChanged() { m_changed = false; }
     inline bool hasChanged() const { return m_changed; }
 

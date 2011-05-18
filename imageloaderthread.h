@@ -13,7 +13,7 @@ public:
     explicit ImageLoaderThread(ImageLoader *loader, QObject *parent = 0);
     ~ImageLoaderThread();
 
-    ImageLoader *loader() const { return m_loader; }
+    inline ImageLoader* loader() const { return m_loader; }
 
 private:
     ImageLoader *m_loader;

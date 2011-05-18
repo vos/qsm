@@ -53,7 +53,7 @@ void ImageLoaderPool::clear()
 
 void ImageLoaderPool::addThread(ImageLoader *imageLoader)
 {
-    ImageLoaderThread *thread = new ImageLoaderThread(imageLoader);
+    ImageLoaderThread *thread = new ImageLoaderThread(imageLoader, this);
     connect(thread, SIGNAL(finished()), SLOT(thread_finished()));
     m_activeThreads.insert(thread);
     thread->start(QThread::NormalPriority);

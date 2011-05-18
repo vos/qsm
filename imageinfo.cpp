@@ -3,18 +3,20 @@
 #include <QPixmap>
 #include <QPainter>
 
+#include "mainwindow.h"
+
 QIcon ImageInfo::DEFAULT_ICON;
 
 ImageInfo::ImageInfo(const QFileInfo &fileInfo)
 {
     if (ImageInfo::DEFAULT_ICON.isNull()) {
-        QPixmap icon(64, 64);
+        QPixmap icon(MainWindow::MAX_THUMBNAIL_SIZE, MainWindow::MAX_THUMBNAIL_SIZE);
         QPainter painter(&icon);
         painter.setBrush(Qt::white);
         painter.setPen(Qt::red);
         painter.drawRect(0,0, icon.rect().width()-1, icon.rect().height()-1);
-        painter.drawLine(0,0, 64,64);
-        painter.drawLine(64,0, 0,64);
+        painter.drawLine(0,0, MainWindow::MAX_THUMBNAIL_SIZE,MainWindow::MAX_THUMBNAIL_SIZE);
+        painter.drawLine(MainWindow::MAX_THUMBNAIL_SIZE,0, 0,MainWindow::MAX_THUMBNAIL_SIZE);
         ImageInfo::DEFAULT_ICON = QIcon(icon);
     }
 

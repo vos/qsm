@@ -7,19 +7,11 @@
 #include <QDateTime>
 #include <QDir>
 
+#include "mainwindow.h"
+
 ImageListModel::ImageListModel(QObject *parent) :
     QAbstractListModel(parent), m_imageInfoCount(0)
 {
-}
-
-int ImageListModel::rowCount(const QModelIndex &) const
-{
-    return m_imageInfoCount;
-}
-
-int ImageListModel::imageCount() const
-{
-    return m_imageInfoList.count();
 }
 
 QVariant ImageListModel::data(const QModelIndex &index, int role) const
@@ -152,7 +144,7 @@ void ImageListModel::fetchMore(const QModelIndex &)
         const ImageInfo imageInfo = m_imageInfoList.at(i);
         if (imageInfo.exists()) {
             ImageLoader *imageLoader = new ImageLoader(imageInfo.imagePath(), i);
-            imageLoader->setScaleSize();
+            imageLoader->setScaleSize(MainWindow::MAX_THUMBNAIL_SIZE, MainWindow::MAX_THUMBNAIL_SIZE);
             connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(thumbnailLoaded(QImage, int, int, int)));
             m_imageLoaderPool.start(imageLoader);
         }

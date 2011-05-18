@@ -15,12 +15,13 @@ class ImageListModel : public QAbstractListModel
 public:
     explicit ImageListModel(QObject *parent = 0);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int imageCount() const;
+    inline int imageCount() const { return m_imageInfoList.count(); }
+    inline int rowCount(const QModelIndex & = QModelIndex()) const { return m_imageInfoCount; }
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     ImageInfo imageInfo(const QModelIndex &index) const;
     QString imagePath(const QModelIndex &index) const;
+    inline bool allThumbnailsLoaded() const { return rowCount() == imageCount(); }
 
 signals:
     void changed();
@@ -41,7 +42,7 @@ private:
 
     ImageLoaderPool m_imageLoaderPool;
 
-    bool canFetchMore(const QModelIndex &parent) const;
+    inline bool canFetchMore(const QModelIndex &parent) const;
     void fetchMore(const QModelIndex &parent);
 };
 

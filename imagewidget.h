@@ -21,7 +21,7 @@ public:
     inline double rotation() const { return m_rotate; }
 
 signals:
-    void viewportChanged();
+    void viewChanged();
 
 public slots:
     void setBackgroundColor(const QColor &color = Qt::black);

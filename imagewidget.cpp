@@ -70,7 +70,7 @@ void ImageWidget::setupViewport(int width, int height)
 
     glMatrixMode(GL_MODELVIEW);
 
-    emit viewportChanged();
+    emit viewChanged();
 }
 
 void ImageWidget::paintEvent(QPaintEvent *)

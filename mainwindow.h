@@ -29,6 +29,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    static const int MAX_THUMBNAIL_SIZE = 128;
+
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -49,7 +51,7 @@ private slots:
     void imageLoaded(const QImage &image, int width, int height, int index);
     void slideshowFileManager_started();
     void slideshowFileManager_finished();
-    void on_imageWidget_viewportChanged();
+    void on_imageWidget_viewChanged();
     void on_imageWidget_customContextMenuRequested(const QPoint &pos);
     void scanFolderAbortButton_clicked();
 
@@ -80,6 +82,7 @@ private slots:
     void on_actionSaveSlideshow_triggered();
 
     void on_includeSubfoldersCheckBox_toggled(bool checked);
+    void thumbnailSizeMenu_triggered(QAction *action);
 
 private:
     Ui::MainWindow *ui;
@@ -103,6 +106,7 @@ private:
     void prepareImage(const ImageListModel *model, const QModelIndex &index);
 
     QWidget* activeWidget(QAction *action);
+    QMenu* createThumbnailSizeMenu(QWidget *parent = 0, int selectedSize = 64);
 
     void closeEvent(QCloseEvent *event);
 };
