@@ -42,7 +42,7 @@ private:
 
     ImageLoaderPool m_imageLoaderPool;
 
-    inline bool canFetchMore(const QModelIndex &parent) const;
+    inline bool canFetchMore(const QModelIndex &) const { return m_imageInfoCount < m_imageInfoList.count(); }
     void fetchMore(const QModelIndex &parent);
 };
 

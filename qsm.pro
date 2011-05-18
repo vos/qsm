@@ -24,6 +24,7 @@ HEADERS += qsm.h \
            slideshowlistmodel.h \
            slideshowlistview.h \
            slideshowfilemanager.h \
+           slideshowwindow.h \
            optionsdialog.h
 
 SOURCES += main.cpp \
@@ -40,9 +41,11 @@ SOURCES += main.cpp \
            slideshowlistmodel.cpp \
            slideshowlistview.cpp \
            slideshowfilemanager.cpp \
+           slideshowwindow.cpp \
            optionsdialog.cpp
 
 FORMS += mainwindow.ui \
+         slideshowwindow.ui \
          optionsdialog.ui
 
 RESOURCES += icons.qrc

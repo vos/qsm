@@ -120,11 +120,6 @@ void ImageListModel::clear()
     emit changed();
 }
 
-bool ImageListModel::canFetchMore(const QModelIndex &) const
-{
-    return m_imageInfoCount < m_imageInfoList.count();
-}
-
 void ImageListModel::fetchMore(const QModelIndex &)
 {
     int remainder = m_imageInfoList.count() - m_imageInfoCount;

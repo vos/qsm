@@ -14,6 +14,7 @@
 #include "slideshowlistmodel.h"
 #include "slideshowfilemanager.h"
 #include "imagewidget.h"
+#include "slideshowwindow.h"
 #include "optionsdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -194,6 +195,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     on_actionSaveAllSlideshows_triggered();
     saveSettings();
+    qApp->quit();
     QMainWindow::closeEvent(event);
 }
 
@@ -293,7 +295,7 @@ QMenu* MainWindow::createThumbnailSizeMenu(QWidget *parent, int selectedSize)
     if (selectedSize == 0)
         disabledAction->setChecked(true);
     static const int sizes[] = {16, 24, 32, 48, 64, 96, 128};
-    for (int i = 0; i < sizeof(sizes) / sizeof(int); ++i) {
+    for (int i = 0; i < int(sizeof(sizes) / sizeof(int)); ++i) {
         int size = sizes[i];
         QAction *sizeAction = menu->addAction(tr("%1 Pixels").arg(size));
         sizeAction->setCheckable(true);
@@ -318,6 +320,7 @@ void MainWindow::thumbnailSizeMenu_triggered(QAction *action)
 void MainWindow::on_imageListView_clicked(const QModelIndex &index)
 {
     prepareImage(m_imageListModel, index);
+    ui->imageWidget->setText();
 }
 
 void MainWindow::on_imageListView_doubleClicked(const QModelIndex &index)
@@ -411,7 +414,7 @@ void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoi
     if (ui->slideshowImageListView->currentIndex().isValid()) {
         menu.addAction(ui->actionImageEditComment);
         static const int randomFactors[] = {1, 2, 3, 4, 5, 10, 25, 50, 100};
-        for (int i = 0; i < sizeof(randomFactors) / sizeof(int); ++i) {
+        for (int i = 0; i < int(sizeof(randomFactors) / sizeof(int)); ++i) {
             int randomFactor = randomFactors[i];
             QAction *randomFactorAction = randomFactorMenu.addAction(QString::number(randomFactor));
             randomFactorAction->setCheckable(true);
@@ -695,4 +698,14 @@ void MainWindow::on_includeSubfoldersCheckBox_toggled(bool checked)
     QModelIndex index = ui->folderBrowserTreeView->currentIndex();
     if (index.isValid())
         scanFolder(index, checked);
+}
+
+void MainWindow::on_slideshowStartPushButton_clicked()
+{
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow || !slideshow->imageCount())
+        return;
+
+    SlideshowWindow *slideshowWindow = new SlideshowWindow(slideshow);
+    slideshowWindow->showFullScreen();
 }

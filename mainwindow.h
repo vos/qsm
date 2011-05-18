@@ -84,6 +84,8 @@ private slots:
     void on_includeSubfoldersCheckBox_toggled(bool checked);
     void thumbnailSizeMenu_triggered(QAction *action);
 
+    void on_slideshowStartPushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QLabel *m_scanFolderLabel;

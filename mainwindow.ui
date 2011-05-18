@@ -258,7 +258,7 @@
           <item>
            <widget class="QPushButton" name="slideshowStartPushButton">
             <property name="statusTip">
-             <string>Starts the Slideshow</string>
+             <string>Start the Slideshow</string>
             </property>
             <property name="text">
              <string>Start</string>
