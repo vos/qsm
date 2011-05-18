@@ -14,7 +14,7 @@
    <cursorShape>BlankCursor</cursorShape>
   </property>
   <property name="windowTitle">
-   <string>QSM - Slideshow</string>
+   <string notr="true">QSM - Slideshow</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">

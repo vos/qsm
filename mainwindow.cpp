@@ -134,6 +134,9 @@ void MainWindow::loadSettings()
 
     // image view
     ui->imageWidget->setBackgroundColor(settings.value("backgroundColor", OptionsDialog::DEFAULT_BACKGROUND_COLOR).value<QColor>());
+    ui->imageWidget->setTextBackgroundColor(settings.value("textBackgroundColor", OptionsDialog::DEFAULT_TEXT_BACKGROUND_COLOR).value<QColor>());
+    ui->imageWidget->setTextFont(settings.value("textFont", OptionsDialog::DEFAULT_TEXT_FONT).value<QFont>());
+    ui->imageWidget->setTextColor(settings.value("textColor", OptionsDialog::DEFAULT_TEXT_COLOR).value<QColor>());
 
     // slideshows and images directory
     m_slideshowsDirectory = settings.value("slideshowsDirectory", OptionsDialog::DEFAULT_SLIDESHOWS_DIRECTORY).toString();
@@ -258,9 +261,6 @@ void MainWindow::prepareImage(const ImageListModel *model, const QModelIndex &in
         return;
 
     m_currentImagePath = imagePath;
-
-    // reset image view
-    ui->imageWidget->setImageMode();
 
     QVariant var = model->data(index, Qt::DecorationRole);
     if (var.canConvert<QIcon>()) {
@@ -571,6 +571,9 @@ void MainWindow::on_actionOptions_triggered()
     OptionsDialog options(&actions, this);
     if (options.exec() == QDialog::Accepted) {
         ui->imageWidget->setBackgroundColor(options.backgroundColor());
+        ui->imageWidget->setTextBackgroundColor(options.textBackgroundColor());
+        ui->imageWidget->setTextFont(options.textFont());
+        ui->imageWidget->setTextColor(options.textColor());
         QString slideshowsDirectory = options.slideshowsDirectory();
         if (slideshowsDirectory != m_slideshowsDirectory) {
             m_slideshowsDirectory = slideshowsDirectory;
@@ -707,5 +710,10 @@ void MainWindow::on_slideshowStartPushButton_clicked()
         return;
 
     SlideshowWindow *slideshowWindow = new SlideshowWindow(slideshow);
+    ImageWidget *imageWidget = slideshowWindow->imageWidget();
+    imageWidget->setBackgroundColor(ui->imageWidget->backgroundColor());
+    imageWidget->setTextBackgroundColor(ui->imageWidget->textBackgroundColor());
+    imageWidget->setTextFont(ui->imageWidget->textFont());
+    imageWidget->setTextColor(ui->imageWidget->textColor());
     slideshowWindow->showFullScreen();
 }

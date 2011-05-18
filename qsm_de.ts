@@ -5,12 +5,12 @@
 <context>
     <name>ImageListModel</name>
     <message>
-        <location filename="imagelistmodel.cpp" line="37"/>
+        <location filename="imagelistmodel.cpp" line="29"/>
         <source>&lt;html&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Dimensions: %2&lt;br/&gt;Size: %3&lt;br/&gt;Date created: %4&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Abmessungen: %2&lt;br/&gt;Größe: %3&lt;br/&gt;Erstellungsdatum: %4&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="imagelistmodel.cpp" line="43"/>
+        <location filename="imagelistmodel.cpp" line="35"/>
         <source>&lt;html&gt;&lt;b&gt;%1&lt;br/&gt;&lt;br/&gt;&lt;span style=&quot;color: red;&quot;&gt;IMAGE NOT FOUND&lt;/span&gt;&lt;/b&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;b&gt;%1&lt;br/&gt;&lt;br/&gt;&lt;span style=&quot;color: red;&quot;&gt;BILD NICHT GEFUNDEN&lt;/span&gt;&lt;/b&gt;&lt;/html&gt;</translation>
     </message>
@@ -113,8 +113,9 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="261"/>
-        <source>Starts the Slideshow</source>
-        <translation>Startet die Slideshow</translation>
+        <source>Start the Slideshow</source>
+        <oldsource>Starts the Slideshow</oldsource>
+        <translation>Starte die Slideshow</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="264"/>
@@ -327,109 +328,109 @@
         <translation>&amp;Neue Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="26"/>
+        <location filename="mainwindow.cpp" line="27"/>
         <source>&amp;Sidebar</source>
         <translation>&amp;Seitenpanele</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="111"/>
-        <location filename="mainwindow.cpp" line="219"/>
+        <location filename="mainwindow.cpp" line="110"/>
+        <location filename="mainwindow.cpp" line="233"/>
         <source>Abort</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="119"/>
+        <location filename="mainwindow.cpp" line="118"/>
         <source>Ready</source>
         <translation>Bereit</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="216"/>
-        <location filename="mainwindow.cpp" line="227"/>
+        <location filename="mainwindow.cpp" line="230"/>
+        <location filename="mainwindow.cpp" line="241"/>
         <source>Scanning folder %1 ...</source>
         <translation>Durchsuche Ordner %1...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="234"/>
+        <location filename="mainwindow.cpp" line="248"/>
         <source>%1 images found, %2 folders scanned</source>
         <translation>%1 Bilder gefunden, %2 Ordner durchsucht</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="278"/>
+        <location filename="mainwindow.cpp" line="289"/>
         <source>Thumbnail Size</source>
         <translation>Vorschaubildgröße</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="280"/>
+        <location filename="mainwindow.cpp" line="291"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="289"/>
+        <location filename="mainwindow.cpp" line="300"/>
         <source>%1 Pixels</source>
         <translation>%1 Pixel</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="346"/>
+        <location filename="mainwindow.cpp" line="359"/>
         <source>Image List %1/%2</source>
         <translation>Bildliste %1/%2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="397"/>
+        <location filename="mainwindow.cpp" line="410"/>
         <source>Random Factor</source>
         <translation>Zufallsfaktor</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="437"/>
+        <location filename="mainwindow.cpp" line="451"/>
         <source>Slideshow Image List %1/%2</source>
         <translation>Slideshow Bildliste %1/%2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="465"/>
+        <location filename="mainwindow.cpp" line="479"/>
         <source>Zoom: %1 %</source>
         <translation>Zoom: %1 %</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="477"/>
+        <location filename="mainwindow.cpp" line="491"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="500"/>
+        <location filename="mainwindow.cpp" line="514"/>
         <source>aborting...</source>
         <translation>Bitte warten...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="507"/>
+        <location filename="mainwindow.cpp" line="521"/>
         <source>New Slideshow</source>
         <translation>Neue Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="532"/>
+        <location filename="mainwindow.cpp" line="546"/>
         <source>Window</source>
         <translation>Fenster</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="540"/>
+        <location filename="mainwindow.cpp" line="554"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="548"/>
+        <location filename="mainwindow.cpp" line="562"/>
         <source>Slideshow</source>
         <translation>Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="554"/>
+        <location filename="mainwindow.cpp" line="568"/>
         <source>Image View</source>
-        <translation>Bildansicht</translation>
+        <translation>Bildanzeige</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="576"/>
+        <location filename="mainwindow.cpp" line="593"/>
         <source>About QSM</source>
         <translation>Über QSM</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="577"/>
+        <location filename="mainwindow.cpp" line="594"/>
         <source>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 alpha&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Written by Alexander Vos and Till Althaus</source>
         <translation>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 alpha&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Entwickelt von Alexander Vos und Till Althaus</translation>
     </message>
@@ -472,33 +473,55 @@
         <translation>Deutsch</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="78"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The &lt;span style=&quot; font-weight:600;&quot;&gt;Background Color&lt;/span&gt; is used as a background for the image view.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <location filename="optionsdialog.ui" line="81"/>
+        <source>Image View</source>
+        <translation>Bildanzeige</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="85"/>
+        <location filename="optionsdialog.ui" line="87"/>
         <source>Background Color:</source>
         <translation>Hintergrundfarbe:</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="160"/>
-        <location filename="optionsdialog.ui" line="339"/>
+        <location filename="optionsdialog.ui" line="162"/>
+        <location filename="optionsdialog.ui" line="247"/>
+        <location filename="optionsdialog.ui" line="287"/>
+        <location filename="optionsdialog.ui" line="372"/>
+        <location filename="optionsdialog.ui" line="551"/>
         <source>Reset to default</source>
         <translation>Auf den Standardwert zurücksetzen</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="163"/>
-        <location filename="optionsdialog.ui" line="342"/>
+        <location filename="optionsdialog.ui" line="165"/>
+        <location filename="optionsdialog.ui" line="250"/>
+        <location filename="optionsdialog.ui" line="290"/>
+        <location filename="optionsdialog.ui" line="375"/>
+        <location filename="optionsdialog.ui" line="554"/>
         <source>Reset</source>
         <translation>Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="173"/>
+        <location filename="optionsdialog.ui" line="172"/>
+        <source>Text Background Color:</source>
+        <translation>Text Hintergrundfarbe:</translation>
+    </message>
+    <message>
+        <location filename="optionsdialog.ui" line="270"/>
+        <source>Text Font:</source>
+        <translation>Schriftart:</translation>
+    </message>
+    <message>
+        <location filename="optionsdialog.ui" line="277"/>
+        <source>Change Font</source>
+        <translation>Schrift anpassen</translation>
+    </message>
+    <message>
+        <location filename="optionsdialog.ui" line="297"/>
+        <source>Text Color:</source>
+        <translation>Textfarbe:</translation>
+    </message>
+    <message>
+        <location filename="optionsdialog.ui" line="385"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -507,18 +530,18 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="180"/>
+        <location filename="optionsdialog.ui" line="392"/>
         <source>Slideshows Directory</source>
         <translation>Slideshow-Verzeichnis</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="189"/>
-        <location filename="optionsdialog.ui" line="217"/>
+        <location filename="optionsdialog.ui" line="401"/>
+        <location filename="optionsdialog.ui" line="429"/>
         <source>Browse...</source>
         <translation>Durchsuchen...</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="199"/>
+        <location filename="optionsdialog.ui" line="411"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -529,100 +552,90 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="208"/>
+        <location filename="optionsdialog.ui" line="420"/>
         <source>Images Directory</source>
         <translation>Bilder-Verzeichnis</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="241"/>
+        <location filename="optionsdialog.ui" line="453"/>
         <source>Keyboard</source>
         <translation>Tastatur</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="247"/>
+        <location filename="optionsdialog.ui" line="459"/>
         <source>Keyboard Shortcuts</source>
         <translation>Tastaturkürzel</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="272"/>
+        <location filename="optionsdialog.ui" line="484"/>
         <source>Command</source>
         <translation>Befehl</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="277"/>
+        <location filename="optionsdialog.ui" line="489"/>
         <source>Label</source>
         <translation>Beschriftung</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="282"/>
-        <location filename="optionsdialog.ui" line="323"/>
+        <location filename="optionsdialog.ui" line="494"/>
+        <location filename="optionsdialog.ui" line="535"/>
         <source>Shortcut</source>
         <translation>Kürzel</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="292"/>
+        <location filename="optionsdialog.ui" line="504"/>
         <source>Reset all to default</source>
         <translation>Alle auf Standardwerte zurücksetzen</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="295"/>
+        <location filename="optionsdialog.ui" line="507"/>
         <source>Reset All</source>
         <translation>Alle zurücksetzen</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="329"/>
+        <location filename="optionsdialog.ui" line="541"/>
         <source>Key sequence:</source>
         <translation>Tastenkombination:</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="349"/>
+        <location filename="optionsdialog.ui" line="561"/>
         <source>Remove the shortcut</source>
         <translation>Kürzel löschen</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="352"/>
+        <location filename="optionsdialog.ui" line="564"/>
         <source>Remove</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="34"/>
+        <location filename="optionsdialog.cpp" line="37"/>
         <source>Failed to create directory</source>
         <translation>Fehler beim Erstellen des Verzeichnisses</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="35"/>
+        <location filename="optionsdialog.cpp" line="38"/>
         <source>Could not create directory &quot;%1&quot;.</source>
         <translation>Konnte das Verzeichnis &quot;%1&quot; nicht erstellen.</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="56"/>
+        <location filename="optionsdialog.cpp" line="59"/>
         <source>Window Context</source>
         <translation>Fenster Kontext</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="57"/>
+        <location filename="optionsdialog.cpp" line="60"/>
         <source>Widget Context</source>
         <translation>Steuerelement Kontext</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="121"/>
+        <location filename="optionsdialog.cpp" line="137"/>
         <source>Restart required</source>
         <translation>Neustart erforderlich</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="122"/>
+        <location filename="optionsdialog.cpp" line="138"/>
         <source>The language change will take effect after a restart of Qt SlideShow Manager.</source>
         <translation>Die Änderung der Sprache wird nach einem Neustart von Qt SlideShow Manager wirksam.</translation>
-    </message>
-    <message>
-        <location filename="optionsdialog.cpp" line="150"/>
-        <source>Select Color</source>
-        <translation>Farbe auswählen</translation>
-    </message>
-    <message>
-        <location filename="optionsdialog.cpp" line="182"/>
-        <source>Choose Directory</source>
-        <translation>Verzeichnis auswählen</translation>
     </message>
 </context>
 </TS>

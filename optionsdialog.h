@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QSettings>
 #include <QLocale>
+#include <QColorDialog>
 
 QT_BEGIN_NAMESPACE
 class QTreeWidgetItem;
@@ -21,6 +22,9 @@ class OptionsDialog : public QDialog
 public:
     static const QLocale::Language DEFAULT_LANGUAGE;
     static const QColor DEFAULT_BACKGROUND_COLOR;
+    static const QColor DEFAULT_TEXT_BACKGROUND_COLOR;
+    static const QFont DEFAULT_TEXT_FONT;
+    static const QColor DEFAULT_TEXT_COLOR;
     static const QString DEFAULT_APPLICATION_DIRECTORY;
     static const QString DEFAULT_SLIDESHOWS_DIRECTORY;
     static const QString DEFAULT_IMAGES_DIRECTORY;
@@ -35,12 +39,21 @@ public:
 
     QLocale::Language language() const;
     QColor backgroundColor() const;
+    QColor textBackgroundColor() const;
+    QFont textFont() const;
+    QColor textColor() const;
     QString slideshowsDirectory() const;
     QString imagesDirectory() const;
 
 private slots:
     void on_backgroundColorPushButton_clicked();
     void on_backgroundColorResetPushButton_clicked();
+    void on_textBackgroundColorPushButton_clicked();
+    void on_textBackgroundColorResetPushButton_clicked();
+    void on_textFontPushButton_clicked();
+    void on_textFontResetPushButton_clicked();
+    void on_textColorPushButton_clicked();
+    void on_textColorResetPushButton_clicked();
     void on_slideshowsDirectoryPushButton_clicked();
     void on_imagesDirectoryPushButton_clicked();
 
@@ -60,6 +73,7 @@ private:
     void loadSettings();
     void saveSettings();
 
+    void selectColor(QPushButton *pushButton, QColorDialog::ColorDialogOptions options = 0);
     void chooseDirectory(QLineEdit *lineEdit, const QString &defaultDirectory);
     bool checkShortcuts();
     bool eventFilter(QObject *obj, QEvent *event);

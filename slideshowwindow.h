@@ -5,6 +5,8 @@
 
 #include "slideshow.h"
 
+class ImageWidget;
+
 namespace Ui {
     class SlideshowWindow;
 }
@@ -16,6 +18,8 @@ class SlideshowWindow : public QWidget
 public:
     explicit SlideshowWindow(Slideshow *slideshow, QWidget *parent = 0);
     ~SlideshowWindow();
+
+    ImageWidget* imageWidget() const;
 
 private:
     Ui::SlideshowWindow *ui;

@@ -115,11 +115,12 @@ void ImageWidget::paintEvent(QPaintEvent *)
 
 void ImageWidget::drawText(QPainter *painter, const QString &text)
 {
-    QFontMetrics metrics = QFontMetrics(font());
+    QFontMetrics metrics = QFontMetrics(m_textFont);
     int border = qMax(4, metrics.leading());
 
     QRect rect = metrics.boundingRect(0, 0, width() - 2 * border, int(height() * 0.25),
                                       Qt::AlignCenter | Qt::TextWordWrap, text);
+    painter->setFont(m_textFont);
     painter->setRenderHint(QPainter::TextAntialiasing);
     int rectHeight = rect.height() + 2 * border;
     painter->fillRect(0, height() - rectHeight, width(), rectHeight,
@@ -135,7 +136,12 @@ void ImageWidget::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton) {
         m_lastPos = event->pos();
         m_imageMode = ManualAdjustment;
+        m_cursor = cursor().shape();
         setCursor(Qt::ClosedHandCursor);
+        event->accept();
+    } else if (event->button() == Qt::MiddleButton) {
+        setImageMode();
+        event->accept();
     }
 }
 
@@ -146,12 +152,13 @@ void ImageWidget::mouseMoveEvent(QMouseEvent *event)
         m_translate += d;
         m_lastPos = event->pos();
         update();
+        event->accept();
     }
 }
 
 void ImageWidget::mouseReleaseEvent(QMouseEvent *)
 {
-    setCursor(Qt::OpenHandCursor);
+    setCursor(m_cursor);
 }
 
 void ImageWidget::wheelEvent(QWheelEvent *event)
@@ -160,6 +167,7 @@ void ImageWidget::wheelEvent(QWheelEvent *event)
         zoomIn();
     else
         zoomOut();
+    event->accept();
 }
 
 void ImageWidget::setBackgroundColor(const QColor &color)
@@ -179,6 +187,7 @@ void ImageWidget::setImage(const QImage &image)
     m_textureId = bindTexture(image);
     m_imageWidth = image.width();
     m_imageHeight = image.height();
+    setImageMode();
     update();
 }
 
@@ -191,6 +200,12 @@ void ImageWidget::setText(const QString &text)
 void ImageWidget::setTextBackgroundColor(const QColor &color)
 {
     m_textBackgroundColor = color;
+    update();
+}
+
+void ImageWidget::setTextFont(const QFont &font)
+{
+    m_textFont = font;
     update();
 }
 

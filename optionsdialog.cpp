@@ -2,13 +2,16 @@
 #include "ui_optionsdialog.h"
 
 #include <QDir>
-#include <QColorDialog>
+#include <QFontDialog>
 #include <QFileDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
 
 const QLocale::Language OptionsDialog::DEFAULT_LANGUAGE = QLocale::C;
 const QColor OptionsDialog::DEFAULT_BACKGROUND_COLOR = Qt::black;
+const QColor OptionsDialog::DEFAULT_TEXT_BACKGROUND_COLOR = QColor(0, 0, 0, 127);
+const QFont OptionsDialog::DEFAULT_TEXT_FONT;
+const QColor OptionsDialog::DEFAULT_TEXT_COLOR = Qt::white;
 const QString OptionsDialog::DEFAULT_APPLICATION_DIRECTORY = QDir::homePath() + "/.qsm";
 const QString OptionsDialog::DEFAULT_SLIDESHOWS_DIRECTORY = OptionsDialog::DEFAULT_APPLICATION_DIRECTORY + "/slideshows";
 const QString OptionsDialog::DEFAULT_IMAGES_DIRECTORY = OptionsDialog::DEFAULT_APPLICATION_DIRECTORY + "/images";
@@ -97,9 +100,22 @@ void OptionsDialog::loadSettings()
     }
 
     QColor backgroundColor = settings.value("backgroundColor", OptionsDialog::DEFAULT_BACKGROUND_COLOR).value<QColor>();
-    QPalette palette = ui->backgroundColorPushButton->palette();
-    palette.setColor(QPalette::Button, backgroundColor);
-    ui->backgroundColorPushButton->setPalette(palette);
+    QPalette backgroundColorPalette = ui->backgroundColorPushButton->palette();
+    backgroundColorPalette.setColor(QPalette::Button, backgroundColor);
+    ui->backgroundColorPushButton->setPalette(backgroundColorPalette);
+
+    QColor textBackgroundColor = settings.value("textBackgroundColor", OptionsDialog::DEFAULT_TEXT_BACKGROUND_COLOR).value<QColor>();
+    QPalette textBackgroundColorPalette = ui->textBackgroundColorPushButton->palette();
+    textBackgroundColorPalette.setColor(QPalette::Button, textBackgroundColor);
+    ui->textBackgroundColorPushButton->setPalette(textBackgroundColorPalette);
+
+    QFont textFont = settings.value("textFont", OptionsDialog::DEFAULT_TEXT_FONT).value<QFont>();
+    ui->textFontPushButton->setFont(textFont);
+
+    QColor textColor = settings.value("textColor", OptionsDialog::DEFAULT_TEXT_COLOR).value<QColor>();
+    QPalette textColorPalette = ui->textColorPushButton->palette();
+    textColorPalette.setColor(QPalette::Button, textColor);
+    ui->textColorPushButton->setPalette(textColorPalette);
 
     QString slideshowsDirectory = settings.value("slideshowsDirectory", OptionsDialog::DEFAULT_SLIDESHOWS_DIRECTORY).toString();
     ui->slideshowsDirectoryLineEdit->setText(QDir::toNativeSeparators(slideshowsDirectory));
@@ -122,6 +138,9 @@ void OptionsDialog::saveSettings()
             tr("The language change will take effect after a restart of Qt SlideShow Manager."));
     }
     settings.setValue("backgroundColor", backgroundColor());
+    settings.setValue("textBackgroundColor", textBackgroundColor());
+    settings.setValue("textFont", textFont());
+    settings.setValue("textColor", textColor());
     settings.setValue("slideshowsDirectory", slideshowsDirectory());
     settings.setValue("imagesDirectory", imagesDirectory());
 
@@ -144,14 +163,20 @@ OptionsDialog::~OptionsDialog()
     delete ui;
 }
 
-void OptionsDialog::on_backgroundColorPushButton_clicked()
+void OptionsDialog::selectColor(QPushButton *pushButton, QColorDialog::ColorDialogOptions options)
 {
-    QPalette palette = ui->backgroundColorPushButton->palette();
-    QColor color = QColorDialog::getColor(palette.button().color(), this, tr("Select Color"));
+    Q_ASSERT(pushButton);
+    QPalette palette = pushButton->palette();
+    QColor color = QColorDialog::getColor(palette.button().color(), this, QString(), options);
     if (color.isValid()) {
         palette.setColor(QPalette::Button, color);
-        ui->backgroundColorPushButton->setPalette(palette);
+        pushButton->setPalette(palette);
     }
+}
+
+void OptionsDialog::on_backgroundColorPushButton_clicked()
+{
+    selectColor(ui->backgroundColorPushButton);
 }
 
 void OptionsDialog::on_backgroundColorResetPushButton_clicked()
@@ -159,6 +184,43 @@ void OptionsDialog::on_backgroundColorResetPushButton_clicked()
     QPalette palette = ui->backgroundColorPushButton->palette();
     palette.setColor(QPalette::Button, OptionsDialog::DEFAULT_BACKGROUND_COLOR);
     ui->backgroundColorPushButton->setPalette(palette);
+}
+
+void OptionsDialog::on_textBackgroundColorPushButton_clicked()
+{
+    selectColor(ui->textBackgroundColorPushButton, QColorDialog::ShowAlphaChannel);
+}
+
+void OptionsDialog::on_textBackgroundColorResetPushButton_clicked()
+{
+    QPalette palette = ui->textBackgroundColorPushButton->palette();
+    palette.setColor(QPalette::Button, OptionsDialog::DEFAULT_TEXT_BACKGROUND_COLOR);
+    ui->textBackgroundColorPushButton->setPalette(palette);
+}
+
+void OptionsDialog::on_textFontPushButton_clicked()
+{
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok, ui->textFontPushButton->font(), this);
+    if (ok)
+        ui->textFontPushButton->setFont(font);
+}
+
+void OptionsDialog::on_textFontResetPushButton_clicked()
+{
+    ui->textFontPushButton->setFont(OptionsDialog::DEFAULT_TEXT_FONT);
+}
+
+void OptionsDialog::on_textColorPushButton_clicked()
+{
+    selectColor(ui->textColorPushButton);
+}
+
+void OptionsDialog::on_textColorResetPushButton_clicked()
+{
+    QPalette palette = ui->textColorPushButton->palette();
+    palette.setColor(QPalette::Button, OptionsDialog::DEFAULT_TEXT_COLOR);
+    ui->textColorPushButton->setPalette(palette);
 }
 
 void OptionsDialog::directoryLineEdit_textChanged(const QString &text)
@@ -179,7 +241,7 @@ void OptionsDialog::chooseDirectory(QLineEdit *lineEdit, const QString &defaultD
     QDir currentDir(lineEdit->text());
     if (!currentDir.exists())
         currentDir = defaultDirectory;
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Choose Directory"), currentDir.path());
+    QString dir = QFileDialog::getExistingDirectory(this, QString(), currentDir.path());
     if (!dir.isEmpty())
         lineEdit->setText(dir);
 }
@@ -302,6 +364,21 @@ QLocale::Language OptionsDialog::language() const
 QColor OptionsDialog::backgroundColor() const
 {
     return ui->backgroundColorPushButton->palette().button().color();
+}
+
+QColor OptionsDialog::textBackgroundColor() const
+{
+    return ui->textBackgroundColorPushButton->palette().button().color();
+}
+
+QFont OptionsDialog::textFont() const
+{
+    return ui->textFontPushButton->font();
+}
+
+QColor OptionsDialog::textColor() const
+{
+    return ui->textColorPushButton->palette().button().color();
 }
 
 QString OptionsDialog::slideshowsDirectory() const

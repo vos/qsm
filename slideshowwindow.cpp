@@ -11,6 +11,7 @@ SlideshowWindow::SlideshowWindow(Slideshow *slideshow, QWidget *parent) :
     Q_ASSERT(slideshow);
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
+    setWindowTitle("QSM - " + slideshow->name());
     //connect(m_slideshow, SIGNAL(destroyed()), SLOT(close()));
     m_imageCount = 0;
 }
@@ -18,6 +19,11 @@ SlideshowWindow::SlideshowWindow(Slideshow *slideshow, QWidget *parent) :
 SlideshowWindow::~SlideshowWindow()
 {
     delete ui;
+}
+
+ImageWidget* SlideshowWindow::imageWidget() const
+{
+    return ui->imageWidget;
 }
 
 void SlideshowWindow::nextImage()
