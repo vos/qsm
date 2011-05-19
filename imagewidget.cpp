@@ -217,10 +217,17 @@ void ImageWidget::setTextColor(const QColor &color)
     update();
 }
 
-void ImageWidget::setTextVisible(bool visible)
+void ImageWidget::setTextVisibility(bool visible)
 {
     m_textVisible = visible;
     update();
+}
+
+bool ImageWidget::toggleTextVisibility()
+{
+    m_textVisible = !m_textVisible;
+    update();
+    return m_textVisible;
 }
 
 void ImageWidget::setImageMode(ImageWidget::ImageMode mode)

@@ -88,6 +88,9 @@ void SlideshowWindow::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Escape:
         close();
         break;
+    case Qt::Key_C:
+        ui->imageWidget->toggleTextVisibility();
+        break;
     case Qt::Key_Space:
         if (m_timer.isActive())
             m_timer.stop();

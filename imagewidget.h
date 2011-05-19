@@ -39,7 +39,8 @@ public slots:
     void setTextBackgroundColor(const QColor &color = QColor(0, 0, 0, 127));
     void setTextFont(const QFont &font);
     void setTextColor(const QColor &color = Qt::white);
-    void setTextVisible(bool visible = true);
+    void setTextVisibility(bool visible = true);
+    bool toggleTextVisibility();
     void setImageMode(ImageMode mode = FitToWidget);
     void zoomTo(double factor = 1.0);
     inline void zoomIn(double factor = 1.15) { zoomTo(m_zoom * factor); }
