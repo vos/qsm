@@ -2,18 +2,34 @@
 #include "ui_slideshowwindow.h"
 
 #include <QKeyEvent>
+#include <QThreadPool>
 
-SlideshowWindow::SlideshowWindow(Slideshow *slideshow, QWidget *parent) :
+#include "imageloader.h"
+
+SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SlideshowWindow),
-    m_slideshow(slideshow)
+    m_slideshow(slideshow),
+    m_nextImage(NULL),
+    m_slideshowIndex(0),
+    m_interval(interval)
 {
     Q_ASSERT(slideshow);
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowTitle("QSM - " + slideshow->name());
     //connect(m_slideshow, SIGNAL(destroyed()), SLOT(close()));
-    m_imageCount = 0;
+    connect(&m_timer, SIGNAL(timeout()), SLOT(timer_timeout()));
+}
+
+void SlideshowWindow::on_imageWidget_initialized()
+{
+    if (prepareNextImage(0, true)) {
+        showNextImage();
+        if (prepareNextImage())
+            m_timer.start(m_interval * 1000);
+    } else
+        close();
 }
 
 SlideshowWindow::~SlideshowWindow()
@@ -26,14 +42,44 @@ ImageWidget* SlideshowWindow::imageWidget() const
     return ui->imageWidget;
 }
 
-void SlideshowWindow::nextImage()
+bool SlideshowWindow::prepareNextImage(int delta, bool synchronous)
 {
-    SlideshowImage *image = m_slideshow->image(m_imageCount++);
-    if (!image) return;
-    if (m_imageCount >= m_slideshow->imageCount())
-        m_imageCount = 0;
-    ui->imageWidget->setImage(QImage(image->path()));
-    ui->imageWidget->setText(image->comment());
+    int index = m_slideshowIndex + delta;
+    if (index < 0 || index >= m_slideshow->imageCount())
+        return false;
+    if (m_nextImage = m_slideshow->image(index)) {
+        if (synchronous) {
+            m_imageBuffer = QImage(m_nextImage->path());
+            m_slideshowIndex = index;
+        } else {
+            ImageLoader *imageLoader = new ImageLoader(m_nextImage->path(), index);
+            connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(imageLoaded(QImage, int, int, int)));
+            QThreadPool::globalInstance()->start(imageLoader, 1);
+        }
+    } else
+        return false;
+    return true;
+}
+
+void SlideshowWindow::showNextImage()
+{
+    if (!m_nextImage || m_imageBuffer.isNull())
+        return;
+    ui->imageWidget->setImage(m_imageBuffer);
+    ui->imageWidget->setText(m_nextImage->comment());
+}
+
+void SlideshowWindow::timer_timeout()
+{
+    showNextImage();
+    if (!prepareNextImage())
+        m_timer.stop();
+}
+
+void SlideshowWindow::imageLoaded(const QImage &image, int, int, int index)
+{
+    m_imageBuffer = image;
+    m_slideshowIndex = index;
 }
 
 void SlideshowWindow::keyPressEvent(QKeyEvent *event)
@@ -42,8 +88,26 @@ void SlideshowWindow::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Escape:
         close();
         break;
+    case Qt::Key_Space:
+        if (m_timer.isActive())
+            m_timer.stop();
+        else if (prepareNextImage(1, true)) {
+            showNextImage();
+            if (prepareNextImage())
+                m_timer.start();
+        }
+        break;
     case Qt::Key_Right:
-        nextImage();
+        if (m_timer.isActive())
+            m_timer.stop();
+        if (prepareNextImage(1, true))
+            showNextImage();
+        break;
+    case Qt::Key_Left:
+        if (m_timer.isActive())
+            m_timer.stop();
+        if (prepareNextImage(-1, true))
+            showNextImage();
         break;
     }
 }

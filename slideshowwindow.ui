@@ -22,6 +22,9 @@
    </property>
    <item>
     <widget class="ImageWidget" name="imageWidget" native="true">
+     <property name="focusPolicy">
+      <enum>Qt::WheelFocus</enum>
+     </property>
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>

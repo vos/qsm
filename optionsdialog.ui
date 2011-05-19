@@ -274,7 +274,7 @@
           <item row="3" column="1" colspan="2">
            <widget class="QPushButton" name="textFontPushButton">
             <property name="text">
-             <string>Change Font</string>
+             <string notr="true">AaBbYyZz</string>
             </property>
             <property name="flat">
              <bool>true</bool>

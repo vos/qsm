@@ -511,11 +511,6 @@
         <translation>Schriftart:</translation>
     </message>
     <message>
-        <location filename="optionsdialog.ui" line="277"/>
-        <source>Change Font</source>
-        <translation>Schrift anpassen</translation>
-    </message>
-    <message>
         <location filename="optionsdialog.ui" line="297"/>
         <source>Text Color:</source>
         <translation>Textfarbe:</translation>

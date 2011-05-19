@@ -29,6 +29,7 @@ public:
     inline double rotation() const { return m_rotate; }
 
 signals:
+    void initialized();
     void viewChanged();
 
 public slots:

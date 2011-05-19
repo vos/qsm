@@ -272,7 +272,7 @@ void MainWindow::prepareImage(const ImageListModel *model, const QModelIndex &in
     // load the actual image inside a separate thread
     ImageLoader *imageLoader = new ImageLoader(imagePath);
     connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(imageLoaded(QImage, int, int, int)));
-    QThreadPool::globalInstance()->start(imageLoader);
+    QThreadPool::globalInstance()->start(imageLoader, 1);
 }
 
 QWidget* MainWindow::activeWidget(QAction *action)
