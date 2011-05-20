@@ -88,6 +88,24 @@ void SlideshowWindow::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Escape:
         close();
         break;
+    case Qt::Key_0:
+        ui->imageWidget->setImageMode();
+        break;
+    case Qt::Key_1:
+        ui->imageWidget->zoomTo();
+        break;
+    case Qt::Key_R:
+        if (event->modifiers() & Qt::ShiftModifier)
+            ui->imageWidget->rotateCounterclockwise();
+        else
+            ui->imageWidget->rotateClockwise();
+        break;
+    case Qt::Key_Plus:
+        ui->imageWidget->zoomIn();
+        break;
+    case Qt::Key_Minus:
+        ui->imageWidget->zoomOut();
+        break;
     case Qt::Key_C:
         ui->imageWidget->toggleTextVisibility();
         break;

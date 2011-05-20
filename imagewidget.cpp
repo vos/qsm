@@ -28,12 +28,6 @@ ImageWidget::~ImageWidget()
 void ImageWidget::initializeGL()
 {
     qglClearColor(m_backgroundColor);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
     emit initialized();
 }
 
@@ -186,7 +180,12 @@ void ImageWidget::setImage(const QImage &image)
 
     if (m_textureId > 0)
         deleteTexture(m_textureId);
+
     m_textureId = bindTexture(image);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     m_imageWidth = image.width();
     m_imageHeight = image.height();
     setImageMode();
@@ -234,7 +233,6 @@ void ImageWidget::setImageMode(ImageWidget::ImageMode mode)
 {
     m_imageMode = mode;
     if (mode == FitToWidget) {
-        // reset manual values
         m_translate = QPoint();
         m_zoom = 1.0;
         m_rotate = 0.0;

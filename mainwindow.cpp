@@ -715,5 +715,6 @@ void MainWindow::on_slideshowStartPushButton_clicked()
     imageWidget->setTextBackgroundColor(ui->imageWidget->textBackgroundColor());
     imageWidget->setTextFont(ui->imageWidget->textFont());
     imageWidget->setTextColor(ui->imageWidget->textColor());
+    imageWidget->setTextVisibility(ui->imageWidget->isTextVisible());
     slideshowWindow->showFullScreen();
 }
