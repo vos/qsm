@@ -276,5 +276,12 @@ void ImageWidget::rotateTo(double angle)
         m_rotate += 360.0;
     else if (m_rotate >= 360.0)
         m_rotate -= 360.0;
+    if (m_imageMode == ManualAdjustment) {
+        int relativeAspectChange = qAbs(m_actualImageWidth - m_actualImageHeight) / 2;
+        if (m_rotate == 0.0 || m_rotate == 180.0)
+            relativeAspectChange = -relativeAspectChange;
+        m_translate.rx() += relativeAspectChange;
+        m_translate.ry() += relativeAspectChange;
+    }
     update();
 }
