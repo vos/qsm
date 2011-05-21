@@ -7,10 +7,8 @@ ImageWidget::ImageWidget(QWidget *parent) :
 {
     m_backgroundColor = Qt::black;
     m_textureId = 0;
-    m_imageWidth = 0;
-    m_imageHeight = 0;
-    m_currentImageWidth = 0;
-    m_currentImageHeight = 0;
+    m_imageWidth = m_imageHeight = 0;
+    m_actualImageWidth = m_actualImageHeight = 0;
     m_textBackgroundColor = QColor(0, 0, 0, 127);
     m_textColor = Qt::white;
     m_textVisible = true;
@@ -36,37 +34,44 @@ void ImageWidget::setupViewport(int width, int height)
     GLint x = 0, y = 0;
     GLsizei w = width, h = height;
 
+    int imageWidth, imageHeight;
+    if (m_rotate == 90.0 || m_rotate == 270.0) {
+        imageWidth = m_imageHeight;
+        imageHeight = m_imageWidth;
+    } else {
+        imageWidth = m_imageWidth;
+        imageHeight = m_imageHeight;
+    }
+
     if (m_imageMode == FitToWidget) {
-        double wr = (double)width / m_imageWidth;
-        double hr = (double)height / m_imageHeight;
+        double wr = (double)width / imageWidth;
+        double hr = (double)height / imageHeight;
         if (wr < hr) { // full width
-            h = int(wr * m_imageHeight);
+            h = int(wr * imageHeight);
             y = (height - h) / 2;
         } else if (wr > hr) { // full height
-            w = int(hr * m_imageWidth);
+            w = int(hr * imageWidth);
             x = (width - w) / 2;
         }
         m_translate.setX(x);
         m_translate.setY(-y);
-        m_zoom = (double)w / m_imageWidth;
+        m_zoom = (double)w / imageWidth;
     } else {
         x = m_translate.x();
         y = -m_translate.y();
-        w = m_imageWidth * m_zoom;
-        h = m_imageHeight * m_zoom;
+        w = imageWidth * m_zoom;
+        h = imageHeight * m_zoom;
     }
-    m_currentImageWidth = w;
-    m_currentImageHeight = h;
+    m_actualImageWidth = w;
+    m_actualImageHeight = h;
 
     glViewport(x, y, w, h);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, m_imageWidth, m_imageHeight, 0, -1.0, 1.0);
+    glOrtho(0, imageWidth, imageHeight, 0, -1.0, 1.0);
 
     glMatrixMode(GL_MODELVIEW);
-
-    emit viewChanged();
 }
 
 void ImageWidget::paintEvent(QPaintEvent *)
@@ -81,7 +86,17 @@ void ImageWidget::paintEvent(QPaintEvent *)
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
-    glRotated(m_rotate, 0.0, 0.0, 1.0);
+    if (m_rotate == 90.0) {
+        glRotated(m_rotate, 0.0, 0.0, 1.0);
+        glTranslated(0.0, -m_imageHeight, 0.0);
+    } else if (m_rotate == 180.0) {
+        glScaled(-1.0, -1.0, 1.0);
+        glTranslated(-m_imageWidth, -m_imageHeight, 0.0);
+    } else if (m_rotate == 270.0) {
+        glRotated(m_rotate, 0.0, 0.0, 1.0);
+        glTranslated(-m_imageWidth, 0.0, 0.0);
+    }
+
     glBegin(GL_QUADS);
         glVertex2i(0, 0);
         glTexCoord2f(0.0f, 0.0f);
@@ -107,6 +122,8 @@ void ImageWidget::paintEvent(QPaintEvent *)
         glFlush();
         swapBuffers();
     }
+
+    emit viewChanged();
 }
 
 void ImageWidget::drawText(QPainter *painter, const QString &text)
@@ -244,8 +261,8 @@ void ImageWidget::zoomTo(double factor)
 {
     m_imageMode = ManualAdjustment;
     double relativeZoomFactor = factor / m_zoom;
-    int dx = int(m_currentImageWidth * relativeZoomFactor) - m_currentImageWidth;
-    int dy = int(m_currentImageHeight * relativeZoomFactor) - m_currentImageHeight;
+    int dx = int(m_actualImageWidth * relativeZoomFactor) - m_actualImageWidth;
+    int dy = int(m_actualImageHeight * relativeZoomFactor) - m_actualImageHeight;
     m_translate.rx() -= dx / 2;
     m_translate.ry() += dy / 2;
     m_zoom = factor;
@@ -254,7 +271,10 @@ void ImageWidget::zoomTo(double factor)
 
 void ImageWidget::rotateTo(double angle)
 {
-    m_imageMode = ManualAdjustment;
     m_rotate = angle;
+    if (m_rotate < 0.0)
+        m_rotate += 360.0;
+    else if (m_rotate >= 360.0)
+        m_rotate -= 360.0;
     update();
 }

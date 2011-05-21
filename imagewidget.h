@@ -54,8 +54,8 @@ private:
     GLuint m_textureId;
     int m_imageWidth;
     int m_imageHeight;
-    int m_currentImageWidth;
-    int m_currentImageHeight;
+    int m_actualImageWidth;
+    int m_actualImageHeight;
     QString m_text;
     QColor m_textBackgroundColor;
     QFont m_textFont;
