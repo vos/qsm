@@ -100,6 +100,8 @@ private:
     QString m_slideshowsDirectory;
     QString m_imagesDirectory;
     QString m_currentImagePath;
+    Slideshow *m_currentSlideshow;
+    SlideshowImage *m_currentSlideshowImage;
 
     void loadSettings();
     void saveSettings();

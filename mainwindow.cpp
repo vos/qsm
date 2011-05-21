@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QFileSystemModel>
 #include <QThreadPool>
+#include <QInputDialog>
 
 #include <QDebug>
 
@@ -19,7 +20,9 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_currentSlideshow(NULL),
+    m_currentSlideshowImage(NULL)
 {
     ui->setupUi(this);
     ui->menuView->addAction(ui->mainToolBar->toggleViewAction());
@@ -321,6 +324,8 @@ void MainWindow::on_imageListView_clicked(const QModelIndex &index)
 {
     prepareImage(m_imageListModel, index);
     ui->imageWidget->setText();
+    m_currentSlideshow = NULL;
+    m_currentSlideshowImage = NULL;
 }
 
 void MainWindow::on_imageListView_doubleClicked(const QModelIndex &index)
@@ -400,8 +405,12 @@ void MainWindow::on_slideshowListView_customContextMenuRequested(const QPoint &p
 
 void MainWindow::on_slideshowImageListView_clicked(const QModelIndex &index)
 {
+    m_currentSlideshow = m_slideshowListModel->currentSlideshow();
+    Q_ASSERT(m_currentSlideshow);
+    m_currentSlideshowImage = m_currentSlideshow->image(index.row());
+    Q_ASSERT(m_currentSlideshowImage);
     prepareImage(m_slideshowImageListModel, index);
-    ui->imageWidget->setText(m_slideshowListModel->currentSlideshow()->image(index.row())->comment());
+    ui->imageWidget->setText(m_currentSlideshowImage->comment());
 }
 
 void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoint &pos)
@@ -495,7 +504,7 @@ void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
         zoomMenu.addAction(ui->actionZoomOut);
         menu.addMenu(&zoomMenu);
         menu.addSeparator();
-        if (ui->slideshowImageListView->currentIndex().isValid()) // TODO: check for slideshow image
+        if (m_currentSlideshowImage)
             menu.addAction(ui->actionImageEditComment);
         menu.addAction(ui->actionCutImage);
         menu.addAction(ui->actionCopyImage);
@@ -616,6 +625,30 @@ void MainWindow::on_actionAddToSlideshow_triggered()
 
 void MainWindow::on_actionImageEditComment_triggered()
 {
+    QWidget *widget = activeWidget(ui->actionImageEditComment);
+    if (!widget) return;
+
+    Slideshow *slideshow = NULL;
+    SlideshowImage *image = NULL;
+    if (widget == ui->slideshowImageListView) {
+        slideshow = m_slideshowListModel->currentSlideshow();
+        if (!slideshow) return;
+        image = slideshow->image(ui->slideshowImageListView->currentIndex().row());
+    } else if (widget == ui->imageWidget && m_currentSlideshowImage) {
+        slideshow = m_currentSlideshow;
+        image = m_currentSlideshowImage;
+    }
+    if (!slideshow || !image) return;
+
+    bool ok;
+    QString comment = QInputDialog::getText(this, tr("Edit Comment"), tr("Comment:"),
+                                            QLineEdit::Normal, image->comment(), &ok);
+    if (ok) {
+        image->setComment(comment);
+        slideshow->setChanged();
+        if (image == m_currentSlideshowImage)
+            ui->imageWidget->setText(comment);
+    }
 }
 
 void MainWindow::on_actionRenameImage_triggered()
@@ -636,6 +669,8 @@ void MainWindow::on_actionPasteImage_triggered()
 
 void MainWindow::on_actionRemoveImage_triggered()
 {
+    if (m_currentSlideshowImage == m_slideshowListModel->currentSlideshow()->image(ui->slideshowImageListView->currentIndex().row()))
+        m_currentSlideshowImage = NULL;
     m_slideshowListModel->removeImage(ui->slideshowImageListView->currentIndex());
     m_slideshowImageListModel->removeImage(ui->slideshowImageListView->currentIndex());
 }
@@ -666,6 +701,14 @@ void MainWindow::on_actionPreloadAllImages_triggered()
 
 void MainWindow::on_actionSlideshowEditComment_triggered()
 {
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow) return;
+
+    bool ok;
+    QString comment = QInputDialog::getText(this, tr("Edit Comment"), tr("Comment:"),
+                                            QLineEdit::Normal, slideshow->comment(), &ok);
+    if (ok)
+        slideshow->setComment(comment);
 }
 
 void MainWindow::on_actionRenameSlideshow_triggered()
@@ -675,6 +718,10 @@ void MainWindow::on_actionRenameSlideshow_triggered()
 
 void MainWindow::on_actionRemoveSlideshow_triggered()
 {
+    if (m_currentSlideshow == m_slideshowListModel->currentSlideshow()) {
+        m_currentSlideshow = NULL;
+        m_currentSlideshowImage = NULL;
+    }
     m_slideshowListModel->removeSlideshow(ui->slideshowListView->currentIndex());
 }
 
