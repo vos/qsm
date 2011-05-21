@@ -476,7 +476,7 @@ void MainWindow::slideshowFileManager_finished()
 
 void MainWindow::on_imageWidget_viewChanged()
 {
-    statusBar()->showMessage(tr("Zoom: %1 %").arg(ui->imageWidget->zoomFactor() * 100, 0, 'f', 0));
+    statusBar()->showMessage(tr("Zoom: %1%").arg(int(ui->imageWidget->zoomFactor() * 100)));
 }
 
 void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)

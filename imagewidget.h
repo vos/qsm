@@ -3,6 +3,7 @@
 
 #include <QGLWidget>
 #include <QImage>
+#include <QTimer>
 
 class ImageWidget : public QGLWidget
 {
@@ -36,12 +37,16 @@ public slots:
     void setBackgroundColor(const QColor &color = Qt::black);
     void setImage(const QImage &image);
     void setText(const QString &text = QString());
+    void setOverlayText(const QString &text = QString(), int hideAfter = 1000);
     void setTextBackgroundColor(const QColor &color = QColor(0, 0, 0, 127));
     void setTextFont(const QFont &font);
     void setTextColor(const QColor &color = Qt::white);
     void setTextVisibility(bool visible = true);
     bool toggleTextVisibility();
     void setImageMode(ImageMode mode = FitToWidget);
+    void translateTo(const QPoint &pos = QPoint());
+    inline void translate(const QPoint &delta) { translateTo(m_translate + delta); }
+    inline void translate(int dx, int dy) { translate(QPoint(dx, dy)); }
     void zoomTo(double factor = 1.0);
     inline void zoomIn(double factor = 1.15) { zoomTo(m_zoom * factor); }
     inline void zoomOut(double factor = 1.15) { zoomIn(1.0 / factor); }
@@ -57,6 +62,7 @@ private:
     int m_actualImageWidth;
     int m_actualImageHeight;
     QString m_text;
+    QString m_overlayText;
     QColor m_textBackgroundColor;
     QFont m_textFont;
     QColor m_textColor;
@@ -67,11 +73,13 @@ private:
     double m_zoom;
     double m_rotate;
     Qt::CursorShape m_cursor;
+    QTimer m_overlayTimer;
 
     void initializeGL();
     void setupViewport(int width, int height);
     void paintEvent(QPaintEvent *event);
-    void drawText(QPainter *painter, const QString &text);
+    void drawText(QPainter *painter);
+    void drawOverlay(QPainter *painter);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

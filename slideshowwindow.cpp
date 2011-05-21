@@ -110,12 +110,12 @@ void SlideshowWindow::keyPressEvent(QKeyEvent *event)
         ui->imageWidget->toggleTextVisibility();
         break;
     case Qt::Key_Space:
-        if (m_timer.isActive())
+        if (m_timer.isActive()) {
             m_timer.stop();
-        else if (prepareNextImage(1, true)) {
-            showNextImage();
-            if (prepareNextImage())
-                m_timer.start();
+            ui->imageWidget->setOverlayText(tr("Slideshow paused"), 2000);
+        } else if (prepareNextImage()) {
+            m_timer.start();
+            ui->imageWidget->setOverlayText(tr("Slideshow continued"), 2000);
         }
         break;
     case Qt::Key_Right:
