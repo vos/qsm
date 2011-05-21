@@ -33,7 +33,6 @@ private:
     SlideshowImage *m_nextImage;
     QImage m_imageBuffer;
     int m_slideshowIndex;
-    int m_interval;
     QTimer m_timer;
 
     bool prepareNextImage(int delta = 1, bool synchronous = false);

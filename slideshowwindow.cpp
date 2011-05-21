@@ -11,23 +11,26 @@ SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval, QWidget *pa
     ui(new Ui::SlideshowWindow),
     m_slideshow(slideshow),
     m_nextImage(NULL),
-    m_slideshowIndex(0),
-    m_interval(interval)
+    m_slideshowIndex(0)
 {
     Q_ASSERT(slideshow);
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowTitle("QSM - " + slideshow->name());
-    //connect(m_slideshow, SIGNAL(destroyed()), SLOT(close()));
+    m_timer.setInterval(interval * 1000);
     connect(&m_timer, SIGNAL(timeout()), SLOT(timer_timeout()));
+    //connect(m_slideshow, SIGNAL(destroyed()), SLOT(close()));
 }
 
 void SlideshowWindow::on_imageWidget_initialized()
 {
+    ui->imageWidget->setOverlayText(m_slideshow->name(), m_timer.interval());
     if (prepareNextImage(0, true)) {
         showNextImage();
+        if (m_nextImage->comment().isEmpty() && !m_slideshow->comment().isEmpty())
+            ui->imageWidget->setText(m_slideshow->comment());
         if (prepareNextImage())
-            m_timer.start(m_interval * 1000);
+            m_timer.start();
     } else
         close();
 }
