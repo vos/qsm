@@ -133,7 +133,6 @@ void MainWindow::loadSettings()
     ui->imageListSortComboBox->setCurrentIndex(settings.value("imageSort", 0).toInt());
 
     // slideshow options
-    ui->slideshowSortComboBox->setCurrentIndex(settings.value("slideshowSort", 4).toInt());
     ui->intervalSpinBox->setValue(settings.value("interval", 5).toInt());
     ui->randomCheckBox->setChecked(settings.value("random", false).toBool());
     ui->repeatCheckBox->setChecked(settings.value("repeat", false).toBool());
@@ -205,7 +204,6 @@ void MainWindow::saveSettings()
     settings.setValue("geometry", saveGeometry());
     settings.setValue("windowState", saveState());
     settings.setValue("imageSort", ui->imageListSortComboBox->currentIndex());
-    settings.setValue("slideshowSort", ui->slideshowSortComboBox->currentIndex());
     settings.setValue("interval", ui->intervalSpinBox->value());
     settings.setValue("random", ui->randomCheckBox->isChecked());
     settings.setValue("repeat", ui->repeatCheckBox->isChecked());
