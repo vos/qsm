@@ -129,6 +129,15 @@ void MainWindow::loadSettings()
     restoreGeometry(settings.value("geometry").toByteArray());
     restoreState(settings.value("windowState").toByteArray());
 
+    // image settings
+    ui->imageListSortComboBox->setCurrentIndex(settings.value("imageSort", 0).toInt());
+
+    // slideshow options
+    ui->slideshowSortComboBox->setCurrentIndex(settings.value("slideshowSort", 4).toInt());
+    ui->intervalSpinBox->setValue(settings.value("interval", 5).toInt());
+    ui->randomCheckBox->setChecked(settings.value("random", false).toBool());
+    ui->repeatCheckBox->setChecked(settings.value("repeat", false).toBool());
+
     // thumbnail sizes
     int imageListViewThumbnailSize = settings.value("imageListViewThumbnailSize", 64).toInt();
     ui->imageListView->setIconSize(QSize(imageListViewThumbnailSize, imageListViewThumbnailSize));
@@ -140,6 +149,7 @@ void MainWindow::loadSettings()
     ui->imageWidget->setTextBackgroundColor(settings.value("textBackgroundColor", OptionsDialog::DEFAULT_TEXT_BACKGROUND_COLOR).value<QColor>());
     ui->imageWidget->setTextFont(settings.value("textFont", OptionsDialog::DEFAULT_TEXT_FONT).value<QFont>());
     ui->imageWidget->setTextColor(settings.value("textColor", OptionsDialog::DEFAULT_TEXT_COLOR).value<QColor>());
+    ui->actionShowComments->setChecked(settings.value("showComments", true).toBool());
 
     // slideshows and images directory
     m_slideshowsDirectory = settings.value("slideshowsDirectory", OptionsDialog::DEFAULT_SLIDESHOWS_DIRECTORY).toString();
@@ -194,8 +204,14 @@ void MainWindow::saveSettings()
     QSettings settings;
     settings.setValue("geometry", saveGeometry());
     settings.setValue("windowState", saveState());
+    settings.setValue("imageSort", ui->imageListSortComboBox->currentIndex());
+    settings.setValue("slideshowSort", ui->slideshowSortComboBox->currentIndex());
+    settings.setValue("interval", ui->intervalSpinBox->value());
+    settings.setValue("random", ui->randomCheckBox->isChecked());
+    settings.setValue("repeat", ui->repeatCheckBox->isChecked());
     settings.setValue("imageListViewThumbnailSize", ui->imageListView->iconSize().width());
     settings.setValue("slideshowImageListViewThumbnailSize", ui->slideshowImageListView->iconSize().width());
+    settings.setValue("showComments", ui->actionShowComments->isChecked());
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -504,7 +520,8 @@ void MainWindow::slideshowFileManager_finished()
 
 void MainWindow::on_imageWidget_viewChanged()
 {
-    statusBar()->showMessage(tr("Zoom: %1%").arg(int(ui->imageWidget->zoomFactor() * 100)));
+    if (ui->actionZoomFit->isEnabled())
+        statusBar()->showMessage(tr("Zoom: %1%").arg(int(ui->imageWidget->zoomFactor() * 100)));
 }
 
 void MainWindow::on_imageWidget_doubleClicked()
@@ -623,7 +640,7 @@ void MainWindow::on_actionQsmHelp_triggered()
 void MainWindow::on_actionAboutQsm_triggered()
 {
     QMessageBox::about(this, tr("About QSM"),
-            tr("<b>Qt SlideShow Manager</b> v0.1 alpha<br/><br/>"
+            tr("<b>Qt SlideShow Manager</b> v0.1 beta<br/><br/>"
                "Copyright &copy; 2011 Fachhochschule S&uuml;dwestfalen<br/>"
                "Written by Alexander Vos and Till Althaus"));
 }
@@ -810,7 +827,8 @@ void MainWindow::on_slideshowStartPushButton_clicked()
     if (!slideshow || !slideshow->imageCount())
         return;
 
-    SlideshowWindow *slideshowWindow = new SlideshowWindow(slideshow, 5, true);
+    SlideshowWindow *slideshowWindow = new SlideshowWindow(slideshow, ui->intervalSpinBox->value(),
+            ui->randomCheckBox->isChecked(), ui->repeatCheckBox->isChecked());
     ImageWidget *imageWidget = slideshowWindow->imageWidget();
     imageWidget->setBackgroundColor(ui->imageWidget->backgroundColor());
     imageWidget->setTextBackgroundColor(ui->imageWidget->textBackgroundColor());

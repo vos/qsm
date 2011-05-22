@@ -295,6 +295,43 @@
         <item>
          <layout class="QHBoxLayout" name="slideshowOptionsLayout2">
           <item>
+           <widget class="QSpinBox" name="intervalSpinBox">
+            <property name="statusTip">
+             <string>Interval between image transitions</string>
+            </property>
+            <property name="suffix">
+             <string>s</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>3600</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="randomCheckBox">
+            <property name="text">
+             <string>Random</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="repeatCheckBox">
+            <property name="text">
+             <string>Repeat</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="slideshowOptionsLayout3">
+          <item>
            <widget class="QPushButton" name="beginPushButton">
             <property name="text">
              <string notr="true"/>

@@ -33,308 +33,338 @@
         <translation>&amp;Anzeige</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="68"/>
+        <location filename="mainwindow.ui" line="67"/>
+        <source>&amp;Zoom</source>
+        <translation>&amp;Zoom</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="84"/>
         <source>&amp;Tools</source>
         <translation>&amp;Extras</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="74"/>
+        <location filename="mainwindow.ui" line="90"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="89"/>
+        <location filename="mainwindow.ui" line="105"/>
         <source>Toolbar</source>
         <translation>Symbolleiste</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="108"/>
+        <location filename="mainwindow.ui" line="133"/>
         <source>Folder Browser</source>
         <translation>Dateibrowser</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="121"/>
+        <location filename="mainwindow.ui" line="146"/>
         <source>Image List</source>
         <translation>Bildliste</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="137"/>
+        <location filename="mainwindow.ui" line="162"/>
         <source>Image List Options</source>
         <translation>Bildlistenoptionen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="150"/>
-        <location filename="mainwindow.ui" line="233"/>
+        <location filename="mainwindow.ui" line="175"/>
+        <location filename="mainwindow.ui" line="258"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="155"/>
-        <location filename="mainwindow.ui" line="238"/>
+        <location filename="mainwindow.ui" line="180"/>
+        <location filename="mainwindow.ui" line="263"/>
         <source>Name Desc</source>
         <translation>Name absteigend</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="160"/>
-        <location filename="mainwindow.ui" line="243"/>
+        <location filename="mainwindow.ui" line="185"/>
+        <location filename="mainwindow.ui" line="268"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="165"/>
-        <location filename="mainwindow.ui" line="248"/>
+        <location filename="mainwindow.ui" line="190"/>
+        <location filename="mainwindow.ui" line="273"/>
         <source>Date Desc</source>
         <translation>Datum absteigend</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="173"/>
+        <location filename="mainwindow.ui" line="198"/>
         <source>Include Subfolders</source>
         <translation>Unterordner einbeziehen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="195"/>
+        <location filename="mainwindow.ui" line="220"/>
         <source>Slideshow List</source>
         <translation>Slideshow Liste</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="208"/>
+        <location filename="mainwindow.ui" line="233"/>
         <source>Slideshow Image List</source>
         <translation>Slideshow Bildliste</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="221"/>
+        <location filename="mainwindow.ui" line="246"/>
         <source>Slideshow Options</source>
         <translation>Slideshow Optionen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="253"/>
+        <location filename="mainwindow.ui" line="278"/>
         <source>Unsorted</source>
         <translation>Unsortiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="261"/>
+        <location filename="mainwindow.ui" line="286"/>
         <source>Start the Slideshow</source>
         <oldsource>Starts the Slideshow</oldsource>
         <translation>Starte die Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="264"/>
+        <location filename="mainwindow.ui" line="289"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="383"/>
-        <location filename="mainwindow.ui" line="386"/>
+        <location filename="mainwindow.ui" line="300"/>
+        <source>Interval between image transitions</source>
+        <translation>Abstand zwischen Bildübergängen</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="303"/>
+        <source>s</source>
+        <translation>s</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="319"/>
+        <source>Random</source>
+        <translation>Zufällig</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="326"/>
+        <source>Repeat</source>
+        <translation>Wiederholen</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="445"/>
+        <location filename="mainwindow.ui" line="448"/>
         <source>Create an empty Slideshow</source>
         <translation>Erstellt eine leere Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="391"/>
+        <location filename="mainwindow.ui" line="453"/>
         <source>Re&amp;load All Slideshows</source>
         <translation>Alle Slideshows neu&amp;laden</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="394"/>
+        <location filename="mainwindow.ui" line="456"/>
         <source>Reload All Slideshows</source>
         <translation>Alle Slideshows neuladen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="403"/>
+        <location filename="mainwindow.ui" line="465"/>
         <source>&amp;Save All Slideshows</source>
         <translation>Alle Slideshows &amp;speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="406"/>
-        <location filename="mainwindow.ui" line="409"/>
-        <location filename="mainwindow.ui" line="412"/>
+        <location filename="mainwindow.ui" line="468"/>
+        <location filename="mainwindow.ui" line="471"/>
+        <location filename="mainwindow.ui" line="474"/>
         <source>Save All Slideshows</source>
         <translation>Alle Slideshows speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="417"/>
+        <location filename="mainwindow.ui" line="479"/>
         <source>&amp;Exit</source>
         <translation>&amp;Beenden</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="420"/>
-        <location filename="mainwindow.ui" line="423"/>
+        <location filename="mainwindow.ui" line="482"/>
+        <location filename="mainwindow.ui" line="485"/>
         <source>Exit the application</source>
         <translation>Beendet die Anwendung</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="449"/>
+        <location filename="mainwindow.ui" line="511"/>
         <source>Open the Options Dialog</source>
         <translation>Öffnet den Optionendialog</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="461"/>
+        <location filename="mainwindow.ui" line="523"/>
         <source>QSM &amp;Help...</source>
         <translation>QSM &amp;Hilfe...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="509"/>
+        <location filename="mainwindow.ui" line="571"/>
         <source>&amp;Add to Slideshow</source>
         <translation>Zur Slideshow &amp;hinzufügen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="517"/>
-        <location filename="mainwindow.ui" line="597"/>
+        <location filename="mainwindow.ui" line="579"/>
+        <location filename="mainwindow.ui" line="659"/>
         <source>&amp;Edit Comment...</source>
         <translation>Kommentar b&amp;earbeiten...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="525"/>
-        <location filename="mainwindow.ui" line="605"/>
+        <location filename="mainwindow.ui" line="587"/>
+        <location filename="mainwindow.ui" line="667"/>
         <source>Re&amp;name</source>
         <translation>Umbe&amp;nennen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="533"/>
+        <location filename="mainwindow.ui" line="595"/>
         <source>Cu&amp;t</source>
         <translation>Au&amp;sschneiden</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="541"/>
+        <location filename="mainwindow.ui" line="603"/>
         <source>&amp;Copy</source>
         <translation>&amp;Kopieren</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="549"/>
+        <location filename="mainwindow.ui" line="611"/>
         <source>&amp;Paste</source>
         <translation>&amp;Einfügen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="557"/>
-        <location filename="mainwindow.ui" line="613"/>
+        <location filename="mainwindow.ui" line="619"/>
+        <location filename="mainwindow.ui" line="675"/>
         <source>&amp;Remove</source>
         <translation>&amp;Löschen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="565"/>
+        <location filename="mainwindow.ui" line="627"/>
         <source>Remove from &amp;Disk</source>
         <translation>Von der &amp;Festplatte löschen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="573"/>
+        <location filename="mainwindow.ui" line="635"/>
         <source>Copy Full &amp;Path</source>
         <translation>&amp;Bildpfad kopieren</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="581"/>
+        <location filename="mainwindow.ui" line="643"/>
         <source>Export to Images Directory</source>
         <translation>Ins Bildvereichnis exportieren</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="589"/>
+        <location filename="mainwindow.ui" line="651"/>
         <source>Preload &amp;All Images</source>
         <translation>&amp;Alle Bilder vorladen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="625"/>
+        <location filename="mainwindow.ui" line="687"/>
         <source>&amp;Copy Images to Slideshow...</source>
         <translation>Alle Bilder in Slideshow &amp;kopieren...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="633"/>
+        <location filename="mainwindow.ui" line="695"/>
         <source>Export All Images</source>
         <translation>Alle Bilder Exportieren</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="636"/>
-        <location filename="mainwindow.ui" line="639"/>
+        <location filename="mainwindow.ui" line="698"/>
+        <location filename="mainwindow.ui" line="701"/>
         <source>Export All Images to the Images Directory</source>
         <translation>Alle Bilder ins Bildverzeichnis exportieren</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="647"/>
+        <location filename="mainwindow.ui" line="709"/>
         <source>Re&amp;load</source>
         <translation>&amp;Neuladen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="659"/>
+        <location filename="mainwindow.ui" line="721"/>
         <source>&amp;Save</source>
         <translation>&amp;Speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="667"/>
+        <location filename="mainwindow.ui" line="732"/>
         <source>Rotate Clockwise</source>
         <translation>Im Uhrzeigersinn drehen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="672"/>
+        <location filename="mainwindow.ui" line="740"/>
         <source>Rotate Counterclockwise</source>
         <translation>Gegen den Uhrzeigersinn drehen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="677"/>
+        <location filename="mainwindow.ui" line="748"/>
         <source>&amp;Fit to Widget</source>
         <translation>An &amp;Fenster anpassen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="682"/>
+        <location filename="mainwindow.ui" line="756"/>
         <source>&amp;Original Size</source>
         <translation>&amp;Originalgröße</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="687"/>
+        <location filename="mainwindow.ui" line="764"/>
         <source>Zoom &amp;In</source>
         <translation>Here&amp;inzoomen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="692"/>
+        <location filename="mainwindow.ui" line="772"/>
         <source>Zoom O&amp;ut</source>
         <translation>Hera&amp;uszoomen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="437"/>
+        <location filename="mainwindow.ui" line="783"/>
+        <source>Show &amp;Comments</source>
+        <translation>&amp;Kommentare anzeigen</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="499"/>
         <source>&amp;Statusbar</source>
         <translation>&amp;Statusleiste</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="446"/>
+        <location filename="mainwindow.ui" line="508"/>
         <source>&amp;Options...</source>
         <translation>&amp;Einstellungen...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="464"/>
+        <location filename="mainwindow.ui" line="526"/>
         <source>QSM Help</source>
         <translation>QSM Hilfe</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="473"/>
+        <location filename="mainwindow.ui" line="535"/>
         <source>&amp;About Qt...</source>
         <translation>Über &amp;Qt...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="476"/>
-        <location filename="mainwindow.ui" line="479"/>
+        <location filename="mainwindow.ui" line="538"/>
+        <location filename="mainwindow.ui" line="541"/>
         <source>Show the Qt library&apos;s About box</source>
         <translation>Zeigt Informationen über die Qt-Bibliothek an</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="491"/>
+        <location filename="mainwindow.ui" line="553"/>
         <source>&amp;About QSM...</source>
         <translation>Über Q&amp;SM...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="494"/>
-        <location filename="mainwindow.ui" line="497"/>
+        <location filename="mainwindow.ui" line="556"/>
+        <location filename="mainwindow.ui" line="559"/>
         <source>Show the application&apos;s About box</source>
         <translation>Zeigt Informationen der Anwendung an</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="380"/>
+        <location filename="mainwindow.ui" line="442"/>
         <source>&amp;New Slideshow</source>
         <translation>&amp;Neue Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="30"/>
+        <location filename="mainwindow.cpp" line="29"/>
         <source>&amp;Sidebar</source>
         <translation>&amp;Seitenpanele</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="113"/>
-        <location filename="mainwindow.cpp" line="236"/>
+        <location filename="mainwindow.cpp" line="253"/>
         <source>Abort</source>
         <translation>Abbrechen</translation>
     </message>
@@ -344,107 +374,112 @@
         <translation>Bereit</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="233"/>
-        <location filename="mainwindow.cpp" line="244"/>
+        <location filename="mainwindow.cpp" line="250"/>
+        <location filename="mainwindow.cpp" line="261"/>
         <source>Scanning folder %1 ...</source>
         <translation>Durchsuche Ordner %1...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="251"/>
+        <location filename="mainwindow.cpp" line="268"/>
         <source>%1 images found, %2 folders scanned</source>
         <translation>%1 Bilder gefunden, %2 Ordner durchsucht</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="292"/>
+        <location filename="mainwindow.cpp" line="319"/>
         <source>Thumbnail Size</source>
         <translation>Vorschaubildgröße</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="294"/>
+        <location filename="mainwindow.cpp" line="321"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="303"/>
+        <location filename="mainwindow.cpp" line="330"/>
         <source>%1 Pixels</source>
         <translation>%1 Pixel</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="364"/>
+        <location filename="mainwindow.cpp" line="394"/>
         <source>Image List %1/%2</source>
         <translation>Bildliste %1/%2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="419"/>
+        <location filename="mainwindow.cpp" line="452"/>
         <source>Random Factor</source>
         <translation>Zufallsfaktor</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="460"/>
+        <location filename="mainwindow.cpp" line="495"/>
         <source>Slideshow Image List %1/%2</source>
         <translation>Slideshow Bildliste %1/%2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="488"/>
+        <location filename="mainwindow.cpp" line="524"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="644"/>
-        <location filename="mainwindow.cpp" line="708"/>
+        <location filename="mainwindow.cpp" line="643"/>
+        <source>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 beta&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Written by Alexander Vos and Till Althaus</source>
+        <translation>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 beta&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Entwickelt von Alexander Vos und Till Althaus</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="662"/>
+        <source>%1 image(s) added to slideshow &quot;%2&quot;</source>
+        <translation>%1 Bild(er) zur Slideshow &quot;%&quot; hinzugefügt</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="687"/>
+        <location filename="mainwindow.cpp" line="779"/>
         <source>Edit Comment</source>
         <translation>Kommentar bearbeiten</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="644"/>
-        <location filename="mainwindow.cpp" line="708"/>
+        <location filename="mainwindow.cpp" line="687"/>
+        <location filename="mainwindow.cpp" line="779"/>
         <source>Comment:</source>
         <translation>Kommentar:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="500"/>
-        <source>Zoom</source>
-        <translation>Zoom</translation>
+        <location filename="mainwindow.cpp" line="726"/>
+        <source>%1 image(s) removed from slideshow &quot;%2&quot;</source>
+        <translation>%1 Bild(er) aus der Slideshow &quot;%2&quot; entfernt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="523"/>
+        <location filename="mainwindow.cpp" line="562"/>
         <source>aborting...</source>
         <translation>Bitte warten...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="530"/>
+        <location filename="mainwindow.cpp" line="569"/>
         <source>New Slideshow</source>
         <translation>Neue Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="555"/>
+        <location filename="mainwindow.cpp" line="594"/>
         <source>Window</source>
         <translation>Fenster</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="563"/>
+        <location filename="mainwindow.cpp" line="602"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="571"/>
+        <location filename="mainwindow.cpp" line="610"/>
         <source>Slideshow</source>
         <translation>Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="577"/>
+        <location filename="mainwindow.cpp" line="617"/>
         <source>Image View</source>
         <translation>Bildanzeige</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="602"/>
+        <location filename="mainwindow.cpp" line="642"/>
         <source>About QSM</source>
         <translation>Über QSM</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="603"/>
-        <source>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 alpha&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Written by Alexander Vos and Till Althaus</source>
-        <translation>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 alpha&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Entwickelt von Alexander Vos und Till Althaus</translation>
     </message>
 </context>
 <context>
@@ -648,27 +683,27 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SlideshowWindow</name>
     <message>
-        <location filename="slideshowwindow.cpp" line="90"/>
+        <location filename="slideshowwindow.cpp" line="135"/>
         <source>Slideshow stopped</source>
         <translation>Slideshow angehalten</translation>
     </message>
     <message>
-        <location filename="slideshowwindow.cpp" line="125"/>
+        <location filename="slideshowwindow.cpp" line="170"/>
         <source>Comments %1</source>
         <translation>Kommentare %1</translation>
     </message>
     <message>
-        <location filename="slideshowwindow.cpp" line="125"/>
+        <location filename="slideshowwindow.cpp" line="170"/>
         <source>enabled</source>
         <translation>aktiviert</translation>
     </message>
     <message>
-        <location filename="slideshowwindow.cpp" line="125"/>
+        <location filename="slideshowwindow.cpp" line="170"/>
         <source>disabled</source>
         <translation>deaktiviert</translation>
     </message>
     <message>
-        <location filename="slideshowwindow.cpp" line="132"/>
+        <location filename="slideshowwindow.cpp" line="177"/>
         <source>Slideshow continued</source>
         <translation>Slideshow fortgesetzt</translation>
     </message>
