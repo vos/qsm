@@ -6,10 +6,11 @@
 
 #include "imageloader.h"
 
-SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval, QWidget *parent) :
+SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval, bool repeat, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SlideshowWindow),
     m_slideshow(slideshow),
+    m_repeat(repeat),
     m_currentImage(NULL),
     m_nextImage(NULL),
     m_slideshowIndex(0)
@@ -49,11 +50,23 @@ ImageWidget* SlideshowWindow::imageWidget() const
 bool SlideshowWindow::prepareNextImage(int delta, bool synchronous)
 {
     int index = m_slideshowIndex + delta;
-    if (index < 0 || index >= m_slideshow->imageCount()) {
-        m_nextImage = NULL;
-        return false;
+    if (index < 0) {
+        if (m_repeat)
+            index = m_slideshow->imageCount() - 1;
+        else {
+            m_nextImage = NULL;
+            return false;
+        }
+    } else if (index >= m_slideshow->imageCount()) {
+        if (m_repeat)
+            index = 0;
+        else {
+            m_nextImage = NULL;
+            return false;
+        }
     }
-    if (m_nextImage = m_slideshow->image(index)) {
+    // set next image and validate it
+    if ((m_nextImage = m_slideshow->image(index))) {
         if (synchronous) {
             m_imageBuffer = QImage(m_nextImage->path());
             m_slideshowIndex = index;
