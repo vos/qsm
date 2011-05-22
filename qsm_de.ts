@@ -328,109 +328,121 @@
         <translation>&amp;Neue Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="27"/>
+        <location filename="mainwindow.cpp" line="30"/>
         <source>&amp;Sidebar</source>
         <translation>&amp;Seitenpanele</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="110"/>
-        <location filename="mainwindow.cpp" line="233"/>
+        <location filename="mainwindow.cpp" line="113"/>
+        <location filename="mainwindow.cpp" line="236"/>
         <source>Abort</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="118"/>
+        <location filename="mainwindow.cpp" line="121"/>
         <source>Ready</source>
         <translation>Bereit</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="230"/>
-        <location filename="mainwindow.cpp" line="241"/>
+        <location filename="mainwindow.cpp" line="233"/>
+        <location filename="mainwindow.cpp" line="244"/>
         <source>Scanning folder %1 ...</source>
         <translation>Durchsuche Ordner %1...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="248"/>
+        <location filename="mainwindow.cpp" line="251"/>
         <source>%1 images found, %2 folders scanned</source>
         <translation>%1 Bilder gefunden, %2 Ordner durchsucht</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="289"/>
+        <location filename="mainwindow.cpp" line="292"/>
         <source>Thumbnail Size</source>
         <translation>Vorschaubildgröße</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="291"/>
+        <location filename="mainwindow.cpp" line="294"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="300"/>
+        <location filename="mainwindow.cpp" line="303"/>
         <source>%1 Pixels</source>
         <translation>%1 Pixel</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="359"/>
+        <location filename="mainwindow.cpp" line="364"/>
         <source>Image List %1/%2</source>
         <translation>Bildliste %1/%2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="410"/>
+        <location filename="mainwindow.cpp" line="419"/>
         <source>Random Factor</source>
         <translation>Zufallsfaktor</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="451"/>
+        <location filename="mainwindow.cpp" line="460"/>
         <source>Slideshow Image List %1/%2</source>
         <translation>Slideshow Bildliste %1/%2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="479"/>
-        <source>Zoom: %1 %</source>
-        <translation>Zoom: %1 %</translation>
+        <location filename="mainwindow.cpp" line="488"/>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="491"/>
+        <location filename="mainwindow.cpp" line="644"/>
+        <location filename="mainwindow.cpp" line="708"/>
+        <source>Edit Comment</source>
+        <translation>Kommentar bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="644"/>
+        <location filename="mainwindow.cpp" line="708"/>
+        <source>Comment:</source>
+        <translation>Kommentar:</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="500"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="514"/>
+        <location filename="mainwindow.cpp" line="523"/>
         <source>aborting...</source>
         <translation>Bitte warten...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="521"/>
+        <location filename="mainwindow.cpp" line="530"/>
         <source>New Slideshow</source>
         <translation>Neue Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="546"/>
+        <location filename="mainwindow.cpp" line="555"/>
         <source>Window</source>
         <translation>Fenster</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="554"/>
+        <location filename="mainwindow.cpp" line="563"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="562"/>
+        <location filename="mainwindow.cpp" line="571"/>
         <source>Slideshow</source>
         <translation>Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="568"/>
+        <location filename="mainwindow.cpp" line="577"/>
         <source>Image View</source>
         <translation>Bildanzeige</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="593"/>
+        <location filename="mainwindow.cpp" line="602"/>
         <source>About QSM</source>
         <translation>Über QSM</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="594"/>
+        <location filename="mainwindow.cpp" line="603"/>
         <source>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 alpha&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Written by Alexander Vos and Till Althaus</source>
         <translation>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 alpha&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Entwickelt von Alexander Vos und Till Althaus</translation>
     </message>
@@ -631,6 +643,34 @@ p, li { white-space: pre-wrap; }
         <location filename="optionsdialog.cpp" line="138"/>
         <source>The language change will take effect after a restart of Qt SlideShow Manager.</source>
         <translation>Die Änderung der Sprache wird nach einem Neustart von Qt SlideShow Manager wirksam.</translation>
+    </message>
+</context>
+<context>
+    <name>SlideshowWindow</name>
+    <message>
+        <location filename="slideshowwindow.cpp" line="90"/>
+        <source>Slideshow stopped</source>
+        <translation>Slideshow angehalten</translation>
+    </message>
+    <message>
+        <location filename="slideshowwindow.cpp" line="125"/>
+        <source>Comments %1</source>
+        <translation>Kommentare %1</translation>
+    </message>
+    <message>
+        <location filename="slideshowwindow.cpp" line="125"/>
+        <source>enabled</source>
+        <translation>aktiviert</translation>
+    </message>
+    <message>
+        <location filename="slideshowwindow.cpp" line="125"/>
+        <source>disabled</source>
+        <translation>deaktiviert</translation>
+    </message>
+    <message>
+        <location filename="slideshowwindow.cpp" line="132"/>
+        <source>Slideshow continued</source>
+        <translation>Slideshow fortgesetzt</translation>
     </message>
 </context>
 </TS>
