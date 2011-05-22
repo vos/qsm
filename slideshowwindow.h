@@ -24,6 +24,7 @@ public:
 
 private slots:
     void on_imageWidget_initialized();
+    void on_imageWidget_doubleClicked();
     void timer_timeout();
     void timer_stop();
     void imageLoaded(const QImage &image, int width, int height, int index);

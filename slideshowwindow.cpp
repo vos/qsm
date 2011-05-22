@@ -56,6 +56,11 @@ void SlideshowWindow::on_imageWidget_initialized()
         close();
 }
 
+void SlideshowWindow::on_imageWidget_doubleClicked()
+{
+    setWindowState(windowState() ^ Qt::WindowFullScreen);
+}
+
 SlideshowWindow::~SlideshowWindow()
 {
     delete ui;
@@ -187,5 +192,9 @@ void SlideshowWindow::keyPressEvent(QKeyEvent *event)
         if (prepareNextImage(hasNextImage() ? -2 : -1, true))
             showNextImage();
         break;
+    case Qt::Key_F:
+    case Qt::Key_F11:
+        on_imageWidget_doubleClicked();
+       break;
     }
 }
