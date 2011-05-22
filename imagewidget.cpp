@@ -242,12 +242,12 @@ void ImageWidget::setText(const QString &text)
     update();
 }
 
-void ImageWidget::setOverlayText(const QString &text, int hideAfter)
+void ImageWidget::setOverlayText(const QString &text, int timeout)
 {
     m_overlayText = text;
     update();
-    if (!text.isEmpty() && hideAfter > 0)
-        m_overlayTimer.start(hideAfter);
+    if (!text.isEmpty() && timeout > 0)
+        m_overlayTimer.start(timeout);
 }
 
 void ImageWidget::setTextBackgroundColor(const QColor &color)

@@ -38,7 +38,7 @@ public slots:
     void setBackgroundColor(const QColor &color = Qt::black);
     void setImage(const QImage &image);
     void setText(const QString &text = QString());
-    void setOverlayText(const QString &text = QString(), int hideAfter = 1000);
+    void setOverlayText(const QString &text = QString(), int timeout = 1000);
     void setTextBackgroundColor(const QColor &color = QColor(0, 0, 0, 127));
     void setTextFont(const QFont &font);
     void setTextColor(const QColor &color = Qt::white);
