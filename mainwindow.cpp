@@ -25,14 +25,13 @@ MainWindow::MainWindow(QWidget *parent) :
     m_currentSlideshowImage(NULL)
 {
     ui->setupUi(this);
-    ui->menuView->addAction(ui->mainToolBar->toggleViewAction());
-    ui->menuView->addAction(ui->actionStatusbar);
-    QMenu *menuSidebar = new QMenu(tr("&Sidebar"), ui->menuBar);
+    ui->menuView->insertAction(ui->actionStatusbar, ui->mainToolBar->toggleViewAction());
+    QMenu *menuSidebar = new QMenu(tr("&Sidebar"), ui->menuView);
     menuSidebar->addAction(ui->folderBrowserDockWidget->toggleViewAction());
     menuSidebar->addAction(ui->imageListDockWidget->toggleViewAction());
     menuSidebar->addAction(ui->slideshowListDockWidget->toggleViewAction());
     menuSidebar->addAction(ui->slideshowImageListDockWidget->toggleViewAction());
-    ui->menuView->addMenu(menuSidebar);
+    ui->menuView->insertMenu(ui->actionStatusbar, menuSidebar);
     connect(ui->actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
     m_folderBrowserModel = new QFileSystemModel(this);
@@ -101,6 +100,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imageWidget->addAction(ui->actionRemoveImageFromDisk);
     ui->imageWidget->addAction(ui->actionCopyPath);
     ui->imageWidget->addAction(ui->actionExportImages);
+    ui->imageWidget->addAction(ui->actionShowComments);
 
     m_slideshowFileManager = new SlideshowFileManager(this);
     connect(m_slideshowFileManager, SIGNAL(started()), SLOT(slideshowFileManager_started()));
@@ -184,6 +184,7 @@ void MainWindow::loadSettings()
     OptionsDialog::DefaultShortcuts.insert(ui->actionZoomOriginal, Qt::CTRL + Qt::Key_1);
     OptionsDialog::DefaultShortcuts.insert(ui->actionZoomIn, QKeySequence::ZoomIn);
     OptionsDialog::DefaultShortcuts.insert(ui->actionZoomOut, QKeySequence::ZoomOut);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionShowComments, 0);
 
     OptionsDialog::loadAllShortcuts(settings);
 }
@@ -263,8 +264,6 @@ void MainWindow::prepareImage(const ImageListModel *model, const QModelIndex &in
     if (imagePath == m_currentImagePath)
         return;
 
-    m_currentImagePath = imagePath;
-
     QVariant var = model->data(index, Qt::DecorationRole);
     if (var.canConvert<QIcon>()) {
         // set up preview image
@@ -276,6 +275,18 @@ void MainWindow::prepareImage(const ImageListModel *model, const QModelIndex &in
     ImageLoader *imageLoader = new ImageLoader(imagePath);
     connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(imageLoaded(QImage, int, int, int)));
     QThreadPool::globalInstance()->start(imageLoader, 1);
+
+    // enable image view actions if the first image gets set
+    if (m_currentImagePath.isEmpty()) {
+        ui->actionRotateClockwise->setEnabled(true);
+        ui->actionRotateCounterclockwise->setEnabled(true);
+        ui->actionZoomFit->setEnabled(true);
+        ui->actionZoomOriginal->setEnabled(true);
+        ui->actionZoomIn->setEnabled(true);
+        ui->actionZoomOut->setEnabled(true);
+    }
+
+    m_currentImagePath = imagePath;
 }
 
 QWidget* MainWindow::activeWidget(QAction *action)
@@ -322,6 +333,9 @@ void MainWindow::thumbnailSizeMenu_triggered(QAction *action)
 
 void MainWindow::on_imageListView_clicked(const QModelIndex &index)
 {
+    if (!index.isValid())
+        return;
+
     prepareImage(m_imageListModel, index);
     ui->imageWidget->setText();
     m_currentSlideshow = NULL;
@@ -330,7 +344,7 @@ void MainWindow::on_imageListView_clicked(const QModelIndex &index)
 
 void MainWindow::on_imageListView_doubleClicked(const QModelIndex &index)
 {
-    if (!m_slideshowListModel->currentSlideshow())
+    if (!index.isValid() || !m_slideshowListModel->currentSlideshow())
         return;
 
     m_slideshowListModel->addImage(SlideshowImage(m_imageListModel->imagePath(index)));
@@ -405,6 +419,9 @@ void MainWindow::on_slideshowListView_customContextMenuRequested(const QPoint &p
 
 void MainWindow::on_slideshowImageListView_clicked(const QModelIndex &index)
 {
+    if (!index.isValid())
+        return;
+
     m_currentSlideshow = m_slideshowListModel->currentSlideshow();
     Q_ASSERT(m_currentSlideshow);
     m_currentSlideshowImage = m_currentSlideshow->image(index.row());
@@ -422,7 +439,7 @@ void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoi
     SlideshowImage *image = slideshow ? slideshow->image(ui->slideshowImageListView->currentIndex().row()) : NULL;
     if (ui->slideshowImageListView->currentIndex().isValid()) {
         menu.addAction(ui->actionImageEditComment);
-        static const int randomFactors[] = {1, 2, 3, 4, 5, 10, 25, 50, 100};
+        static const int randomFactors[] = {0, 1, 2, 3, 4, 5, 10, 25, 50, 100};
         for (int i = 0; i < int(sizeof(randomFactors) / sizeof(int)); ++i) {
             int randomFactor = randomFactors[i];
             QAction *randomFactorAction = randomFactorMenu.addAction(QString::number(randomFactor));
@@ -450,7 +467,9 @@ void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoi
         menu.addAction(ui->actionPreloadAllImages);
     QAction *action = menu.exec(ui->slideshowImageListView->mapToGlobal(pos));
     if (action && action->parent() == &randomFactorMenu && image) {
-        image->setRandomFactor(action->data().toInt());
+        int randomFactor = action->data().toInt();
+        foreach (const QModelIndex &index, ui->slideshowImageListView->selectedIndexes())
+            slideshow->image(index.row())->setRandomFactor(randomFactor);
         slideshow->setChanged();
     }
 }
@@ -496,19 +515,14 @@ void MainWindow::on_imageWidget_doubleClicked()
 
 void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
 {
+    QMenu menu(ui->imageWidget);
     if (QFile::exists(m_currentImagePath)) {
-        QMenu menu(ui->imageWidget);
         ui->actionAddToSlideshow->setEnabled(m_slideshowListModel->currentSlideshow());
         menu.addAction(ui->actionAddToSlideshow);
         menu.addSeparator();
         menu.addAction(ui->actionRotateClockwise);
         menu.addAction(ui->actionRotateCounterclockwise);
-        QMenu zoomMenu(tr("Zoom"), &menu);
-        zoomMenu.addAction(ui->actionZoomFit);
-        zoomMenu.addAction(ui->actionZoomOriginal);
-        zoomMenu.addAction(ui->actionZoomIn);
-        zoomMenu.addAction(ui->actionZoomOut);
-        menu.addMenu(&zoomMenu);
+        menu.addMenu(ui->menuZoom);
         menu.addSeparator();
         if (m_currentSlideshowImage)
             menu.addAction(ui->actionImageEditComment);
@@ -517,8 +531,10 @@ void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
         menu.addAction(ui->actionRemoveImageFromDisk);
         menu.addAction(ui->actionCopyPath);
         menu.addAction(ui->actionExportImages);
-        menu.exec(ui->imageWidget->mapToGlobal(pos));
+        menu.addSeparator();
     }
+    menu.addAction(ui->actionShowComments);
+    menu.exec(ui->imageWidget->mapToGlobal(pos));
 }
 
 void MainWindow::scanFolderAbortButton_clicked()
@@ -579,7 +595,8 @@ void MainWindow::on_actionOptions_triggered()
     // image view shortcuts
     QList<QAction*> imageViewActions;
     imageViewActions << ui->actionRotateClockwise << ui->actionRotateCounterclockwise << ui->actionZoomFit
-                     << ui->actionZoomOriginal << ui->actionZoomIn << ui->actionZoomOut;
+                     << ui->actionZoomOriginal << ui->actionZoomIn << ui->actionZoomOut
+                     << ui->actionShowComments;
     actions.append(qMakePair(tr("Image View"), imageViewActions));
 
     // open options dialog
@@ -613,16 +630,19 @@ void MainWindow::on_actionAboutQsm_triggered()
 
 void MainWindow::on_actionAddToSlideshow_triggered()
 {
-    QWidget *widget = activeWidget(ui->actionAddToSlideshow);
-    if (!widget) return;
-
     Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
     if (!slideshow) return;
 
+    QWidget *widget = activeWidget(ui->actionAddToSlideshow);
+    if (!widget) return;
+
     if (widget == ui->imageListView) {
-        QString path = m_imageListModel->imagePath(ui->imageListView->currentIndex());
-        m_slideshowListModel->addImage(path);
-        m_slideshowImageListModel->addImage(ImageInfo(path));
+        QModelIndexList indexList = ui->imageListView->selectedIndexes();
+        foreach (const QModelIndex &index, indexList) {
+            m_slideshowListModel->addImage(m_imageListModel->imagePath(index));
+            m_slideshowImageListModel->addImage(m_imageListModel->imageInfo(index));
+        }
+        statusBar()->showMessage(tr("%1 image(s) added to slideshow \"%2\"").arg(indexList.count()).arg(slideshow->name()));
     } else if (widget == ui->imageWidget)
         on_imageWidget_doubleClicked();
 }
@@ -633,25 +653,29 @@ void MainWindow::on_actionImageEditComment_triggered()
     if (!widget) return;
 
     Slideshow *slideshow = NULL;
-    SlideshowImage *image = NULL;
+    QList<SlideshowImage*> images;
     if (widget == ui->slideshowImageListView) {
         slideshow = m_slideshowListModel->currentSlideshow();
         if (!slideshow) return;
-        image = slideshow->image(ui->slideshowImageListView->currentIndex().row());
+        foreach (const QModelIndex &index, ui->slideshowImageListView->selectedIndexes())
+            images.append(slideshow->image(index.row()));
     } else if (widget == ui->imageWidget && m_currentSlideshowImage) {
         slideshow = m_currentSlideshow;
-        image = m_currentSlideshowImage;
+        images.append(m_currentSlideshowImage);
     }
-    if (!slideshow || !image) return;
+    if (!slideshow || !images.count()) return;
 
     bool ok;
+    QString currentComment = slideshow->image(ui->slideshowImageListView->currentIndex().row())->comment();
     QString comment = QInputDialog::getText(this, tr("Edit Comment"), tr("Comment:"),
-                                            QLineEdit::Normal, image->comment(), &ok);
+                                            QLineEdit::Normal, currentComment, &ok);
     if (ok) {
-        image->setComment(comment);
+        foreach (SlideshowImage *image, images) {
+            image->setComment(comment);
+            if (image == m_currentSlideshowImage)
+                ui->imageWidget->setText(comment);
+        }
         slideshow->setChanged();
-        if (image == m_currentSlideshowImage)
-            ui->imageWidget->setText(comment);
     }
 }
 
@@ -673,30 +697,56 @@ void MainWindow::on_actionPasteImage_triggered()
 
 void MainWindow::on_actionRemoveImage_triggered()
 {
-    if (m_currentSlideshowImage == m_slideshowListModel->currentSlideshow()->image(ui->slideshowImageListView->currentIndex().row()))
-        m_currentSlideshowImage = NULL;
-    m_slideshowListModel->removeImage(ui->slideshowImageListView->currentIndex());
-    m_slideshowImageListModel->removeImage(ui->slideshowImageListView->currentIndex());
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow) return;
+    QModelIndexList indexList = ui->slideshowImageListView->selectedIndexes();
+    foreach (const QModelIndex &index, indexList) {
+        m_slideshowListModel->removeImage(index);
+        m_slideshowImageListModel->removeImage(index);
+        if (slideshow->image(index.row()) == m_currentSlideshowImage)
+            m_currentSlideshowImage = NULL;
+    }
+    statusBar()->showMessage(tr("%1 image(s) removed from slideshow \"%2\"").arg(indexList.count()).arg(slideshow->name()));
+}
+
+QStringList MainWindow::imagePaths(QAction *action)
+{
+    Q_ASSERT(action);
+    QWidget *widget = activeWidget(action);
+    if (!widget) return QStringList();
+
+    QStringList paths;
+    if (widget == ui->imageListView)
+        foreach (const QModelIndex &index, ui->imageListView->selectedIndexes())
+            paths.append(m_imageListModel->imagePath(index));
+    else if (widget == ui->slideshowImageListView)
+        foreach (const QModelIndex &index, ui->slideshowImageListView->selectedIndexes())
+            paths.append(m_slideshowImageListModel->imagePath(index));
+    else if (widget == ui->imageWidget)
+        paths.append(m_currentImagePath);
+
+    return paths;
 }
 
 void MainWindow::on_actionRemoveImageFromDisk_triggered()
 {
-    QWidget *widget = activeWidget(ui->actionRemoveImageFromDisk);
-    if (!widget) return;
-
-    QString path;
-    if (widget == ui->imageListView)
-        path = m_imageListModel->imagePath(ui->imageListView->currentIndex());
-    else if (widget == ui->slideshowImageListView)
-        path = m_slideshowImageListModel->imagePath(ui->slideshowImageListView->currentIndex());
-    else if (widget == ui->imageWidget)
-        path = m_currentImagePath;
-
-    qDebug() << path;
+    QStringList paths = imagePaths(ui->actionRemoveImageFromDisk);
+    // TODO: delete from disk
+    if (activeWidget(ui->actionRemoveImageFromDisk) == ui->slideshowImageListView) // remove images also from slideshow
+        on_actionRemoveImage_triggered();
 }
 
 void MainWindow::on_actionCopyPath_triggered()
 {
+    QStringList paths = imagePaths(ui->actionCopyPath);
+
+#ifdef Q_WS_WIN // convert to native paths on windows
+    for (QStringList::iterator path = paths.begin(); path != paths.end(); ++path)
+        *path = QDir::toNativeSeparators(*path);
+#endif
+
+    // TODO: copy to clipboard
+    qDebug() << paths;
 }
 
 void MainWindow::on_actionPreloadAllImages_triggered()
@@ -760,7 +810,7 @@ void MainWindow::on_slideshowStartPushButton_clicked()
     if (!slideshow || !slideshow->imageCount())
         return;
 
-    SlideshowWindow *slideshowWindow = new SlideshowWindow(slideshow);
+    SlideshowWindow *slideshowWindow = new SlideshowWindow(slideshow, 5, true);
     ImageWidget *imageWidget = slideshowWindow->imageWidget();
     imageWidget->setBackgroundColor(ui->imageWidget->backgroundColor());
     imageWidget->setTextBackgroundColor(ui->imageWidget->textBackgroundColor());

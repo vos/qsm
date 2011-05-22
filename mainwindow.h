@@ -112,6 +112,7 @@ private:
 
     QWidget* activeWidget(QAction *action);
     QMenu* createThumbnailSizeMenu(QWidget *parent = 0, int selectedSize = 64);
+    QStringList imagePaths(QAction *action);
 
     void closeEvent(QCloseEvent *event);
 };

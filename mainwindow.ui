@@ -62,6 +62,22 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <widget class="QMenu" name="menuZoom">
+     <property name="title">
+      <string>&amp;Zoom</string>
+     </property>
+     <addaction name="actionZoomFit"/>
+     <addaction name="actionZoomOriginal"/>
+     <addaction name="actionZoomIn"/>
+     <addaction name="actionZoomOut"/>
+    </widget>
+    <addaction name="actionStatusbar"/>
+    <addaction name="separator"/>
+    <addaction name="actionRotateClockwise"/>
+    <addaction name="actionRotateCounterclockwise"/>
+    <addaction name="menuZoom"/>
+    <addaction name="separator"/>
+    <addaction name="actionShowComments"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -95,7 +111,16 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNewSlideshow"/>
+   <addaction name="actionReloadAllSlideshows"/>
    <addaction name="actionSaveAllSlideshows"/>
+   <addaction name="separator"/>
+   <addaction name="actionRotateClockwise"/>
+   <addaction name="actionRotateCounterclockwise"/>
+   <addaction name="actionZoomFit"/>
+   <addaction name="actionZoomOriginal"/>
+   <addaction name="actionZoomIn"/>
+   <addaction name="actionZoomOut"/>
+   <addaction name="actionShowComments"/>
    <addaction name="separator"/>
    <addaction name="actionOptions"/>
    <addaction name="separator"/>
@@ -178,7 +203,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="imageListView">
+      <widget class="ImageListView" name="imageListView">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
@@ -359,7 +384,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="slideshowImageListView">
+      <widget class="ImageListView" name="slideshowImageListView">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
@@ -663,38 +688,72 @@
    </property>
   </action>
   <action name="actionRotateClockwise">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Rotate Clockwise</string>
    </property>
   </action>
   <action name="actionRotateCounterclockwise">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Rotate Counterclockwise</string>
    </property>
   </action>
   <action name="actionZoomFit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Fit to Widget</string>
    </property>
   </action>
   <action name="actionZoomOriginal">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Original Size</string>
    </property>
   </action>
   <action name="actionZoomIn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Zoom &amp;In</string>
    </property>
   </action>
   <action name="actionZoomOut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Zoom O&amp;ut</string>
+   </property>
+  </action>
+  <action name="actionShowComments">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show &amp;Comments</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>ImageListView</class>
+   <extends>QListView</extends>
+   <header>imagelistview.h</header>
+  </customwidget>
   <customwidget>
    <class>SlideshowListView</class>
    <extends>QListView</extends>
@@ -711,6 +770,7 @@
     <slot>setImageMode()</slot>
     <slot>rotateClockwise()</slot>
     <slot>rotateCounterclockwise()</slot>
+    <slot>setTextVisibility(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -819,6 +879,22 @@
    <signal>triggered()</signal>
    <receiver>imageWidget</receiver>
    <slot>rotateCounterclockwise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowComments</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>imageWidget</receiver>
+   <slot>setTextVisibility(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
