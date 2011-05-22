@@ -6,6 +6,7 @@
 class SlideshowListView : public QListView
 {
     Q_OBJECT
+
 public:
     explicit SlideshowListView(QWidget *parent = 0);
 
