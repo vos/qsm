@@ -17,7 +17,7 @@ class SlideshowWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit SlideshowWindow(Slideshow *slideshow, int interval = 5, bool repeat = true, QWidget *parent = 0);
+    explicit SlideshowWindow(Slideshow *slideshow, int interval = 5, bool random = false, bool repeat = true, QWidget *parent = 0);
     ~SlideshowWindow();
 
     ImageWidget* imageWidget() const;
@@ -31,7 +31,9 @@ private slots:
 private:
     Ui::SlideshowWindow *ui;
     Slideshow *m_slideshow;
+    bool m_random;
     bool m_repeat;
+    QVector<double> m_randomFactors;
     SlideshowImage *m_currentImage;
     SlideshowImage *m_nextImage;
     QImage m_imageBuffer;

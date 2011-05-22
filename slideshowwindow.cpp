@@ -3,13 +3,15 @@
 
 #include <QKeyEvent>
 #include <QThreadPool>
+#include <QTime>
 
 #include "imageloader.h"
 
-SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval, bool repeat, QWidget *parent) :
+SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval, bool random, bool repeat, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SlideshowWindow),
     m_slideshow(slideshow),
+    m_random(random),
     m_repeat(repeat),
     m_currentImage(NULL),
     m_nextImage(NULL),
@@ -22,6 +24,23 @@ SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval, bool repeat
     m_timer.setInterval(interval * 1000);
     connect(&m_timer, SIGNAL(timeout()), SLOT(timer_timeout()));
     //connect(m_slideshow, SIGNAL(destroyed()), SLOT(close()));
+
+    if (random) {
+        // initialize random generator
+        qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+        // initialize random factors
+        m_randomFactors = QVector<double>(slideshow->imageCount());
+        int i = 0;
+        int sum = 0;
+        foreach (const SlideshowImage &image, slideshow->images()) {
+            int factor = image.randomFactor();
+            m_randomFactors[i++] = factor;
+            sum += factor;
+        }
+        // normalize random factors
+        for (i = 0; i < m_randomFactors.count(); ++i)
+            m_randomFactors[i] /= sum;
+    }
 }
 
 void SlideshowWindow::on_imageWidget_initialized()
@@ -49,20 +68,33 @@ ImageWidget* SlideshowWindow::imageWidget() const
 
 bool SlideshowWindow::prepareNextImage(int delta, bool synchronous)
 {
-    int index = m_slideshowIndex + delta;
-    if (index < 0) {
-        if (m_repeat)
-            index = m_slideshow->imageCount() - 1;
-        else {
-            m_nextImage = NULL;
-            return false;
+    int index;
+    if (m_random) {
+        // get next index based on the weighted random algorithm
+        double rnd = qrand() / (double)RAND_MAX;
+        double sum = 0.0;
+        for (index = 0; index < m_randomFactors.count(); ++index) {
+            sum += m_randomFactors[index];
+            if (sum >= rnd)
+                break;
         }
-    } else if (index >= m_slideshow->imageCount()) {
-        if (m_repeat)
-            index = 0;
-        else {
-            m_nextImage = NULL;
-            return false;
+    } else {
+        // get next index depending on delta
+        index = m_slideshowIndex + delta;
+        if (index < 0) {
+            if (m_repeat)
+                index = m_slideshow->imageCount() - 1;
+            else {
+                m_nextImage = NULL;
+                return false;
+            }
+        } else if (index >= m_slideshow->imageCount()) {
+            if (m_repeat)
+                index = 0;
+            else {
+                m_nextImage = NULL;
+                return false;
+            }
         }
     }
     // set next image and validate it
