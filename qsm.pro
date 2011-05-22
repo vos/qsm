@@ -18,6 +18,7 @@ HEADERS += qsm.h \
            imageloaderthread.h \
            imageloaderpool.h \
            imagelistmodel.h \
+           imagelistview.h \
            imagewidget.h \
            slideshowimage.h \
            slideshow.h \
@@ -35,6 +36,7 @@ SOURCES += main.cpp \
            imageloaderthread.cpp \
            imageloaderpool.cpp \
            imagelistmodel.cpp \
+           imagelistview.cpp \
            imagewidget.cpp \
            slideshowimage.cpp \
            slideshow.cpp \
