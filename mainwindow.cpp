@@ -488,6 +488,12 @@ void MainWindow::on_imageWidget_viewChanged()
     statusBar()->showMessage(tr("Zoom: %1%").arg(int(ui->imageWidget->zoomFactor() * 100)));
 }
 
+void MainWindow::on_imageWidget_doubleClicked()
+{
+    m_slideshowListModel->addImage(m_currentImagePath);
+    m_slideshowImageListModel->addImage(ImageInfo(m_currentImagePath));
+}
+
 void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
 {
     if (QFile::exists(m_currentImagePath)) {
@@ -617,10 +623,8 @@ void MainWindow::on_actionAddToSlideshow_triggered()
         QString path = m_imageListModel->imagePath(ui->imageListView->currentIndex());
         m_slideshowListModel->addImage(path);
         m_slideshowImageListModel->addImage(ImageInfo(path));
-    } else if (widget == ui->imageWidget) {
-        m_slideshowListModel->addImage(m_currentImagePath);
-        m_slideshowImageListModel->addImage(ImageInfo(m_currentImagePath));
-    }
+    } else if (widget == ui->imageWidget)
+        on_imageWidget_doubleClicked();
 }
 
 void MainWindow::on_actionImageEditComment_triggered()

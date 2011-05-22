@@ -181,6 +181,11 @@ void ImageWidget::mousePressEvent(QMouseEvent *event)
     }
 }
 
+void ImageWidget::mouseDoubleClickEvent(QMouseEvent *)
+{
+    emit doubleClicked();
+}
+
 void ImageWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {

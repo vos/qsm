@@ -52,6 +52,7 @@ private slots:
     void slideshowFileManager_started();
     void slideshowFileManager_finished();
     void on_imageWidget_viewChanged();
+    void on_imageWidget_doubleClicked();
     void on_imageWidget_customContextMenuRequested(const QPoint &pos);
     void scanFolderAbortButton_clicked();
 
