@@ -10,6 +10,7 @@ SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval, QWidget *pa
     QWidget(parent),
     ui(new Ui::SlideshowWindow),
     m_slideshow(slideshow),
+    m_currentImage(NULL),
     m_nextImage(NULL),
     m_slideshowIndex(0)
 {
@@ -48,8 +49,10 @@ ImageWidget* SlideshowWindow::imageWidget() const
 bool SlideshowWindow::prepareNextImage(int delta, bool synchronous)
 {
     int index = m_slideshowIndex + delta;
-    if (index < 0 || index >= m_slideshow->imageCount())
+    if (index < 0 || index >= m_slideshow->imageCount()) {
+        m_nextImage = NULL;
         return false;
+    }
     if (m_nextImage = m_slideshow->image(index)) {
         if (synchronous) {
             m_imageBuffer = QImage(m_nextImage->path());
@@ -70,13 +73,22 @@ void SlideshowWindow::showNextImage()
         return;
     ui->imageWidget->setImage(m_imageBuffer);
     ui->imageWidget->setText(m_nextImage->comment());
+    m_currentImage = m_nextImage;
 }
 
 void SlideshowWindow::timer_timeout()
 {
     showNextImage();
     if (!prepareNextImage())
+        timer_stop();
+}
+
+void SlideshowWindow::timer_stop()
+{
+    if (m_timer.isActive()) {
         m_timer.stop();
+        ui->imageWidget->setOverlayText(tr("Slideshow stopped"), 2000);
+    }
 }
 
 void SlideshowWindow::imageLoaded(const QImage &image, int, int, int index)
@@ -110,27 +122,24 @@ void SlideshowWindow::keyPressEvent(QKeyEvent *event)
         ui->imageWidget->zoomOut();
         break;
     case Qt::Key_C:
-        ui->imageWidget->toggleTextVisibility();
+        ui->imageWidget->setOverlayText(tr("Comments %1").arg(ui->imageWidget->toggleTextVisibility() ? tr("enabled") : tr("disabled")));
         break;
     case Qt::Key_Space:
-        if (m_timer.isActive()) {
-            m_timer.stop();
-            ui->imageWidget->setOverlayText(tr("Slideshow paused"), 2000);
-        } else if (prepareNextImage()) {
+        if (m_timer.isActive())
+            timer_stop();
+        else if (hasNextImage() || prepareNextImage()) {
             m_timer.start();
             ui->imageWidget->setOverlayText(tr("Slideshow continued"), 2000);
         }
         break;
     case Qt::Key_Right:
-        if (m_timer.isActive())
-            m_timer.stop();
-        if (prepareNextImage(1, true))
+        timer_stop();
+        if (hasNextImage() || prepareNextImage(1, true))
             showNextImage();
         break;
     case Qt::Key_Left:
-        if (m_timer.isActive())
-            m_timer.stop();
-        if (prepareNextImage(-1, true))
+        timer_stop();
+        if (prepareNextImage(hasNextImage() ? -2 : -1, true))
             showNextImage();
         break;
     }
