@@ -52,7 +52,11 @@ FORMS += mainwindow.ui \
 
 RESOURCES += icons.qrc
 
-OTHER_FILES += README.md
+#RC_FILE = qsm.rc
+
+OTHER_FILES += README.md \
+               qsm_de.ts \
+               qsm.rc
 
 
 TRANSLATIONS = qsm_de.ts

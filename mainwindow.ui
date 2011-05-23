@@ -253,7 +253,14 @@
          <number>5</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" name="slideshowOptionsLayout1" stretch="1,2">
+         <layout class="QHBoxLayout" name="slideshowOptionsLayout1" stretch="0,0,1">
+          <item>
+           <widget class="QLabel" name="intervalLabel">
+            <property name="pixmap">
+             <pixmap resource="icons.qrc">:/icons/clock_24.png</pixmap>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QSpinBox" name="intervalSpinBox">
             <property name="statusTip">
@@ -281,12 +288,16 @@
             <property name="text">
              <string>Start</string>
             </property>
+            <property name="icon">
+             <iconset resource="icons.qrc">
+              <normaloff>:/icons/play.png</normaloff>:/icons/play.png</iconset>
+            </property>
            </widget>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="slideshowOptionsLayout2" stretch="2,1,1">
+         <layout class="QHBoxLayout" name="slideshowOptionsLayout2" stretch="1,0,0">
           <item>
            <widget class="QComboBox" name="slideshowSortComboBox">
             <property name="currentIndex">
@@ -442,7 +453,7 @@
   <action name="actionNewSlideshow">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/add_48.png</normaloff>:/icons/add_48.png</iconset>
+     <normaloff>:/icons/paper_48.png</normaloff>:/icons/paper_48.png</iconset>
    </property>
    <property name="text">
     <string>&amp;New Slideshow</string>
@@ -455,6 +466,10 @@
    </property>
   </action>
   <action name="actionReloadAllSlideshows">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/folder_48.png</normaloff>:/icons/folder_48.png</iconset>
+   </property>
    <property name="text">
     <string>Re&amp;load All Slideshows</string>
    </property>
@@ -581,6 +596,10 @@
    </property>
   </action>
   <action name="actionImageEditComment">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/comment_add_48.png</normaloff>:/icons/comment_add_48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Edit Comment...</string>
    </property>
@@ -597,6 +616,10 @@
    </property>
   </action>
   <action name="actionCutImage">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/editcut.png</normaloff>:/icons/editcut.png</iconset>
+   </property>
    <property name="text">
     <string>Cu&amp;t</string>
    </property>
@@ -605,6 +628,10 @@
    </property>
   </action>
   <action name="actionCopyImage">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/editcopy.png</normaloff>:/icons/editcopy.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Copy</string>
    </property>
@@ -613,6 +640,10 @@
    </property>
   </action>
   <action name="actionPasteImage">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/editpaste.png</normaloff>:/icons/editpaste.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Paste</string>
    </property>
@@ -621,6 +652,10 @@
    </property>
   </action>
   <action name="actionRemoveImage">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/cross_48.png</normaloff>:/icons/cross_48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Remove</string>
    </property>
@@ -629,6 +664,10 @@
    </property>
   </action>
   <action name="actionRemoveImageFromDisk">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/cross_48.png</normaloff>:/icons/cross_48.png</iconset>
+   </property>
    <property name="text">
     <string>Remove from &amp;Disk</string>
    </property>
@@ -637,6 +676,10 @@
    </property>
   </action>
   <action name="actionCopyPath">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/editcopy.png</normaloff>:/icons/editcopy.png</iconset>
+   </property>
    <property name="text">
     <string>Copy Full &amp;Path</string>
    </property>
@@ -645,6 +688,10 @@
    </property>
   </action>
   <action name="actionExportImages">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/box_upload_48.png</normaloff>:/icons/box_upload_48.png</iconset>
+   </property>
    <property name="text">
     <string>Export to Images Directory</string>
    </property>
@@ -661,11 +708,19 @@
    </property>
   </action>
   <action name="actionStartSlideshow">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/play.png</normaloff>:/icons/play.png</iconset>
+   </property>
    <property name="text">
     <string>Start Slideshow</string>
    </property>
   </action>
   <action name="actionSlideshowEditComment">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/comment_add_48.png</normaloff>:/icons/comment_add_48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Edit Comment...</string>
    </property>
@@ -682,6 +737,10 @@
    </property>
   </action>
   <action name="actionRemoveSlideshow">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/cross_48.png</normaloff>:/icons/cross_48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Remove</string>
    </property>
@@ -692,7 +751,7 @@
   <action name="actionCopyImagesToSlideshow">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/add_48.png</normaloff>:/icons/add_48.png</iconset>
+     <normaloff>:/icons/image_add_48.png</normaloff>:/icons/image_add_48.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Copy Images to Slideshow...</string>
@@ -702,6 +761,10 @@
    </property>
   </action>
   <action name="actionExportAllImages">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/box_upload_48.png</normaloff>:/icons/box_upload_48.png</iconset>
+   </property>
    <property name="text">
     <string>Export All Images</string>
    </property>
@@ -716,6 +779,10 @@
    </property>
   </action>
   <action name="actionReloadSlideshow">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/folder_48.png</normaloff>:/icons/folder_48.png</iconset>
+   </property>
    <property name="text">
     <string>Re&amp;load</string>
    </property>
@@ -739,6 +806,10 @@
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/rotate_clockwise_48.png</normaloff>:/icons/rotate_clockwise_48.png</iconset>
+   </property>
    <property name="text">
     <string>Rotate Clockwise</string>
    </property>
@@ -746,6 +817,10 @@
   <action name="actionRotateCounterclockwise">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/rotate_counterclockwise_48.png</normaloff>:/icons/rotate_counterclockwise_48.png</iconset>
    </property>
    <property name="text">
     <string>Rotate Counterclockwise</string>
@@ -755,6 +830,10 @@
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/search_48.png</normaloff>:/icons/search_48.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Fit to Widget</string>
    </property>
@@ -762,6 +841,10 @@
   <action name="actionZoomOriginal">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/search_48.png</normaloff>:/icons/search_48.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Original Size</string>
@@ -771,6 +854,10 @@
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/search_48.png</normaloff>:/icons/search_48.png</iconset>
+   </property>
    <property name="text">
     <string>Zoom &amp;In</string>
    </property>
@@ -778,6 +865,10 @@
   <action name="actionZoomOut">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/search_48.png</normaloff>:/icons/search_48.png</iconset>
    </property>
    <property name="text">
     <string>Zoom O&amp;ut</string>
@@ -789,6 +880,10 @@
    </property>
    <property name="checked">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/comment_48.png</normaloff>:/icons/comment_48.png</iconset>
    </property>
    <property name="text">
     <string>Show &amp;Comments</string>

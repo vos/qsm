@@ -1,15 +1,30 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/add_48.png</file>
-        <file>icons/floppy_disk_48.png</file>
-        <file>icons/info_48.png</file>
-        <file>icons/question_48.png</file>
-        <file>icons/spanner_48.png</file>
         <file>icons/begin.png</file>
+        <file>icons/box_upload_48.png</file>
+        <file>icons/clock_24.png</file>
+        <file>icons/comment_48.png</file>
+        <file>icons/comment_add_48.png</file>
+        <file>icons/cross_48.png</file>
         <file>icons/down.png</file>
+        <file>icons/editcopy.png</file>
+        <file>icons/editcut.png</file>
+        <file>icons/editpaste.png</file>
         <file>icons/end.png</file>
+        <file>icons/floppy_disk_48.png</file>
+        <file>icons/folder_48.png</file>
+        <file>icons/image_add_48.png</file>
+        <file>icons/info_48.png</file>
         <file>icons/multipleDown.png</file>
         <file>icons/multipleUp.png</file>
+        <file>icons/paper_48.png</file>
+        <file>icons/play.png</file>
+        <file>icons/question_48.png</file>
+        <file>icons/rotate_clockwise_48.png</file>
+        <file>icons/rotate_counterclockwise_48.png</file>
+        <file>icons/search_48.png</file>
+        <file>icons/spanner_48.png</file>
         <file>icons/up.png</file>
     </qresource>
 </RCC>
