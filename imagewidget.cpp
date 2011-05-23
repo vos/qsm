@@ -89,14 +89,14 @@ void ImageWidget::paintEvent(QPaintEvent *)
     glLoadIdentity();
 
     if (m_rotate == 90.0) {
-        glRotated(m_rotate, 0.0, 0.0, 1.0);
-        glTranslated(0.0, -m_imageHeight, 0.0);
+        glRotated(-m_rotate, 0.0, 0.0, 1.0);
+        glTranslated(-m_imageWidth, 0.0, 0.0);
     } else if (m_rotate == 180.0) {
         glScaled(-1.0, -1.0, 1.0);
         glTranslated(-m_imageWidth, -m_imageHeight, 0.0);
     } else if (m_rotate == 270.0) {
-        glRotated(m_rotate, 0.0, 0.0, 1.0);
-        glTranslated(-m_imageWidth, 0.0, 0.0);
+        glRotated(-m_rotate, 0.0, 0.0, 1.0);
+        glTranslated(0.0, -m_imageHeight, 0.0);
     }
 
     glBegin(GL_QUADS);
