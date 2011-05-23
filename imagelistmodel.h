@@ -37,6 +37,8 @@ private slots:
     void thumbnailLoaded(const QImage &image, int width, int height, int index);
 
 private:
+    static const QBrush ERROR_BRUSH;
+
     QList<ImageInfo> m_imageInfoList;
     int m_imageInfoCount;
 

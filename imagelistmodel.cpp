@@ -9,6 +9,8 @@
 
 #include "mainwindow.h"
 
+const QBrush ImageListModel::ERROR_BRUSH = QColor(255, 153, 153);
+
 ImageListModel::ImageListModel(QObject *parent) :
     QAbstractListModel(parent), m_imageInfoCount(0)
 {
@@ -19,11 +21,14 @@ QVariant ImageListModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || index.row() >= m_imageInfoList.count())
         return QVariant();
 
-    if (role == Qt::DisplayRole)
+    switch (role) {
+    case Qt::DisplayRole:
         return m_imageInfoList.at(index.row()).fileInfo().fileName();
-    else if (role == Qt::DecorationRole)
+    case Qt::DecorationRole:
         return m_imageInfoList.at(index.row()).icon();
-    else if (role == Qt::ToolTipRole) {
+    case Qt::BackgroundRole:
+        return (m_imageInfoList.at(index.row()).exists() ? Qt::white : ImageListModel::ERROR_BRUSH);
+    case Qt::ToolTipRole:
         const ImageInfo info = m_imageInfoList.at(index.row());
         if (info.exists())
             return QString(tr("<html><b>%1</b><br/><br/>Dimensions: %2<br/>Size: %3<br/>Date created: %4</html>"))
