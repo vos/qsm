@@ -75,6 +75,7 @@ private slots:
     void on_actionCopyPath_triggered();
     void on_actionPreloadAllImages_triggered();
 
+    void on_actionStartSlideshow_triggered();
     void on_actionSlideshowEditComment_triggered();
     void on_actionRenameSlideshow_triggered();
     void on_actionRemoveSlideshow_triggered();
@@ -84,8 +85,6 @@ private slots:
 
     void on_includeSubfoldersCheckBox_toggled(bool checked);
     void thumbnailSizeMenu_triggered(QAction *action);
-
-    void on_slideshowStartPushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

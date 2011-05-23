@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_slideshowListModel = new SlideshowListModel(this);
     ui->slideshowListView->setModel(m_slideshowListModel);
+    ui->slideshowListView->addAction(ui->actionStartSlideshow);
     ui->slideshowListView->addAction(ui->actionSlideshowEditComment);
     ui->slideshowListView->addAction(ui->actionRenameSlideshow);
     ui->slideshowListView->addAction(ui->actionRemoveSlideshow);
@@ -178,6 +179,7 @@ void MainWindow::loadSettings()
     OptionsDialog::DefaultShortcuts.insert(ui->actionNewSlideshow,QKeySequence::New);
     OptionsDialog::DefaultShortcuts.insert(ui->actionReloadAllSlideshows, Qt::CTRL + Qt::SHIFT + Qt::Key_F5);
     OptionsDialog::DefaultShortcuts.insert(ui->actionSaveAllSlideshows, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    OptionsDialog::DefaultShortcuts.insert(ui->actionStartSlideshow, Qt::Key_MediaPlay);
     OptionsDialog::DefaultShortcuts.insert(ui->actionSlideshowEditComment, Qt::Key_Insert);
     OptionsDialog::DefaultShortcuts.insert(ui->actionRenameSlideshow, Qt::Key_F2);
     OptionsDialog::DefaultShortcuts.insert(ui->actionRemoveSlideshow, QKeySequence::Delete);
@@ -292,6 +294,7 @@ void MainWindow::prepareImage(const ImageListModel *model, const QModelIndex &in
 
     // enable image view actions if the first image gets set
     if (m_currentImagePath.isEmpty()) {
+        ui->imageWidget->setEnabled(true);
         ui->actionRotateClockwise->setEnabled(true);
         ui->actionRotateCounterclockwise->setEnabled(true);
         ui->actionZoomFit->setEnabled(true);
@@ -411,6 +414,7 @@ void MainWindow::on_slideshowListView_customContextMenuRequested(const QPoint &p
 {
     QMenu menu(ui->slideshowListView);
     if (ui->slideshowListView->currentIndex().isValid()) {
+        menu.addAction(ui->actionStartSlideshow);
         menu.addAction(ui->actionSlideshowEditComment);
         menu.addAction(ui->actionRenameSlideshow);
         menu.addAction(ui->actionRemoveSlideshow);
@@ -602,9 +606,9 @@ void MainWindow::on_actionOptions_triggered()
     // slideshow shortcuts
     QList<QAction*> slideshowActions;
     slideshowActions << ui->actionNewSlideshow << ui->actionReloadAllSlideshows << ui->actionSaveAllSlideshows
-                     << ui->actionSlideshowEditComment << ui->actionRenameSlideshow << ui->actionRemoveSlideshow
-                     << ui->actionCopyImagesToSlideshow << ui->actionExportAllImages << ui->actionReloadSlideshow
-                     << ui->actionSaveSlideshow;
+                     << ui->actionStartSlideshow << ui->actionSlideshowEditComment << ui->actionRenameSlideshow
+                     << ui->actionRemoveSlideshow << ui->actionCopyImagesToSlideshow << ui->actionExportAllImages
+                     << ui->actionReloadSlideshow << ui->actionSaveSlideshow;
     actions.append(qMakePair(tr("Slideshow"), slideshowActions));
 
     // image view shortcuts
@@ -768,6 +772,23 @@ void MainWindow::on_actionPreloadAllImages_triggered()
 {
 }
 
+void MainWindow::on_actionStartSlideshow_triggered()
+{
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow || !slideshow->imageCount())
+        return;
+
+    SlideshowWindow *slideshowWindow = new SlideshowWindow(slideshow, ui->intervalSpinBox->value(),
+            ui->randomCheckBox->isChecked(), ui->repeatCheckBox->isChecked());
+    ImageWidget *imageWidget = slideshowWindow->imageWidget();
+    imageWidget->setBackgroundColor(ui->imageWidget->backgroundColor());
+    imageWidget->setTextBackgroundColor(ui->imageWidget->textBackgroundColor());
+    imageWidget->setTextFont(ui->imageWidget->textFont());
+    imageWidget->setTextColor(ui->imageWidget->textColor());
+    imageWidget->setTextVisibility(ui->imageWidget->isTextVisible());
+    slideshowWindow->showFullScreen();
+}
+
 void MainWindow::on_actionSlideshowEditComment_triggered()
 {
     Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
@@ -817,21 +838,4 @@ void MainWindow::on_includeSubfoldersCheckBox_toggled(bool checked)
     QModelIndex index = ui->folderBrowserTreeView->currentIndex();
     if (index.isValid())
         scanFolder(index, checked);
-}
-
-void MainWindow::on_slideshowStartPushButton_clicked()
-{
-    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
-    if (!slideshow || !slideshow->imageCount())
-        return;
-
-    SlideshowWindow *slideshowWindow = new SlideshowWindow(slideshow, ui->intervalSpinBox->value(),
-            ui->randomCheckBox->isChecked(), ui->repeatCheckBox->isChecked());
-    ImageWidget *imageWidget = slideshowWindow->imageWidget();
-    imageWidget->setBackgroundColor(ui->imageWidget->backgroundColor());
-    imageWidget->setTextBackgroundColor(ui->imageWidget->textBackgroundColor());
-    imageWidget->setTextFont(ui->imageWidget->textFont());
-    imageWidget->setTextColor(ui->imageWidget->textColor());
-    imageWidget->setTextVisibility(ui->imageWidget->isTextVisible());
-    slideshowWindow->showFullScreen();
 }
