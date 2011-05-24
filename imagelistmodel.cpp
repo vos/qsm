@@ -166,3 +166,15 @@ void ImageListModel::thumbnailLoaded(const QImage &image, int width, int height,
 
     qDebug("ImageListModel::imageLoaded(%d)", index);
 }
+
+bool ImageListModel::hasCorruptedImages() const
+{
+    // TODO
+    return true;
+}
+
+void ImageListModel::removeAllCorruptedImages()
+{
+    // TODO
+    qDebug("remove the dead");
+}

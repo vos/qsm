@@ -56,11 +56,6 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
-     <string>&amp;Edit</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
      <string>&amp;View</string>
@@ -87,6 +82,9 @@
      <string>&amp;Tools</string>
     </property>
     <addaction name="actionOptions"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpenSlideshowsDirectory"/>
+    <addaction name="actionOpenImagesDirectory"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -98,7 +96,6 @@
     <addaction name="actionAboutQsm"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
@@ -535,6 +532,24 @@
     <enum>QAction::PreferencesRole</enum>
    </property>
   </action>
+  <action name="actionOpenSlideshowsDirectory">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/folder_48.png</normaloff>:/icons/folder_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open &amp;Slideshows Directory...</string>
+   </property>
+  </action>
+  <action name="actionOpenImagesDirectory">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/folder_48.png</normaloff>:/icons/folder_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open &amp;Images Directory...</string>
+   </property>
+  </action>
   <action name="actionQsmHelp">
    <property name="icon">
     <iconset resource="icons.qrc">
@@ -687,6 +702,18 @@
     <enum>Qt::WidgetShortcut</enum>
    </property>
   </action>
+  <action name="actionOpenFileLocation">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/folder_48.png</normaloff>:/icons/folder_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open File Location</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
   <action name="actionExportImages">
    <property name="icon">
     <iconset resource="icons.qrc">
@@ -694,6 +721,18 @@
    </property>
    <property name="text">
     <string>Export to Images Directory</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="actionRemoveAllCorruptedImages">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/cross_48.png</normaloff>:/icons/cross_48.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove All Corrupted Images</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>

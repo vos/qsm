@@ -61,6 +61,8 @@ private slots:
     void on_actionSaveAllSlideshows_triggered();
     void on_actionStatusbar_triggered();
     void on_actionOptions_triggered();
+    void on_actionOpenSlideshowsDirectory_triggered();
+    void on_actionOpenImagesDirectory_triggered();
     void on_actionQsmHelp_triggered();
     void on_actionAboutQsm_triggered();
 
@@ -73,6 +75,7 @@ private slots:
     void on_actionRemoveImage_triggered();
     void on_actionRemoveImageFromDisk_triggered();
     void on_actionCopyPath_triggered();
+    void on_actionOpenFileLocation_triggered();
     void on_actionPreloadAllImages_triggered();
 
     void on_actionStartSlideshow_triggered();

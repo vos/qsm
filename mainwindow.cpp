@@ -7,6 +7,8 @@
 #include <QFileSystemModel>
 #include <QThreadPool>
 #include <QInputDialog>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include <QDebug>
 
@@ -60,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imageListView->addAction(ui->actionPasteImage);
     ui->imageListView->addAction(ui->actionRemoveImageFromDisk);
     ui->imageListView->addAction(ui->actionCopyPath);
+    ui->imageListView->addAction(ui->actionOpenFileLocation);
     ui->imageListView->addAction(ui->actionExportImages);
     ui->imageListView->addAction(ui->actionPreloadAllImages);
 
@@ -70,11 +73,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->slideshowListView->addAction(ui->actionRenameSlideshow);
     ui->slideshowListView->addAction(ui->actionRemoveSlideshow);
     ui->slideshowListView->addAction(ui->actionCopyImagesToSlideshow);
+    ui->slideshowListView->addAction(ui->actionOpenFileLocation);
     ui->slideshowListView->addAction(ui->actionExportAllImages);
     ui->slideshowListView->addAction(ui->actionReloadSlideshow);
     ui->slideshowListView->addAction(ui->actionSaveSlideshow);
 
     m_slideshowImageListModel = new ImageListModel(this);
+    connect(ui->actionRemoveAllCorruptedImages, SIGNAL(triggered()), m_slideshowImageListModel, SLOT(removeAllCorruptedImages()));
     connect(m_slideshowImageListModel, SIGNAL(changed()), SLOT(slideshowImageListModel_changed()));
     ui->slideshowImageListView->setModel(m_slideshowImageListModel);
     ui->slideshowImageListView->addAction(ui->actionImageEditComment);
@@ -85,7 +90,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->slideshowImageListView->addAction(ui->actionRemoveImage);
     ui->slideshowImageListView->addAction(ui->actionRemoveImageFromDisk);
     ui->slideshowImageListView->addAction(ui->actionCopyPath);
+    ui->slideshowImageListView->addAction(ui->actionOpenFileLocation);
     ui->slideshowImageListView->addAction(ui->actionExportImages);
+    ui->slideshowImageListView->addAction(ui->actionRemoveAllCorruptedImages);
     ui->slideshowImageListView->addAction(ui->actionPreloadAllImages);
 
     ui->imageWidget->addAction(ui->actionAddToSlideshow);
@@ -100,6 +107,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imageWidget->addAction(ui->actionCopyImage);
     ui->imageWidget->addAction(ui->actionRemoveImageFromDisk);
     ui->imageWidget->addAction(ui->actionCopyPath);
+    ui->imageWidget->addAction(ui->actionOpenFileLocation);
     ui->imageWidget->addAction(ui->actionExportImages);
     ui->imageWidget->addAction(ui->actionShowComments);
 
@@ -160,6 +168,8 @@ void MainWindow::loadSettings()
     // window shortcuts
     OptionsDialog::DefaultShortcuts.insert(ui->actionExit, QKeySequence::Quit);
     OptionsDialog::DefaultShortcuts.insert(ui->actionOptions, QKeySequence::Preferences);
+    //OptionsDialog::DefaultShortcuts.insert(ui->actionOpenSlideshowsDirectory, 0);
+    //OptionsDialog::DefaultShortcuts.insert(ui->actionOpenImagesDirectory, 0);
     OptionsDialog::DefaultShortcuts.insert(ui->actionQsmHelp, QKeySequence::HelpContents);
 
     // image shortcuts
@@ -172,7 +182,9 @@ void MainWindow::loadSettings()
     OptionsDialog::DefaultShortcuts.insert(ui->actionRemoveImage, QKeySequence::Delete);
     OptionsDialog::DefaultShortcuts.insert(ui->actionRemoveImageFromDisk, Qt::ALT + Qt::Key_Delete);
     OptionsDialog::DefaultShortcuts.insert(ui->actionCopyPath, Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+    //OptionsDialog::DefaultShortcuts.insert(ui->actionOpenFileLocation, 0);
     OptionsDialog::DefaultShortcuts.insert(ui->actionExportImages, Qt::CTRL + Qt::Key_E);
+    //OptionsDialog::DefaultShortcuts.insert(ui->actionRemoveAllCorruptedImages, 0);
     OptionsDialog::DefaultShortcuts.insert(ui->actionPreloadAllImages, QKeySequence::Print);
 
     // slideshow shortcuts
@@ -195,7 +207,7 @@ void MainWindow::loadSettings()
     OptionsDialog::DefaultShortcuts.insert(ui->actionZoomOriginal, Qt::CTRL + Qt::Key_1);
     OptionsDialog::DefaultShortcuts.insert(ui->actionZoomIn, QKeySequence::ZoomIn);
     OptionsDialog::DefaultShortcuts.insert(ui->actionZoomOut, QKeySequence::ZoomOut);
-    OptionsDialog::DefaultShortcuts.insert(ui->actionShowComments, 0);
+    //OptionsDialog::DefaultShortcuts.insert(ui->actionShowComments, 0);
 
     OptionsDialog::loadAllShortcuts(settings);
 }
@@ -380,6 +392,7 @@ void MainWindow::on_imageListView_customContextMenuRequested(const QPoint &pos)
         menu.addAction(ui->actionPasteImage);
         menu.addAction(ui->actionRemoveImageFromDisk);
         menu.addAction(ui->actionCopyPath);
+        menu.addAction(ui->actionOpenFileLocation);
         menu.addAction(ui->actionExportImages);
         menu.addSeparator();
     }
@@ -421,6 +434,7 @@ void MainWindow::on_slideshowListView_customContextMenuRequested(const QPoint &p
         bool imagesAvailable = m_slideshowListModel->currentSlideshow()->imageCount() > 0;
         ui->actionCopyImagesToSlideshow->setEnabled(imagesAvailable);
         menu.addAction(ui->actionCopyImagesToSlideshow);
+        menu.addAction(ui->actionOpenFileLocation);
         ui->actionExportAllImages->setEnabled(imagesAvailable);
         menu.addAction(ui->actionExportAllImages);
         menu.addAction(ui->actionReloadSlideshow);
@@ -476,11 +490,14 @@ void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoi
         menu.addAction(ui->actionRemoveImage);
         menu.addAction(ui->actionRemoveImageFromDisk);
         menu.addAction(ui->actionCopyPath);
+        menu.addAction(ui->actionOpenFileLocation);
         menu.addAction(ui->actionExportImages);
         menu.addSeparator();
     }
     QMenu *thumbnailSizeMenu = createThumbnailSizeMenu(&menu, ui->slideshowImageListView->iconSize().width());
     menu.addMenu(thumbnailSizeMenu);
+    if (m_slideshowImageListModel->hasCorruptedImages())
+        menu.addAction(ui->actionRemoveAllCorruptedImages);
     if (!m_slideshowImageListModel->allThumbnailsLoaded())
         menu.addAction(ui->actionPreloadAllImages);
     QAction *action = menu.exec(ui->slideshowImageListView->mapToGlobal(pos));
@@ -549,6 +566,7 @@ void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
         menu.addAction(ui->actionCopyImage);
         menu.addAction(ui->actionRemoveImageFromDisk);
         menu.addAction(ui->actionCopyPath);
+        menu.addAction(ui->actionOpenFileLocation);
         menu.addAction(ui->actionExportImages);
         menu.addSeparator();
     }
@@ -592,7 +610,8 @@ void MainWindow::on_actionOptions_triggered()
 
     // window shortcuts
     QList<QAction*> windowActions;
-    windowActions << ui->actionExit << ui->actionOptions << ui->actionQsmHelp;
+    windowActions << ui->actionExit << ui->actionOptions << ui->actionOpenSlideshowsDirectory
+                  << ui->actionOpenImagesDirectory << ui->actionQsmHelp;
     actions.append(qMakePair(tr("Window"), windowActions));
 
     // image shortcuts
@@ -600,7 +619,8 @@ void MainWindow::on_actionOptions_triggered()
     imageActions << ui->actionAddToSlideshow << ui->actionImageEditComment << ui->actionRenameImage
                  << ui->actionCutImage << ui->actionCopyImage << ui->actionPasteImage
                  << ui->actionRemoveImage <<  ui->actionRemoveImageFromDisk << ui->actionCopyPath
-                 << ui->actionExportImages << ui->actionPreloadAllImages;
+                 << ui->actionOpenFileLocation << ui->actionExportImages << ui->actionRemoveAllCorruptedImages
+                 << ui->actionPreloadAllImages;
     actions.append(qMakePair(tr("Image"), imageActions));
 
     // slideshow shortcuts
@@ -633,6 +653,16 @@ void MainWindow::on_actionOptions_triggered()
         }
         m_imagesDirectory = options.imagesDirectory();
     }
+}
+
+void MainWindow::on_actionOpenSlideshowsDirectory_triggered()
+{
+    QDesktopServices::openUrl(QUrl("file:///" + m_slideshowsDirectory, QUrl::TolerantMode));
+}
+
+void MainWindow::on_actionOpenImagesDirectory_triggered()
+{
+    QDesktopServices::openUrl(QUrl("file:///" + m_imagesDirectory, QUrl::TolerantMode));
 }
 
 void MainWindow::on_actionQsmHelp_triggered()
@@ -766,6 +796,10 @@ void MainWindow::on_actionCopyPath_triggered()
 
     // TODO: copy to clipboard
     qDebug() << paths;
+}
+
+void MainWindow::on_actionOpenFileLocation_triggered()
+{
 }
 
 void MainWindow::on_actionPreloadAllImages_triggered()

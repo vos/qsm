@@ -21,6 +21,8 @@ public:
 
     ImageInfo imageInfo(const QModelIndex &index) const;
     QString imagePath(const QModelIndex &index) const;
+
+    bool hasCorruptedImages() const;
     inline bool allThumbnailsLoaded() const { return rowCount() == imageCount(); }
 
 signals:
@@ -31,6 +33,7 @@ public slots:
     void addImages(const QFileInfoList &files);
     void removeImage(const QModelIndex &index);
     void removeImages(const QModelIndex &startIndex, const QModelIndex &endIndex);
+    void removeAllCorruptedImages();
     void clear();
 
 private slots:
