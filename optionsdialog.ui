@@ -396,6 +396,13 @@ p, li { white-space: pre-wrap; }
            <widget class="QLineEdit" name="slideshowsDirectoryLineEdit"/>
           </item>
           <item>
+           <widget class="QPushButton" name="openSlideshowsDirectoryPushButton">
+            <property name="text">
+             <string>Open...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="slideshowsDirectoryPushButton">
             <property name="text">
              <string>Browse...</string>
@@ -422,6 +429,13 @@ p, li { white-space: pre-wrap; }
          <layout class="QHBoxLayout" name="imagesDirectoryLayout">
           <item>
            <widget class="QLineEdit" name="imagesDirectoryLineEdit"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="openImagesDirectoryPushButton">
+            <property name="text">
+             <string>Open...</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="imagesDirectoryPushButton">

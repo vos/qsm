@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QDesktopServices>
+#include <QUrl>
 
 const QLocale::Language OptionsDialog::DEFAULT_LANGUAGE = QLocale::C;
 const QColor OptionsDialog::DEFAULT_BACKGROUND_COLOR = Qt::black;
@@ -246,9 +248,19 @@ void OptionsDialog::chooseDirectory(QLineEdit *lineEdit, const QString &defaultD
         lineEdit->setText(dir);
 }
 
+void OptionsDialog::on_openSlideshowsDirectoryPushButton_clicked()
+{
+    QDesktopServices::openUrl(QUrl("file:///" + slideshowsDirectory(), QUrl::TolerantMode));
+}
+
 void OptionsDialog::on_slideshowsDirectoryPushButton_clicked()
 {
     chooseDirectory(ui->slideshowsDirectoryLineEdit, OptionsDialog::DEFAULT_SLIDESHOWS_DIRECTORY);
+}
+
+void OptionsDialog::on_openImagesDirectoryPushButton_clicked()
+{
+    QDesktopServices::openUrl(QUrl("file:///" + imagesDirectory(), QUrl::TolerantMode));
 }
 
 void OptionsDialog::on_imagesDirectoryPushButton_clicked()

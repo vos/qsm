@@ -54,7 +54,9 @@ private slots:
     void on_textFontResetPushButton_clicked();
     void on_textColorPushButton_clicked();
     void on_textColorResetPushButton_clicked();
+    void on_openSlideshowsDirectoryPushButton_clicked();
     void on_slideshowsDirectoryPushButton_clicked();
+    void on_openImagesDirectoryPushButton_clicked();
     void on_imagesDirectoryPushButton_clicked();
 
     void directoryLineEdit_textChanged(const QString &text);
