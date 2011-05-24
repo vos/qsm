@@ -1142,7 +1142,7 @@ void MainWindow::moveImages(int delta)
 
 void MainWindow::on_beginPushButton_clicked()
 {
-    moveImages(INT_MIN);
+    moveImages(INT_MIN >> 1);
 }
 
 void MainWindow::on_multipleUpPushButton_clicked()
@@ -1167,7 +1167,7 @@ void MainWindow::on_multipleDownPushButton_clicked()
 
 void MainWindow::on_endPushButton_clicked()
 {
-    moveImages(INT_MAX);
+    moveImages(INT_MAX >> 1);
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
