@@ -954,6 +954,19 @@ void MainWindow::on_actionOpenFileLocation_triggered()
 
 void MainWindow::on_actionExportImages_triggered()
 {
+    if (!OptionsDialog::checkDirectory(m_imagesDirectory)) return;
+    QStringList paths = imagePaths(ui->actionExportImages);
+    if (paths.isEmpty()) return;
+    int count = 0;
+    foreach (const QString &originalPath, paths) {
+        QString exportPath = QDir(m_imagesDirectory).filePath(QFileInfo(originalPath).fileName());
+        if (QFile::copy(originalPath, exportPath))
+            count++;
+        else
+            qWarning("File \"%s\" could not be copied to \"%s\"", qPrintable(originalPath), qPrintable(exportPath));
+    }
+    statusBar()->showMessage(tr("%1 of %2 image(s) copied to \"%3\"")
+            .arg(count).arg(paths.count()).arg(QDir::toNativeSeparators(m_imagesDirectory)));
 }
 
 void MainWindow::on_actionPreloadAllImages_triggered()
@@ -1021,8 +1034,7 @@ void MainWindow::on_actionRemoveSlideshow_triggered()
 void MainWindow::on_actionCopyImagesToSlideshow_triggered()
 {
     Slideshow *slideshowFrom = m_slideshowListModel->currentSlideshow();
-    if (!slideshowFrom)
-        return;
+    if (!slideshowFrom) return;
     QStringList slideshowList;
     foreach (const Slideshow &slideshow, m_slideshowListModel->slideshowList())
         slideshowList.append(slideshow.name());
@@ -1046,6 +1058,20 @@ void MainWindow::on_actionCopyImagesToSlideshow_triggered()
 
 void MainWindow::on_actionExportAllImages_triggered()
 {
+    if (!OptionsDialog::checkDirectory(m_imagesDirectory)) return;
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow) return;
+    int count = 0;
+    foreach (const SlideshowImage &image, slideshow->images()) {
+        QString originalPath = image.path();
+        QString exportPath = QDir(m_imagesDirectory).filePath(image.name());
+        if (QFile::copy(originalPath, exportPath))
+            count++;
+        else
+            qWarning("File \"%s\" could not be copied to \"%s\"", qPrintable(originalPath), qPrintable(exportPath));
+    }
+    statusBar()->showMessage(tr("%1 of %2 image(s) copied to \"%3\"")
+            .arg(count).arg(slideshow->imageCount()).arg(QDir::toNativeSeparators(m_imagesDirectory)));
 }
 
 void MainWindow::on_actionReloadSlideshow_triggered()
