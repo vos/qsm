@@ -9,6 +9,7 @@
 #include <QInputDialog>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QWheelEvent>
 
 #include <QDebug>
 
@@ -872,4 +873,17 @@ void MainWindow::on_includeSubfoldersCheckBox_toggled(bool checked)
     QModelIndex index = ui->folderBrowserTreeView->currentIndex();
     if (index.isValid())
         scanFolder(index, checked);
+}
+
+void MainWindow::wheelEvent(QWheelEvent *event)
+{
+    if (event->modifiers() & Qt::ControlModifier) {
+        QFont font = qApp->font();
+        int delta = event->delta() / 120;
+        int pointSize = qBound(6, font.pointSize() + delta, 72);
+        font.setPointSize(pointSize);
+        qApp->setFont(font);
+        statusBar()->showMessage(tr("Changed font size to %1 points").arg(pointSize));
+        event->accept();
+    }
 }
