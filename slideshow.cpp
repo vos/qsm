@@ -100,6 +100,20 @@ SlideshowImage* Slideshow::image(int index)
     return &m_images[index];
 }
 
+void Slideshow::moveImage(int from, int delta)
+{
+    if (from < 0 || from >= m_images.count())
+        return;
+    int to = qBound(0, from + delta, m_images.count() - 1);
+    if (from == to) return;
+    if (!(m_sort & Qsm::Unsorted)) {
+        m_sort = Qsm::Unsorted;
+        m_comparator = NULL;
+    }
+    m_images.move(from, to);
+    m_changed = true;
+}
+
 void Slideshow::removeImage(int index)
 {
     if (index < 0 || index >= imageCount())

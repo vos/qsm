@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <climits>
+
 #include <QLabel>
 #include <QSettings>
 #include <QMessageBox>
@@ -841,12 +843,13 @@ void MainWindow::on_actionPasteImage_triggered()
         Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
         if (!slideshow) return;
         foreach (const QString &path, m_clipboard) {
-            slideshow->addImage(path);
+            int i = slideshow->addImage(path);
+            m_slideshowImageListModel->addImage(ImageInfo(path), i);
             count++;
         }
         // refresh view
         ui->slideshowListView->update(m_slideshowListModel->currentSlideshowIndex());
-        on_slideshowListView_selectionChanged(m_slideshowListModel->currentSlideshowIndex());
+        //on_slideshowListView_selectionChanged(m_slideshowListModel->currentSlideshowIndex());
     } else
         return;
     if (m_copyMode == Cut) {
@@ -1086,8 +1089,59 @@ void MainWindow::on_slideshowSortComboBox_currentIndexChanged(int index)
     case 4: sort = Qsm::Unsorted; break;
     }
 
-    if (slideshow->setSortFlags(sort))
+    if (slideshow->setSortFlags(sort) && !(sort & Qsm::Unsorted))
         on_slideshowListView_selectionChanged(ui->slideshowListView->currentIndex()); // refresh view
+}
+
+void MainWindow::moveImages(int delta)
+{
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow) return;
+
+    QModelIndexList indexList = ui->slideshowImageListView->selectedIndexes();
+    if (indexList.isEmpty()) return;
+
+    // set to unsorted
+    if (!(slideshow->sortFlags() & Qsm::Unsorted))
+        ui->slideshowSortComboBox->setCurrentIndex(4);
+
+    // move images
+    foreach (const QModelIndex &index, indexList) {
+        slideshow->moveImage(index.row(), delta);
+        //m_slideshowImageListModel->moveImage(index, delta); // BUG
+    }
+    // refresh view
+    on_slideshowListView_selectionChanged(ui->slideshowListView->currentIndex());
+}
+
+void MainWindow::on_beginPushButton_clicked()
+{
+    moveImages(INT_MIN);
+}
+
+void MainWindow::on_multipleUpPushButton_clicked()
+{
+    moveImages(-5);
+}
+
+void MainWindow::on_upPushButton_clicked()
+{
+    moveImages(-1);
+}
+
+void MainWindow::on_downPushButton_clicked()
+{
+    moveImages(1);
+}
+
+void MainWindow::on_multipleDownPushButton_clicked()
+{
+    moveImages(5);
+}
+
+void MainWindow::on_endPushButton_clicked()
+{
+    moveImages(INT_MAX);
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)

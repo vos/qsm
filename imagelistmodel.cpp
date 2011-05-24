@@ -118,6 +118,21 @@ void ImageListModel::addImages(const QFileInfoList &files)
     emit changed();
 }
 
+void ImageListModel::moveImage(const QModelIndex &index, int delta)
+{
+    if (!index.isValid() || index.row() >= m_imageInfoList.count() || !delta)
+        return;
+
+    int from = index.row();
+    int to = qBound(0, from + delta, m_imageInfoList.count() - 1);
+    if (from == to) return;
+    beginMoveRows(QModelIndex(), from, from, QModelIndex(), to);
+    m_imageInfoList.move(from, to);
+    endMoveRows();
+
+    emit changed();
+}
+
 void ImageListModel::removeImage(const QModelIndex &index)
 {
     if (!index.isValid() || index.row() >= m_imageInfoList.count())

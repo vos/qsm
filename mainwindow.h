@@ -96,6 +96,13 @@ private slots:
 
     void on_slideshowSortComboBox_currentIndexChanged(int index);
 
+    void on_beginPushButton_clicked();
+    void on_multipleUpPushButton_clicked();
+    void on_upPushButton_clicked();
+    void on_downPushButton_clicked();
+    void on_multipleDownPushButton_clicked();
+    void on_endPushButton_clicked();
+
 private:
     enum CopyMode {
         Copy,
@@ -130,6 +137,7 @@ private:
     QWidget* activeWidget(QAction *action);
     QMenu* createThumbnailSizeMenu(QWidget *parent = 0, int selectedSize = 64);
     QStringList imagePaths(QAction *action);
+    void moveImages(int delta);
 
     void wheelEvent(QWheelEvent *event);
     void closeEvent(QCloseEvent *event);
