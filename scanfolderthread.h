@@ -12,7 +12,7 @@ class ScanFolderThread : public QThread
 
 public:
     explicit ScanFolderThread(QObject *parent = 0);
-    void setFolder(const QString &path, bool recursive = false);
+    void setFolder(const QString &path, QDir::SortFlags sort = QDir::NoSort, bool recursive = false);
     inline const QString& getFolder() const { return m_path; }
     inline int count() const { return m_count; }
     void run();
@@ -25,6 +25,7 @@ private:
     static QStringList FILE_FILTERS; // TODO should be const
 
     QString m_path;
+    QDir::SortFlags m_sort;
     bool m_recursive;
     volatile int m_count;
     volatile bool m_abort;

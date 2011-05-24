@@ -94,10 +94,12 @@ QString ImageListModel::imagePath(const QModelIndex &index) const
     return m_imageInfoList.at(index.row()).imagePath();
 }
 
-void ImageListModel::addImage(const ImageInfo &imageInfo)
+void ImageListModel::addImage(const ImageInfo &imageInfo, int index)
 {
-    beginInsertRows(QModelIndex(), m_imageInfoList.count(), m_imageInfoList.count() + 1);
-    m_imageInfoList.append(imageInfo);
+    if (index < 0 || index > m_imageInfoList.count())
+        index = m_imageInfoList.count();
+    beginInsertRows(QModelIndex(), index, index);
+    m_imageInfoList.insert(index, imageInfo);
     endInsertRows();
 
     emit changed();
@@ -204,7 +206,7 @@ void ImageListModel::thumbnailLoaded(const QImage &image, int width, int height,
 bool ImageListModel::hasCorruptedImages() const
 {
     // TODO
-    return true;
+    return false;
 }
 
 void ImageListModel::removeAllCorruptedImages()

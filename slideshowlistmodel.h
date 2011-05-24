@@ -32,7 +32,7 @@ public slots:
     QModelIndex addSlideshow(const Slideshow &slideshow);
     bool removeSlideshow(const QModelIndex &index);
     void clear();
-    void addImage(const SlideshowImage &image);
+    int addImage(const SlideshowImage &image);
     void removeImage(const QModelIndex &index);
     bool setCurrentSlideshow(const QModelIndex &index);
 

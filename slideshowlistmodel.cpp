@@ -102,13 +102,14 @@ void SlideshowListModel::clear()
     endResetModel();
 }
 
-void SlideshowListModel::addImage(const SlideshowImage &image)
+int SlideshowListModel::addImage(const SlideshowImage &image)
 {
     if (!m_currentSlideshow)
-        return;
+        return -1;
 
-    m_currentSlideshow->addImage(image);
+    int index = m_currentSlideshow->addImage(image);
     emit dataChanged(m_currentSlideshowIndex, m_currentSlideshowIndex);
+    return index;
 }
 
 void SlideshowListModel::removeImage(const QModelIndex &index)

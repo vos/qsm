@@ -13,9 +13,10 @@ ScanFolderThread::ScanFolderThread(QObject *parent) :
     qRegisterMetaType<QFileInfoList>("QFileInfoList");
 }
 
-void ScanFolderThread::setFolder(const QString &path, bool recursive)
+void ScanFolderThread::setFolder(const QString &path, QDir::SortFlags sort, bool recursive)
 {
     m_path = path;
+    m_sort = sort;
     m_recursive = recursive;
 }
 
@@ -32,7 +33,7 @@ void ScanFolderThread::run()
 
 void ScanFolderThread::scanFolder(const QDir &dir)
 {
-    QFileInfoList files = dir.entryInfoList(ScanFolderThread::FILE_FILTERS, QDir::Files | QDir::Readable, QDir::Name);
+    QFileInfoList files = dir.entryInfoList(ScanFolderThread::FILE_FILTERS, QDir::Files | QDir::Readable, m_sort);
     m_count++;
     emit folderScanned(dir.path(), files);
 }

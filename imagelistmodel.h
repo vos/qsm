@@ -32,7 +32,7 @@ signals:
     void imageRenamed(const QModelIndex &index, const QString &newPath);
 
 public slots:
-    void addImage(const ImageInfo &imageInfo);
+    void addImage(const ImageInfo &imageInfo, int index = -1);
     void addImages(const QFileInfoList &files);
     void removeImage(const QModelIndex &index);
     void removeImages(const QModelIndex &startIndex, const QModelIndex &endIndex);

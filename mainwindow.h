@@ -90,8 +90,11 @@ private slots:
     void on_actionReloadSlideshow_triggered();
     void on_actionSaveSlideshow_triggered();
 
+    void on_imageListSortComboBox_currentIndexChanged(int index);
     void on_includeSubfoldersCheckBox_toggled(bool checked);
     void thumbnailSizeMenu_triggered(QAction *action);
+
+    void on_slideshowSortComboBox_currentIndexChanged(int index);
 
 private:
     enum CopyMode {

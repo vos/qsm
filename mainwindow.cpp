@@ -249,7 +249,14 @@ void MainWindow::scanFolder(const QModelIndex &index, bool includeSubfolders)
         scanFolderAbortButton_clicked();
         m_scanFolderThread->wait();
     }
-    m_scanFolderThread->setFolder(m_folderBrowserModel->filePath(index), includeSubfolders);
+    QDir::SortFlags sort;
+    switch (ui->imageListSortComboBox->currentIndex()) {
+    case 0: sort = QDir::Name; break;
+    case 1: sort = QDir::Name | QDir::Reversed; break;
+    case 2: sort = QDir::Time; break;
+    case 3: sort = QDir::Time | QDir::Reversed; break;
+    }
+    m_scanFolderThread->setFolder(m_folderBrowserModel->filePath(index), sort, includeSubfolders);
     m_scanFolderThread->start(QThread::NormalPriority);
 }
 
@@ -380,8 +387,8 @@ void MainWindow::on_imageListView_doubleClicked(const QModelIndex &index)
     if (!index.isValid() || !m_slideshowListModel->currentSlideshow())
         return;
 
-    m_slideshowListModel->addImage(SlideshowImage(m_imageListModel->imagePath(index)));
-    m_slideshowImageListModel->addImage(m_imageListModel->imageInfo(index));
+    int i = m_slideshowListModel->addImage(SlideshowImage(m_imageListModel->imagePath(index)));
+    m_slideshowImageListModel->addImage(m_imageListModel->imageInfo(index), i);
 }
 
 void MainWindow::on_imageListView_customContextMenuRequested(const QPoint &pos)
@@ -419,15 +426,27 @@ void MainWindow::imageListModel_changed()
 
 void MainWindow::on_slideshowListView_selectionChanged(const QModelIndex &index)
 {
-    if (!m_slideshowListModel->setCurrentSlideshow(index))
+    if (!index.isValid() || !m_slideshowListModel->setCurrentSlideshow(index))
         return;
+
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
 
     // prepare slideshow image list
     m_slideshowImageListModel->clear();
     QFileInfoList imageInfoList;
-    foreach (const SlideshowImage &image, m_slideshowListModel->currentSlideshow()->images())
+    foreach (const SlideshowImage &image, slideshow->images())
         imageInfoList.append(image.fileInfo());
     m_slideshowImageListModel->addImages(imageInfoList);
+
+    // update sort combo box
+    int sortIndex = 4; // Unsorted
+    switch (slideshow->sortFlags()) {
+    case Qsm::Name: sortIndex = 0; break;
+    case Qsm::NameReversed: sortIndex = 1; break;
+    case Qsm::Date: sortIndex = 2; break;
+    case Qsm::DateReversed: sortIndex = 3; break;
+    }
+    ui->slideshowSortComboBox->setCurrentIndex(sortIndex);
 }
 
 void MainWindow::on_slideshowListView_customContextMenuRequested(const QPoint &pos)
@@ -578,8 +597,8 @@ void MainWindow::on_imageWidget_doubleClicked()
     if (m_currentImagePath.isEmpty() || !m_currentSlideshow)
         return;
 
-    m_slideshowListModel->addImage(m_currentImagePath);
-    m_slideshowImageListModel->addImage(ImageInfo(m_currentImagePath));
+    int i = m_slideshowListModel->addImage(m_currentImagePath);
+    m_slideshowImageListModel->addImage(ImageInfo(m_currentImagePath), i);
     statusBar()->showMessage(tr("Image added to slideshow \"%1\"").arg(m_currentSlideshow->name()));
 }
 
@@ -722,8 +741,8 @@ void MainWindow::on_actionAddToSlideshow_triggered()
     if (widget == ui->imageListView) {
         QModelIndexList indexList = ui->imageListView->selectedIndexes();
         foreach (const QModelIndex &index, indexList) {
-            m_slideshowListModel->addImage(m_imageListModel->imagePath(index));
-            m_slideshowImageListModel->addImage(m_imageListModel->imageInfo(index));
+            int i = m_slideshowListModel->addImage(m_imageListModel->imagePath(index));
+            m_slideshowImageListModel->addImage(m_imageListModel->imageInfo(index), i);
         }
         statusBar()->showMessage(tr("%1 image(s) added to slideshow \"%2\"").arg(indexList.count()).arg(slideshow->name()));
     } else if (widget == ui->imageWidget)
@@ -1040,11 +1059,35 @@ void MainWindow::on_actionSaveSlideshow_triggered()
         m_slideshowFileManager->saveSlideshow(*slideshow, m_slideshowsDirectory);
 }
 
+void MainWindow::on_imageListSortComboBox_currentIndexChanged(int)
+{
+    // rescan folder
+    scanFolder(ui->folderBrowserTreeView->currentIndex(), ui->includeSubfoldersCheckBox->isChecked());
+}
+
 void MainWindow::on_includeSubfoldersCheckBox_toggled(bool checked)
 {
     QModelIndex index = ui->folderBrowserTreeView->currentIndex();
     if (index.isValid())
         scanFolder(index, checked);
+}
+
+void MainWindow::on_slideshowSortComboBox_currentIndexChanged(int index)
+{
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow) return;
+
+    Qsm::SortFlags sort;
+    switch (index) {
+    case 0: sort = Qsm::Name; break;
+    case 1: sort = Qsm::NameReversed; break;
+    case 2: sort = Qsm::Date; break;
+    case 3: sort = Qsm::DateReversed; break;
+    case 4: sort = Qsm::Unsorted; break;
+    }
+
+    if (slideshow->setSortFlags(sort))
+        on_slideshowListView_selectionChanged(ui->slideshowListView->currentIndex()); // refresh view
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
