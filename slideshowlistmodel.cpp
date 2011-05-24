@@ -10,14 +10,9 @@ SlideshowListModel::SlideshowListModel(QObject *parent) :
 Qt::ItemFlags SlideshowListModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return Qt::ItemIsEnabled;
+        return Qt::NoItemFlags;
 
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
-}
-
-int SlideshowListModel::rowCount(const QModelIndex &) const
-{
-    return m_slideshowList.count();
 }
 
 QVariant SlideshowListModel::data(const QModelIndex &index, int role) const
@@ -25,14 +20,17 @@ QVariant SlideshowListModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || index.row() >= m_slideshowList.count())
         return QVariant();
 
-    if (role == Qt::DisplayRole) {
+    switch (role) {
+    case Qt::DisplayRole:
+    {
         const Slideshow *slideshow = &m_slideshowList.at(index.row());
         return QString("%1 (%2 images)").arg(slideshow->name()).arg(slideshow->imageCount());
     }
-    else if (role == Qt::ToolTipRole)
+    case Qt::ToolTipRole:
         return m_slideshowList.at(index.row()).comment();
-    else if (role == Qt::EditRole)
+    case Qt::EditRole:
         return m_slideshowList.at(index.row()).name();
+    }
 
     return QVariant();
 }
@@ -43,8 +41,14 @@ bool SlideshowListModel::setData(const QModelIndex &index, const QVariant &value
         return false;
 
     if (role == Qt::EditRole) {
-        m_slideshowList[index.row()].setName(value.toString());
-        return true;
+        Slideshow *slideshow = &m_slideshowList[index.row()];
+        QString oldName = slideshow->name();
+        QString newName = value.toString();
+        if (newName != oldName) {
+            slideshow->setName(newName);
+            emit slideshowRenamed(oldName, newName);
+            return true;
+        }
     }
     return false;
 }
@@ -55,6 +59,14 @@ Slideshow* SlideshowListModel::slideshow(const QModelIndex &index) const
         return NULL;
 
     return const_cast<Slideshow*>(&m_slideshowList[index.row()]);
+}
+
+Slideshow* SlideshowListModel::slideshow(const QString &name) const
+{
+    foreach (const Slideshow &slideshow, m_slideshowList)
+        if (slideshow.name() == name)
+            return const_cast<Slideshow*>(&slideshow);
+    return NULL;
 }
 
 QModelIndex SlideshowListModel::addSlideshow(const Slideshow &slideshow)

@@ -12,10 +12,11 @@ public:
 
     ImageInfo& operator =(const ImageInfo &obj);
 
-    inline const QFileInfo fileInfo() const { return m_fileInfo; }
+    inline const QFileInfo& fileInfo() const { return m_fileInfo; }
+    inline QFileInfo& fileInfo() { return m_fileInfo; }
     inline QString imagePath() const { return m_fileInfo.absoluteFilePath(); }
     inline bool exists() const { return m_fileInfo.exists(); }
-    inline const QIcon icon() const { return m_icon; }
+    inline const QIcon& icon() const { return m_icon; }
     inline int width() const { return m_width; }
     inline int height() const { return m_height; }
     QString dimensions() const;

@@ -19,6 +19,7 @@ public:
     inline int randomFactor() const { return m_randomFactor; }
     inline const QString& comment() const { return m_comment; }
 
+    inline void setPath(const QString &path) { m_fileInfo.setFile(path); }
     inline void setRandomFactor(int randomFactor = 1) { m_randomFactor = randomFactor; }
     inline void setComment(const QString &comment = QString()) { m_comment = comment; }
 

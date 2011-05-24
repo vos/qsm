@@ -16,6 +16,14 @@ ImageListModel::ImageListModel(QObject *parent) :
 {
 }
 
+Qt::ItemFlags ImageListModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::NoItemFlags;
+
+    return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
+}
+
 QVariant ImageListModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.row() >= m_imageInfoList.count())
@@ -23,6 +31,7 @@ QVariant ImageListModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Qt::DisplayRole:
+    case Qt::EditRole:
         return m_imageInfoList.at(index.row()).fileInfo().fileName();
     case Qt::DecorationRole:
         return m_imageInfoList.at(index.row()).icon();
@@ -42,6 +51,31 @@ QVariant ImageListModel::data(const QModelIndex &index, int role) const
     }
 
     return QVariant();
+}
+
+bool ImageListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (!index.isValid() || index.row() >= m_imageInfoList.count())
+        return false;
+
+    if (role == Qt::EditRole) {
+        QFileInfo &fileInfo = m_imageInfoList[index.row()].fileInfo();
+        QString oldName = fileInfo.fileName();
+        QString newName = value.toString();
+        if (newName != oldName) {
+            // rename the actual file
+            QString oldPath = fileInfo.absoluteFilePath();
+            QString newPath = fileInfo.dir().filePath(newName);
+            if (QFile::rename(oldPath, newPath)) {
+                // update the file info reference
+                fileInfo.setFile(newPath);
+                emit imageRenamed(index, newPath);
+                return true;
+            }
+            qWarning("File \"%s\" could not be renamed to \"%s\"", qPrintable(oldPath), qPrintable(newPath));
+        }
+    }
+    return false;
 }
 
 ImageInfo ImageListModel::imageInfo(const QModelIndex &index) const
@@ -176,5 +210,11 @@ bool ImageListModel::hasCorruptedImages() const
 void ImageListModel::removeAllCorruptedImages()
 {
     // TODO
-    qDebug("remove the dead");
+    qDebug("ImageListModel::removeAllCorruptedImages()");
+}
+
+void ImageListModel::preloadAllImages()
+{
+    // TODO;
+    qDebug("ImageListModel::preloadAllImages()");
 }

@@ -9,6 +9,7 @@
 #include <QInputDialog>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QClipboard>
 #include <QWheelEvent>
 
 #include <QDebug>
@@ -68,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imageListView->addAction(ui->actionPreloadAllImages);
 
     m_slideshowListModel = new SlideshowListModel(this);
+    connect(m_slideshowListModel, SIGNAL(slideshowRenamed(QString,QString)), SLOT(slideshowListModel_slideshowRenamed(QString,QString)));
     ui->slideshowListView->setModel(m_slideshowListModel);
     ui->slideshowListView->addAction(ui->actionStartSlideshow);
     ui->slideshowListView->addAction(ui->actionSlideshowEditComment);
@@ -82,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_slideshowImageListModel = new ImageListModel(this);
     connect(ui->actionRemoveAllCorruptedImages, SIGNAL(triggered()), m_slideshowImageListModel, SLOT(removeAllCorruptedImages()));
     connect(m_slideshowImageListModel, SIGNAL(changed()), SLOT(slideshowImageListModel_changed()));
+    connect(m_slideshowImageListModel, SIGNAL(imageRenamed(QModelIndex,QString)), SLOT(slideshowImageListModel_imageRenamed(QModelIndex,QString)));
     ui->slideshowImageListView->setModel(m_slideshowImageListModel);
     ui->slideshowImageListView->addAction(ui->actionImageEditComment);
     ui->slideshowImageListView->addAction(ui->actionRenameImage);
@@ -186,7 +189,7 @@ void MainWindow::loadSettings()
     //OptionsDialog::DefaultShortcuts.insert(ui->actionOpenFileLocation, 0);
     OptionsDialog::DefaultShortcuts.insert(ui->actionExportImages, Qt::CTRL + Qt::Key_E);
     //OptionsDialog::DefaultShortcuts.insert(ui->actionRemoveAllCorruptedImages, 0);
-    OptionsDialog::DefaultShortcuts.insert(ui->actionPreloadAllImages, QKeySequence::Print);
+    //OptionsDialog::DefaultShortcuts.insert(ui->actionPreloadAllImages, 0);
 
     // slideshow shortcuts
     OptionsDialog::DefaultShortcuts.insert(ui->actionNewSlideshow,QKeySequence::New);
@@ -396,6 +399,9 @@ void MainWindow::on_imageListView_customContextMenuRequested(const QPoint &pos)
         menu.addAction(ui->actionOpenFileLocation);
         menu.addAction(ui->actionExportImages);
         menu.addSeparator();
+    } else if (ui->actionPasteImage->isEnabled() && ui->folderBrowserTreeView->currentIndex().isValid()) {
+        menu.addAction(ui->actionPasteImage);
+        menu.addSeparator();
     }
     QMenu *thumbnailSizeMenu = createThumbnailSizeMenu(&menu, ui->imageListView->iconSize().width());
     menu.addMenu(thumbnailSizeMenu);
@@ -450,6 +456,15 @@ void MainWindow::on_slideshowListView_customContextMenuRequested(const QPoint &p
     menu.exec(ui->slideshowListView->mapToGlobal(pos));
 }
 
+void MainWindow::slideshowListModel_slideshowRenamed(const QString &oldName, const QString &newName)
+{
+    QDir slideshowsDirectory(m_slideshowsDirectory);
+    QString oldPath = slideshowsDirectory.filePath(oldName) + Slideshow::FILE_EXTENSION;
+    QString newPath = slideshowsDirectory.filePath(newName) + Slideshow::FILE_EXTENSION;
+    if (!QFile::rename(oldPath, newPath))
+        qWarning("File \"%s\" could not be renamed to \"%s\"", qPrintable(oldPath), qPrintable(newPath));
+}
+
 void MainWindow::on_slideshowImageListView_clicked(const QModelIndex &index)
 {
     if (!index.isValid())
@@ -494,6 +509,9 @@ void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoi
         menu.addAction(ui->actionOpenFileLocation);
         menu.addAction(ui->actionExportImages);
         menu.addSeparator();
+    } else if (ui->actionPasteImage->isEnabled() && m_slideshowListModel->currentSlideshow()) {
+        menu.addAction(ui->actionPasteImage);
+        menu.addSeparator();
     }
     QMenu *thumbnailSizeMenu = createThumbnailSizeMenu(&menu, ui->slideshowImageListView->iconSize().width());
     menu.addMenu(thumbnailSizeMenu);
@@ -515,6 +533,17 @@ void MainWindow::slideshowImageListModel_changed()
     ui->slideshowImageListDockWidget->setWindowTitle(tr("Slideshow Image List %1/%2")
                                                      .arg(m_slideshowImageListModel->rowCount())
                                                      .arg(m_slideshowImageListModel->imageCount()));
+}
+
+void MainWindow::slideshowImageListModel_imageRenamed(const QModelIndex &index, const QString &newPath)
+{
+    qDebug() << newPath;
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow) return;
+    SlideshowImage *image = slideshow->image(index.row());
+    if (!image) return;
+    image->setPath(newPath);
+    slideshow->setChanged();
 }
 
 void MainWindow::imageLoaded(const QImage &image, int, int, int)
@@ -546,8 +575,12 @@ void MainWindow::on_imageWidget_viewChanged()
 
 void MainWindow::on_imageWidget_doubleClicked()
 {
+    if (m_currentImagePath.isEmpty() || !m_currentSlideshow)
+        return;
+
     m_slideshowListModel->addImage(m_currentImagePath);
     m_slideshowImageListModel->addImage(ImageInfo(m_currentImagePath));
+    statusBar()->showMessage(tr("Image added to slideshow \"%1\"").arg(m_currentSlideshow->name()));
 }
 
 void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
@@ -731,18 +764,81 @@ void MainWindow::on_actionImageEditComment_triggered()
 
 void MainWindow::on_actionRenameImage_triggered()
 {
+    QWidget *widget = activeWidget(ui->actionRenameImage);
+    if (!widget) return;
+    ImageListView *view = qobject_cast<ImageListView*>(widget);
+    if (!view) return;
+    ImageListModel* model = qobject_cast<ImageListModel*>(view->model());
+    if (!model) return;
+    QModelIndexList indexList = view->selectedIndexes();
+    if (indexList.isEmpty())
+        return;
+    else if (indexList.count() == 1) // inline rename
+        view->edit(view->currentIndex());
+    else // show dialog to rename multiple images
+        ;
 }
 
 void MainWindow::on_actionCutImage_triggered()
 {
+    m_copyMode = Cut;
+    m_clipboard = imagePaths(ui->actionCutImage);
+    if (m_clipboard.isEmpty())
+        return;
+    statusBar()->showMessage(tr("%1 image(s) cut out").arg(m_clipboard.count()));
+    ui->actionPasteImage->setEnabled(true);
 }
 
 void MainWindow::on_actionCopyImage_triggered()
 {
+    m_copyMode = Copy;
+    m_clipboard = imagePaths(ui->actionCopyImage);
+    if (m_clipboard.isEmpty())
+        return;
+    statusBar()->showMessage(tr("%1 image(s) copied").arg(m_clipboard.count()));
+    ui->actionPasteImage->setEnabled(true);
 }
 
 void MainWindow::on_actionPasteImage_triggered()
 {
+    QWidget *widget = activeWidget(ui->actionPasteImage);
+    if (!widget || m_clipboard.isEmpty()) return;
+    // insert images from "clipboard"
+    int count = 0;
+    if (widget == ui->imageListView) {
+        QModelIndex folderIndex = ui->folderBrowserTreeView->currentIndex();
+        if (!folderIndex.isValid()) return;
+        QDir dir = m_folderBrowserModel->filePath(folderIndex);
+        foreach (const QString &src, m_clipboard) {
+            QString dst = dir.filePath(QFileInfo(src).fileName());
+            if (QFile::copy(src, dst))
+                count++;
+            else
+                qWarning("File \"%s\" could not be copied to \"%s\"", qPrintable(src), qPrintable(dst));
+        }
+        if (count > 0) // refresh view
+            scanFolder(folderIndex, ui->includeSubfoldersCheckBox->isChecked());
+    } else if (widget == ui->slideshowImageListView) {
+        Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+        if (!slideshow) return;
+        foreach (const QString &path, m_clipboard) {
+            slideshow->addImage(path);
+            count++;
+        }
+        // refresh view
+        ui->slideshowListView->update(m_slideshowListModel->currentSlideshowIndex());
+        on_slideshowListView_selectionChanged(m_slideshowListModel->currentSlideshowIndex());
+    } else
+        return;
+    if (m_copyMode == Cut) {
+        // remove images
+        foreach (const QString &path, m_clipboard)
+            if (!QFile::remove(path))
+                qWarning("File \"%s\" could not be removed", qPrintable(path));
+        m_clipboard.clear();
+        ui->actionPasteImage->setEnabled(false);
+    }
+    statusBar()->showMessage(tr("%1 image(s) inserted").arg(count));
 }
 
 void MainWindow::on_actionRemoveImage_triggered()
@@ -781,30 +877,73 @@ QStringList MainWindow::imagePaths(QAction *action)
 void MainWindow::on_actionRemoveImageFromDisk_triggered()
 {
     QStringList paths = imagePaths(ui->actionRemoveImageFromDisk);
-    // TODO: delete from disk
-    if (activeWidget(ui->actionRemoveImageFromDisk) == ui->slideshowImageListView) // remove images also from slideshow
-        on_actionRemoveImage_triggered();
+    if (QMessageBox::question(this, tr("Remove Image(s)"), tr("Are you sure you want to remove the %1 image(s) from disk?")
+            .arg(paths.count()), QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
+        QWidget *widget = activeWidget(ui->actionRemoveImageFromDisk);
+        if (widget == ui->slideshowImageListView) // remove images also from slideshow
+            on_actionRemoveImage_triggered();
+        // remove images from disk
+        foreach (const QString &path, paths)
+            if (!QFile::remove(path))
+                qWarning("File \"%s\" could not be removed", qPrintable(path));
+        // update view
+        if (widget == ui->imageListView)
+            foreach (const QModelIndex &index, ui->imageListView->selectedIndexes())
+                m_imageListModel->removeImage(index);
+        statusBar()->showMessage(tr("%1 image(s) removed from disk").arg(paths.count()));
+    }
 }
 
 void MainWindow::on_actionCopyPath_triggered()
 {
     QStringList paths = imagePaths(ui->actionCopyPath);
 
-#ifdef Q_WS_WIN // convert to native paths on windows
+#ifdef Q_WS_WIN
+    // convert to native paths on windows
     for (QStringList::iterator path = paths.begin(); path != paths.end(); ++path)
         *path = QDir::toNativeSeparators(*path);
 #endif
 
-    // TODO: copy to clipboard
-    qDebug() << paths;
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(paths.join("\n"));
+
+    statusBar()->showMessage(tr("%1 image path(s) copied to the clipboard").arg(paths.count()));
 }
 
 void MainWindow::on_actionOpenFileLocation_triggered()
+{
+    QWidget *widget = activeWidget(ui->actionOpenFileLocation);
+    if (!widget) return;
+    QString path;
+    if (widget == ui->imageListView)
+        path = m_imageListModel->imagePath(ui->imageListView->currentIndex());
+    else if (widget == ui->slideshowListView) {
+        if (m_slideshowListModel->currentSlideshow())
+            path = m_slideshowListModel->currentSlideshow()->path(m_slideshowsDirectory);
+    } else if (widget == ui->slideshowImageListView)
+        path = m_slideshowImageListModel->imagePath(ui->slideshowImageListView->currentIndex());
+    else if (widget == ui->imageWidget)
+        path = m_currentImagePath;
+    QDir dir = QDir(path);
+    dir.cdUp();
+    path = dir.path();
+    QDesktopServices::openUrl(QUrl("file:///" + path, QUrl::TolerantMode));
+}
+
+void MainWindow::on_actionExportImages_triggered()
 {
 }
 
 void MainWindow::on_actionPreloadAllImages_triggered()
 {
+    QWidget *widget = activeWidget(ui->actionPreloadAllImages);
+    if (!widget) return;
+    ImageListView *view = qobject_cast<ImageListView*>(widget);
+    if (view) {
+        ImageListModel* model = qobject_cast<ImageListModel*>(view->model());
+        if (model)
+            model->preloadAllImages();
+    }
 }
 
 void MainWindow::on_actionStartSlideshow_triggered()
@@ -843,14 +982,47 @@ void MainWindow::on_actionRenameSlideshow_triggered()
 
 void MainWindow::on_actionRemoveSlideshow_triggered()
 {
-    if (m_currentSlideshow == m_slideshowListModel->currentSlideshow()) {
-        m_currentSlideshow = NULL;
-        m_currentSlideshowImage = NULL;
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (!slideshow) return;
+    if (QMessageBox::question(this, tr("Remove Slideshow"), tr("Are you sure you want to remove the slideshow \"%1\"?")
+            .arg(slideshow->name()), QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
+        if (slideshow == m_currentSlideshow) {
+            m_currentSlideshow = NULL;
+            m_currentSlideshowImage = NULL;
+        }
+        QString path = slideshow->path(m_slideshowsDirectory);
+        if (m_slideshowListModel->removeSlideshow(ui->slideshowListView->currentIndex()) && !QFile::remove(path))
+            qWarning("File \"%s\" could not be removed", qPrintable(path));
     }
-    m_slideshowListModel->removeSlideshow(ui->slideshowListView->currentIndex());
 }
 
 void MainWindow::on_actionCopyImagesToSlideshow_triggered()
+{
+    Slideshow *slideshowFrom = m_slideshowListModel->currentSlideshow();
+    if (!slideshowFrom)
+        return;
+    QStringList slideshowList;
+    foreach (const Slideshow &slideshow, m_slideshowListModel->slideshowList())
+        slideshowList.append(slideshow.name());
+    bool ok;
+    QString slideshowString = QInputDialog::getItem(this, tr("Select Slideshow"),
+            tr("Copy all images to slideshow:"), slideshowList, 0, true, &ok);
+    if (ok && !slideshowString.isEmpty()) {
+        Slideshow *slideshowTo = m_slideshowListModel->slideshow(slideshowString);
+        if (!slideshowTo) { // slideshow not found, create new one
+            QModelIndex slideshowIndex = m_slideshowListModel->addSlideshow(slideshowString);
+            slideshowTo = m_slideshowListModel->slideshow(slideshowIndex);
+            if (!slideshowTo) return; // should never happen, just in case
+        }
+        // copy all images
+        foreach (const SlideshowImage &image, slideshowFrom->images())
+            slideshowTo->addImage(image);
+        statusBar()->showMessage(tr("%1 image(s) copied from slideshow \"%2\" to \"%3\"")
+                .arg(slideshowFrom->imageCount()).arg(slideshowFrom->name()).arg(slideshowTo->name()));
+    }
+}
+
+void MainWindow::on_actionExportAllImages_triggered()
 {
 }
 

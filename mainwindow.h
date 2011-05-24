@@ -45,9 +45,11 @@ private slots:
     void imageListModel_changed();
     void on_slideshowListView_selectionChanged(const QModelIndex &index);
     void on_slideshowListView_customContextMenuRequested(const QPoint &pos);
+    void slideshowListModel_slideshowRenamed(const QString &oldName, const QString &newName);
     void on_slideshowImageListView_clicked(const QModelIndex &index);
     void on_slideshowImageListView_customContextMenuRequested(const QPoint &pos);
     void slideshowImageListModel_changed();
+    void slideshowImageListModel_imageRenamed(const QModelIndex &index, const QString &newPath);
     void imageLoaded(const QImage &image, int width, int height, int index);
     void slideshowFileManager_started();
     void slideshowFileManager_finished();
@@ -76,6 +78,7 @@ private slots:
     void on_actionRemoveImageFromDisk_triggered();
     void on_actionCopyPath_triggered();
     void on_actionOpenFileLocation_triggered();
+    void on_actionExportImages_triggered();
     void on_actionPreloadAllImages_triggered();
 
     void on_actionStartSlideshow_triggered();
@@ -83,6 +86,7 @@ private slots:
     void on_actionRenameSlideshow_triggered();
     void on_actionRemoveSlideshow_triggered();
     void on_actionCopyImagesToSlideshow_triggered();
+    void on_actionExportAllImages_triggered();
     void on_actionReloadSlideshow_triggered();
     void on_actionSaveSlideshow_triggered();
 
@@ -90,6 +94,11 @@ private slots:
     void thumbnailSizeMenu_triggered(QAction *action);
 
 private:
+    enum CopyMode {
+        Copy,
+        Cut
+    };
+
     Ui::MainWindow *ui;
     QLabel *m_scanFolderLabel;
     QPushButton *m_scanFolderAbortButton;
@@ -105,6 +114,9 @@ private:
     QString m_currentImagePath;
     Slideshow *m_currentSlideshow;
     SlideshowImage *m_currentSlideshowImage;
+
+    CopyMode m_copyMode;
+    QStringList m_clipboard;
 
     void loadSettings();
     void saveSettings();

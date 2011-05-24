@@ -655,6 +655,9 @@
    </property>
   </action>
   <action name="actionPasteImage">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/icons/editpaste.png</normaloff>:/icons/editpaste.png</iconset>
@@ -708,7 +711,7 @@
      <normaloff>:/icons/folder_48.png</normaloff>:/icons/folder_48.png</iconset>
    </property>
    <property name="text">
-    <string>Open File Location</string>
+    <string>Open File Location...</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>
