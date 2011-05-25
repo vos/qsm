@@ -1146,22 +1146,22 @@ void MainWindow::moveImages(int delta)
         ui->slideshowSortComboBox->setCurrentIndex(4);
 
     // move images
-    int begin;
-    int end;
+    QModelIndexList::const_iterator begin;
+    QModelIndexList::const_iterator end;
     int direction;
     if (delta < 0) { // move up, begin with smallest index
-        begin = 0;
-        end = indexList.count() - 1;
+        begin = indexList.constBegin();
+        end = indexList.constEnd() - 1;
         direction = 1;
     } else { // move down, begin with largest index
-        begin = indexList.count() - 1;
-        end = 0;
+        begin = indexList.constEnd() - 1;
+        end = indexList.constBegin();
         direction = -1;
     }
     end += direction;
-    for (int i = begin; i != end; i += direction) {
-        slideshow->moveImage(indexList.at(i).row(), delta);
-        //m_slideshowImageListModel->moveImage(indexList.at(i).row(), delta); // BUG
+    for (QModelIndexList::const_iterator i = begin; i != end; i += direction) {
+        slideshow->moveImage((*i).row(), delta);
+        //m_slideshowImageListModel->moveImage(*i, delta); // BUG
     }
     // refresh view
     on_slideshowListView_selectionChanged(ui->slideshowListView->currentIndex());
