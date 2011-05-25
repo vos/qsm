@@ -220,6 +220,7 @@ void ImageListModel::thumbnailLoaded(const QImage &image, int width, int height,
 
 void ImageListModel::preloadAllImages()
 {
-    // TODO;
-    qDebug("ImageListModel::preloadAllImages()");
+    QModelIndex parentDummy;
+    while (canFetchMore(parentDummy))
+        fetchMore(parentDummy);
 }
