@@ -883,7 +883,7 @@
    </property>
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/search_48.png</normaloff>:/icons/search_48.png</iconset>
+     <normaloff>:/icons/zoom_fit_48.png</normaloff>:/icons/zoom_fit_48.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Fit to Widget</string>
@@ -895,7 +895,7 @@
    </property>
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/search_48.png</normaloff>:/icons/search_48.png</iconset>
+     <normaloff>:/icons/zoom_100_48.png</normaloff>:/icons/zoom_100_48.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Original Size</string>
@@ -907,7 +907,7 @@
    </property>
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/search_48.png</normaloff>:/icons/search_48.png</iconset>
+     <normaloff>:/icons/zoom_in_48.png</normaloff>:/icons/zoom_in_48.png</iconset>
    </property>
    <property name="text">
     <string>Zoom &amp;In</string>
@@ -919,7 +919,7 @@
    </property>
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/search_48.png</normaloff>:/icons/search_48.png</iconset>
+     <normaloff>:/icons/zoom_out_48.png</normaloff>:/icons/zoom_out_48.png</iconset>
    </property>
    <property name="text">
     <string>Zoom O&amp;ut</string>

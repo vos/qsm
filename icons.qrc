@@ -23,8 +23,11 @@
         <file>icons/question_48.png</file>
         <file>icons/rotate_clockwise_48.png</file>
         <file>icons/rotate_counterclockwise_48.png</file>
-        <file>icons/search_48.png</file>
         <file>icons/spanner_48.png</file>
         <file>icons/up.png</file>
+        <file>icons/zoom_in_48.png</file>
+        <file>icons/zoom_out_48.png</file>
+        <file>icons/zoom_100_48.png</file>
+        <file>icons/zoom_fit_48.png</file>
     </qresource>
 </RCC>
