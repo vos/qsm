@@ -600,12 +600,13 @@ void MainWindow::on_imageWidget_viewChanged()
 
 void MainWindow::on_imageWidget_doubleClicked()
 {
-    if (m_currentImagePath.isEmpty() || !m_currentSlideshow)
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (m_currentImagePath.isEmpty() || !slideshow)
         return;
 
     int i = m_slideshowListModel->addImage(m_currentImagePath);
     m_slideshowImageListModel->addImage(ImageInfo(m_currentImagePath), i);
-    statusBar()->showMessage(tr("Image added to slideshow \"%1\"").arg(m_currentSlideshow->name()));
+    statusBar()->showMessage(tr("Image added to slideshow \"%1\"").arg(slideshow->name()));
 }
 
 void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
