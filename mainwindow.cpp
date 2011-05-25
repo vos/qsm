@@ -832,9 +832,11 @@ void MainWindow::on_actionPasteImage_triggered()
         QDir dir = m_folderBrowserModel->filePath(folderIndex);
         foreach (const QString &src, m_clipboard) {
             QString dst = dir.filePath(QFileInfo(src).fileName());
-            if (QFile::copy(src, dst))
+            if (QFile::copy(src, dst)) {
                 count++;
-            else
+                if (!QFile::remove(src))
+                    qWarning("File \"%s\" could not be removed", qPrintable(src));
+            } else
                 qWarning("File \"%s\" could not be copied to \"%s\"", qPrintable(src), qPrintable(dst));
         }
         if (count > 0) // refresh view
@@ -852,11 +854,8 @@ void MainWindow::on_actionPasteImage_triggered()
         //on_slideshowListView_selectionChanged(m_slideshowListModel->currentSlideshowIndex());
     } else
         return;
+    // clean the clipboard and disable the paste action
     if (m_copyMode == Cut) {
-        // remove images
-        foreach (const QString &path, m_clipboard)
-            if (!QFile::remove(path))
-                qWarning("File \"%s\" could not be removed", qPrintable(path));
         m_clipboard.clear();
         ui->actionPasteImage->setEnabled(false);
     }
@@ -1122,7 +1121,7 @@ void MainWindow::on_slideshowSortComboBox_currentIndexChanged(int index)
 void MainWindow::moveImages(int delta)
 {
     Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
-    if (!slideshow) return;
+    if (!slideshow || slideshow->imageCount() < 2) return;
 
     QModelIndexList indexList = ui->slideshowImageListView->selectedIndexes();
     if (indexList.isEmpty()) return;
@@ -1132,9 +1131,22 @@ void MainWindow::moveImages(int delta)
         ui->slideshowSortComboBox->setCurrentIndex(4);
 
     // move images
-    foreach (const QModelIndex &index, indexList) {
-        slideshow->moveImage(index.row(), delta);
-        //m_slideshowImageListModel->moveImage(index, delta); // BUG
+    int begin;
+    int end;
+    int direction;
+    if (delta < 0) { // move up, begin with smallest index
+        begin = 0;
+        end = indexList.count() - 1;
+        direction = 1;
+    } else { // move down, begin with largest index
+        begin = indexList.count() - 1;
+        end = 0;
+        direction = -1;
+    }
+    end += direction;
+    for (int i = begin; i != end; i += direction) {
+        slideshow->moveImage(indexList.at(i).row(), delta);
+        //m_slideshowImageListModel->moveImage(indexList.at(i).row(), delta); // BUG
     }
     // refresh view
     on_slideshowListView_selectionChanged(ui->slideshowListView->currentIndex());
@@ -1147,7 +1159,7 @@ void MainWindow::on_beginPushButton_clicked()
 
 void MainWindow::on_multipleUpPushButton_clicked()
 {
-    moveImages(-5);
+    moveImages(-5); // TODO: make variable
 }
 
 void MainWindow::on_upPushButton_clicked()
@@ -1162,7 +1174,7 @@ void MainWindow::on_downPushButton_clicked()
 
 void MainWindow::on_multipleDownPushButton_clicked()
 {
-    moveImages(5);
+    moveImages(5); // TODO: make variable
 }
 
 void MainWindow::on_endPushButton_clicked()

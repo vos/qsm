@@ -100,17 +100,17 @@ SlideshowImage* Slideshow::image(int index)
     return &m_images[index];
 }
 
-void Slideshow::moveImage(int from, int delta)
+void Slideshow::moveImage(int index, int delta)
 {
-    if (from < 0 || from >= m_images.count())
+    if (index < 0 || index >= m_images.count())
         return;
-    int to = qBound(0, from + delta, m_images.count() - 1);
-    if (from == to) return;
+    int to = qBound(0, index + delta, m_images.count() - 1);
+    if (index == to) return;
     if (!(m_sort & Qsm::Unsorted)) {
         m_sort = Qsm::Unsorted;
         m_comparator = NULL;
     }
-    m_images.move(from, to);
+    m_images.move(index, to);
     m_changed = true;
 }
 
