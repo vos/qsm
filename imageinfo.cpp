@@ -1,5 +1,6 @@
 #include "imageinfo.h"
 
+#include <QCoreApplication>
 #include <QPixmap>
 #include <QPainter>
 
@@ -53,11 +54,11 @@ QString ImageInfo::size() const
 {
     qint64 bytes = m_fileInfo.size();
     if (bytes >= 1048576)
-        return QString("%1 MB").arg(bytes / 1048576.0, 0, 'f', 2);
+        return QString(QCoreApplication::translate("ImageInfo", "%1 MB")).arg(bytes / 1048576.0, 0, 'f', 2);
     else if (bytes >= 1024)
-        return QString("%1 KB").arg(bytes / 1024.0, 0, 'f', 2);
+        return QString(QCoreApplication::translate("ImageInfo", "%1 KB")).arg(bytes / 1024.0, 0, 'f', 2);
     else
-        return QString("%1 bytes").arg(bytes);
+        return QString(QCoreApplication::translate("ImageInfo", "%1 bytes")).arg(bytes);
 }
 
 void ImageInfo::setDimensions(int width, int height)
