@@ -364,6 +364,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="multipleUpPushButton">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string notr="true"/>
             </property>
@@ -406,6 +409,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="multipleDownPushButton">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string notr="true"/>
             </property>

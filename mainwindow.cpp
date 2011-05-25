@@ -84,7 +84,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->slideshowListView->addAction(ui->actionSaveSlideshow);
 
     m_slideshowImageListModel = new ImageListModel(this);
-    connect(ui->actionRemoveAllCorruptedImages, SIGNAL(triggered()), m_slideshowImageListModel, SLOT(removeAllCorruptedImages()));
     connect(m_slideshowImageListModel, SIGNAL(changed()), SLOT(slideshowImageListModel_changed()));
     connect(m_slideshowImageListModel, SIGNAL(imageRenamed(QModelIndex,QString)), SLOT(slideshowImageListModel_imageRenamed(QModelIndex,QString)));
     ui->slideshowImageListView->setModel(m_slideshowImageListModel);
@@ -130,6 +129,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scanFolderAbortButton, SIGNAL(clicked()), SLOT(scanFolderAbortButton_clicked()));
     statusBar()->addPermanentWidget(m_scanFolderAbortButton);
 
+    connect(ui->multipleUpPushButton, SIGNAL(customContextMenuRequested(QPoint)), SLOT(multipleMoveCountDialog()));
+    connect(ui->multipleDownPushButton, SIGNAL(customContextMenuRequested(QPoint)), SLOT(multipleMoveCountDialog()));
+
     loadSettings();
     on_actionReloadAllSlideshows_triggered(); // start slideshow loading
 
@@ -151,6 +153,7 @@ void MainWindow::loadSettings()
     ui->intervalSpinBox->setValue(settings.value("interval", 5).toInt());
     ui->randomCheckBox->setChecked(settings.value("random", false).toBool());
     ui->repeatCheckBox->setChecked(settings.value("repeat", false).toBool());
+    m_multipleMoveCount = settings.value("multipleMoveCount", 5).toInt();
 
     // thumbnail sizes
     int imageListViewThumbnailSize = settings.value("imageListViewThumbnailSize", 64).toInt();
@@ -227,6 +230,7 @@ void MainWindow::saveSettings()
     settings.setValue("interval", ui->intervalSpinBox->value());
     settings.setValue("random", ui->randomCheckBox->isChecked());
     settings.setValue("repeat", ui->repeatCheckBox->isChecked());
+    settings.setValue("multipleMoveCount", m_multipleMoveCount);
     settings.setValue("imageListViewThumbnailSize", ui->imageListView->iconSize().width());
     settings.setValue("slideshowImageListViewThumbnailSize", ui->slideshowImageListView->iconSize().width());
     settings.setValue("showComments", ui->actionShowComments->isChecked());
@@ -536,7 +540,7 @@ void MainWindow::on_slideshowImageListView_customContextMenuRequested(const QPoi
     }
     QMenu *thumbnailSizeMenu = createThumbnailSizeMenu(&menu, ui->slideshowImageListView->iconSize().width());
     menu.addMenu(thumbnailSizeMenu);
-    if (m_slideshowImageListModel->hasCorruptedImages())
+    if (slideshow && slideshow->hasCorruptedImages())
         menu.addAction(ui->actionRemoveAllCorruptedImages);
     if (!m_slideshowImageListModel->allThumbnailsLoaded())
         menu.addAction(ui->actionPreloadAllImages);
@@ -968,6 +972,16 @@ void MainWindow::on_actionExportImages_triggered()
             .arg(count).arg(paths.count()).arg(QDir::toNativeSeparators(m_imagesDirectory)));
 }
 
+void MainWindow::on_actionRemoveAllCorruptedImages_triggered()
+{
+    Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
+    if (slideshow) {
+        slideshow->removeAllCorruptedImages();
+        // refresh view
+        on_slideshowListView_selectionChanged(ui->slideshowListView->currentIndex());
+    }
+}
+
 void MainWindow::on_actionPreloadAllImages_triggered()
 {
     QWidget *widget = activeWidget(ui->actionPreloadAllImages);
@@ -1159,7 +1173,7 @@ void MainWindow::on_beginPushButton_clicked()
 
 void MainWindow::on_multipleUpPushButton_clicked()
 {
-    moveImages(-5); // TODO: make variable
+    moveImages(-m_multipleMoveCount);
 }
 
 void MainWindow::on_upPushButton_clicked()
@@ -1174,12 +1188,21 @@ void MainWindow::on_downPushButton_clicked()
 
 void MainWindow::on_multipleDownPushButton_clicked()
 {
-    moveImages(5); // TODO: make variable
+    moveImages(m_multipleMoveCount);
 }
 
 void MainWindow::on_endPushButton_clicked()
 {
     moveImages(INT_MAX >> 1);
+}
+
+void MainWindow::multipleMoveCountDialog()
+{
+    bool ok;
+    int moveCount = QInputDialog::getInt(this, tr("Select Multiple Move Count"),
+            tr("Move Count:"), m_multipleMoveCount, 2, INT_MAX / 2, 1, &ok);
+    if (ok)
+        m_multipleMoveCount = moveCount;
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)

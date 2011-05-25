@@ -35,6 +35,9 @@ public:
 
     void sort();
 
+    bool hasCorruptedImages() const;
+    void removeAllCorruptedImages();
+
     inline void setChanged() { m_changed = true; }
     inline void resetChanged() { m_changed = false; }
     inline bool hasChanged() const { return m_changed; }

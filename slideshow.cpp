@@ -133,8 +133,25 @@ void Slideshow::clearImages()
 
 void Slideshow::sort()
 {
-    if (m_comparator && m_images.count())
+    if (m_comparator && m_images.count()) {
         qSort(m_images.begin(), m_images.end(), m_comparator);
+        m_changed = true;
+    }
+}
+
+bool Slideshow::hasCorruptedImages() const
+{
+    // TODO
+    return true;
+}
+
+void Slideshow::removeAllCorruptedImages()
+{
+    for (int i = m_images.count() - 1; i >= 0; --i) {
+        if (!QFile::exists(m_images.at(i).path()))
+            m_images.removeAt(i);
+    }
+    m_changed = true;
 }
 
 bool Slideshow::sortNameAsc(const SlideshowImage &a, const SlideshowImage &b)

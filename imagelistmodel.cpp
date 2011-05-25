@@ -218,18 +218,6 @@ void ImageListModel::thumbnailLoaded(const QImage &image, int width, int height,
     qDebug("ImageListModel::imageLoaded(%d)", index);
 }
 
-bool ImageListModel::hasCorruptedImages() const
-{
-    // TODO
-    return false;
-}
-
-void ImageListModel::removeAllCorruptedImages()
-{
-    // TODO
-    qDebug("ImageListModel::removeAllCorruptedImages()");
-}
-
 void ImageListModel::preloadAllImages()
 {
     // TODO;

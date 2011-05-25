@@ -79,6 +79,7 @@ private slots:
     void on_actionCopyPath_triggered();
     void on_actionOpenFileLocation_triggered();
     void on_actionExportImages_triggered();
+    void on_actionRemoveAllCorruptedImages_triggered();
     void on_actionPreloadAllImages_triggered();
 
     void on_actionStartSlideshow_triggered();
@@ -103,6 +104,8 @@ private slots:
     void on_multipleDownPushButton_clicked();
     void on_endPushButton_clicked();
 
+    void multipleMoveCountDialog();
+
 private:
     enum CopyMode {
         Copy,
@@ -119,6 +122,7 @@ private:
     ImageListModel *m_slideshowImageListModel;
     SlideshowFileManager *m_slideshowFileManager;
 
+    int m_multipleMoveCount;
     QString m_slideshowsDirectory;
     QString m_imagesDirectory;
     QString m_currentImagePath;
