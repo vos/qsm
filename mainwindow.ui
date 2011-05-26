@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string notr="true">QSM - Qt SlideShow Manager</string>
+   <string notr="true">QSM - Qt Slideshow Manager</string>
   </property>
   <widget class="ImageWidget" name="imageWidget">
    <property name="enabled">

@@ -458,150 +458,150 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="608"/>
+        <location filename="mainwindow.cpp" line="609"/>
         <source>Image added to slideshow &quot;%1&quot;</source>
         <translation>Bild zur Slideshow &quot;%1&quot; hinzugefügt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="734"/>
-        <source>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 beta&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Written by Alexander Vos and Till Althaus</source>
-        <translation>&lt;b&gt;Qt SlideShow Manager&lt;/b&gt; v0.1 beta&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Entwickelt von Alexander Vos und Till Althaus</translation>
+        <location filename="mainwindow.cpp" line="735"/>
+        <source>&lt;b&gt;Qt Slideshow Manager&lt;/b&gt; v1.0 beta&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Written by Alexander Vos and Till Althaus</source>
+        <translation>&lt;b&gt;Qt Slideshow Manager&lt;/b&gt; v1.0 beta&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Entwickelt von Alexander Vos und Till Althaus</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="753"/>
+        <location filename="mainwindow.cpp" line="754"/>
         <source>%1 image(s) added to slideshow &quot;%2&quot;</source>
         <translation>%1 Bild(er) zur Slideshow &quot;%2&quot; hinzugefügt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="778"/>
-        <location filename="mainwindow.cpp" line="1020"/>
+        <location filename="mainwindow.cpp" line="779"/>
+        <location filename="mainwindow.cpp" line="1021"/>
         <source>Edit Comment</source>
         <translation>Kommentar bearbeiten</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="778"/>
-        <location filename="mainwindow.cpp" line="1020"/>
+        <location filename="mainwindow.cpp" line="779"/>
+        <location filename="mainwindow.cpp" line="1021"/>
         <source>Comment:</source>
         <translation>Kommentar:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="813"/>
+        <location filename="mainwindow.cpp" line="814"/>
         <source>%1 image(s) cut out</source>
         <translation>%1 Bild(er) ausgeschnitten</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="823"/>
+        <location filename="mainwindow.cpp" line="824"/>
         <source>%1 image(s) copied</source>
         <translation>%1 Bild(er) kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="866"/>
+        <location filename="mainwindow.cpp" line="867"/>
         <source>%1 image(s) inserted</source>
         <translation>%1 Bild(er) eingefügt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="880"/>
+        <location filename="mainwindow.cpp" line="881"/>
         <source>%1 image(s) removed from slideshow &quot;%2&quot;</source>
         <translation>%1 Bild(er) aus der Slideshow &quot;%2&quot; entfernt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="905"/>
+        <location filename="mainwindow.cpp" line="906"/>
         <source>Remove Image(s)</source>
         <translation>Bild(er) entfernen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="905"/>
+        <location filename="mainwindow.cpp" line="906"/>
         <source>Are you sure you want to remove the %1 image(s) from disk?</source>
         <translation>Möchten Sie die Slideshow &quot;%1&quot; wirklich von der Festplatte löschen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="918"/>
+        <location filename="mainwindow.cpp" line="919"/>
         <source>%1 image(s) removed from disk</source>
         <translation>%1 Bild(er) wurden gelöscht</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="935"/>
+        <location filename="mainwindow.cpp" line="936"/>
         <source>%1 image path(s) copied to the clipboard</source>
         <translation>%1 Bildpfad(e) wurden in die Zwischenablage kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="971"/>
-        <location filename="mainwindow.cpp" line="1086"/>
+        <location filename="mainwindow.cpp" line="972"/>
+        <location filename="mainwindow.cpp" line="1087"/>
         <source>%1 of %2 image(s) copied to &quot;%3&quot;</source>
         <translation>%1 von %2 Bild(er) wurde(n) nach &quot;%3&quot; kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1035"/>
+        <location filename="mainwindow.cpp" line="1036"/>
         <source>Remove Slideshow</source>
         <translation>Slideshow löschen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1035"/>
+        <location filename="mainwindow.cpp" line="1036"/>
         <source>Are you sure you want to remove the slideshow &quot;%1&quot;?</source>
         <translation>Möchten Sie die Slideshow &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1055"/>
+        <location filename="mainwindow.cpp" line="1056"/>
         <source>Select Slideshow</source>
         <translation>Slideshow auswählen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1056"/>
+        <location filename="mainwindow.cpp" line="1057"/>
         <source>Copy all images to slideshow:</source>
         <translation>Kopiere alle Bild zur Slideshow:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1067"/>
+        <location filename="mainwindow.cpp" line="1068"/>
         <source>%1 image(s) copied from slideshow &quot;%2&quot; to &quot;%3&quot;</source>
         <translation>Es wurde(n) %1 Bild(er) von Slideshow &quot;%2% nach &quot;%3&quot; kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1202"/>
+        <location filename="mainwindow.cpp" line="1203"/>
         <source>Select Multiple Move Count</source>
         <translation>Mehrfachverschiebunganzahl anpassen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1203"/>
+        <location filename="mainwindow.cpp" line="1204"/>
         <source>Move Count:</source>
         <translation>Verschiebungsschritte:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1216"/>
+        <location filename="mainwindow.cpp" line="1217"/>
         <source>Changed font size to %1 points</source>
         <translation>Schriftgröße auf %1 Punkte geändert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="641"/>
+        <location filename="mainwindow.cpp" line="642"/>
         <source>aborting...</source>
         <translation>Bitte warten...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="648"/>
+        <location filename="mainwindow.cpp" line="649"/>
         <source>New Slideshow</source>
         <translation>Neue Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="674"/>
+        <location filename="mainwindow.cpp" line="675"/>
         <source>Window</source>
         <translation>Fenster</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="683"/>
+        <location filename="mainwindow.cpp" line="684"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="691"/>
+        <location filename="mainwindow.cpp" line="692"/>
         <source>Slideshow</source>
         <translation>Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="698"/>
+        <location filename="mainwindow.cpp" line="699"/>
         <source>Image View</source>
         <translation>Bildanzeige</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="733"/>
+        <location filename="mainwindow.cpp" line="734"/>
         <source>About QSM</source>
         <translation>Über QSM</translation>
     </message>
@@ -806,8 +806,9 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="optionsdialog.cpp" line="140"/>
-        <source>The language change will take effect after a restart of Qt SlideShow Manager.</source>
-        <translation>Die Änderung der Sprache wird nach einem Neustart von Qt SlideShow Manager wirksam.</translation>
+        <source>The language change will take effect after a restart of Qt Slideshow Manager.</source>
+        <oldsource>The language change will take effect after a restart of Qt SlideShow Manager.</oldsource>
+        <translation>Die Änderung der Sprache wird nach einem Neustart von Qt Slideshow Manager wirksam.</translation>
     </message>
 </context>
 <context>

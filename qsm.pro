@@ -55,6 +55,7 @@ RESOURCES += icons.qrc
 RC_FILE = qsm.rc
 
 OTHER_FILES += README.md \
+               COPYING \
                qsm_de.ts \
                qsm.rc
 

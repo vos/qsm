@@ -1,3 +1,25 @@
+/****************************************************************************
+**
+** Copyright (C) 2011 Alexander Vos <alexander.vos@stud.fh-swf.de>,
+**                    Till Althaus <till.althaus@stud.fh-swf.de>
+**
+** This file is part of Qt Slideshow Manager (QSM).
+**
+** QSM is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+**
+** QSM is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with QSM.  If not, see <http://www.gnu.org/licenses/>.
+**
+****************************************************************************/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -732,7 +754,7 @@ void MainWindow::on_actionQsmHelp_triggered()
 void MainWindow::on_actionAboutQsm_triggered()
 {
     QMessageBox::about(this, tr("About QSM"),
-            tr("<b>Qt SlideShow Manager</b> v0.1 beta<br/><br/>"
+            tr("<b>Qt Slideshow Manager</b> v1.0 beta<br/><br/>"
                "Copyright &copy; 2011 Fachhochschule S&uuml;dwestfalen<br/>"
                "Written by Alexander Vos and Till Althaus"));
 }

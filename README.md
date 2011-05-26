@@ -1,1 +1,1 @@
-# Qt SlideShow Manager
+# Qt Slideshow Manager
