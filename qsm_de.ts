@@ -548,7 +548,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1078"/>
         <source>Copy all images to slideshow:</source>
-        <translation>Kopiere alle Bild zur Slideshow:</translation>
+        <translation>Kopiere alle Bilder zur Slideshow:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1089"/>
