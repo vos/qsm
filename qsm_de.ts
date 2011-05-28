@@ -5,17 +5,17 @@
 <context>
     <name>ImageInfo</name>
     <message>
-        <location filename="imageinfo.cpp" line="57"/>
+        <location filename="imageinfo.cpp" line="79"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="imageinfo.cpp" line="59"/>
+        <location filename="imageinfo.cpp" line="81"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="imageinfo.cpp" line="61"/>
+        <location filename="imageinfo.cpp" line="83"/>
         <source>%1 bytes</source>
         <translation>%1 Byte</translation>
     </message>
@@ -23,12 +23,12 @@
 <context>
     <name>ImageListModel</name>
     <message>
-        <location filename="imagelistmodel.cpp" line="43"/>
+        <location filename="imagelistmodel.cpp" line="65"/>
         <source>&lt;html&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Dimensions: %2&lt;br/&gt;Size: %3&lt;br/&gt;Date created: %4&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Abmessungen: %2&lt;br/&gt;Größe: %3&lt;br/&gt;Erstellungsdatum: %4&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="imagelistmodel.cpp" line="49"/>
+        <location filename="imagelistmodel.cpp" line="71"/>
         <source>&lt;html&gt;&lt;b&gt;%1&lt;br/&gt;&lt;br/&gt;&lt;span style=&quot;color: red;&quot;&gt;IMAGE NOT FOUND&lt;/span&gt;&lt;/b&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;b&gt;%1&lt;br/&gt;&lt;br/&gt;&lt;span style=&quot;color: red;&quot;&gt;BILD NICHT GEFUNDEN&lt;/span&gt;&lt;/b&gt;&lt;/html&gt;</translation>
     </message>
@@ -265,7 +265,7 @@
     <message>
         <location filename="mainwindow.ui" line="711"/>
         <source>Copy Full &amp;Path</source>
-        <translation>&amp;Bildpfad kopieren</translation>
+        <translation>&amp;Bildpfad(e) kopieren</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="723"/>
@@ -280,7 +280,7 @@
     <message>
         <location filename="mainwindow.ui" line="747"/>
         <source>Remove All Corrupted Images</source>
-        <translation>Alle fehlerhaften Bilder erntfernen</translation>
+        <translation>Alle fehlerhaften Bilder entfernen</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="755"/>
@@ -396,212 +396,212 @@
         <translation>&amp;Neue Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="35"/>
+        <location filename="mainwindow.cpp" line="57"/>
         <source>&amp;Sidebar</source>
         <translation>&amp;Seitenpanele</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="127"/>
-        <location filename="mainwindow.cpp" line="282"/>
+        <location filename="mainwindow.cpp" line="149"/>
+        <location filename="mainwindow.cpp" line="304"/>
         <source>Abort</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="138"/>
+        <location filename="mainwindow.cpp" line="160"/>
         <source>Ready</source>
         <translation>Bereit</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="279"/>
-        <location filename="mainwindow.cpp" line="290"/>
+        <location filename="mainwindow.cpp" line="301"/>
+        <location filename="mainwindow.cpp" line="312"/>
         <source>Scanning folder %1 ...</source>
         <translation>Durchsuche Ordner %1...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="297"/>
+        <location filename="mainwindow.cpp" line="319"/>
         <source>%1 images found, %2 folders scanned</source>
         <translation>%1 Bilder gefunden, %2 Ordner durchsucht</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="349"/>
+        <location filename="mainwindow.cpp" line="381"/>
         <source>Thumbnail Size</source>
         <translation>Vorschaubildgröße</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="351"/>
+        <location filename="mainwindow.cpp" line="383"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="360"/>
+        <location filename="mainwindow.cpp" line="392"/>
         <source>%1 Pixels</source>
         <translation>%1 Pixel</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="428"/>
+        <location filename="mainwindow.cpp" line="460"/>
         <source>Image List %1/%2</source>
         <translation>Bildliste %1/%2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="509"/>
+        <location filename="mainwindow.cpp" line="541"/>
         <source>Random Factor</source>
         <translation>Zufallsfaktor</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="558"/>
+        <location filename="mainwindow.cpp" line="590"/>
         <source>Slideshow Image List %1/%2</source>
         <translation>Slideshow Bildliste %1/%2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="598"/>
+        <location filename="mainwindow.cpp" line="629"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="609"/>
+        <location filename="mainwindow.cpp" line="640"/>
         <source>Image added to slideshow &quot;%1&quot;</source>
         <translation>Bild zur Slideshow &quot;%1&quot; hinzugefügt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="735"/>
+        <location filename="mainwindow.cpp" line="756"/>
         <source>&lt;b&gt;Qt Slideshow Manager&lt;/b&gt; v1.0 beta&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Written by Alexander Vos and Till Althaus</source>
         <translation>&lt;b&gt;Qt Slideshow Manager&lt;/b&gt; v1.0 beta&lt;br/&gt;&lt;br/&gt;Copyright &amp;copy; 2011 Fachhochschule S&amp;uuml;dwestfalen&lt;br/&gt;Entwickelt von Alexander Vos und Till Althaus</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="754"/>
+        <location filename="mainwindow.cpp" line="775"/>
         <source>%1 image(s) added to slideshow &quot;%2&quot;</source>
         <translation>%1 Bild(er) zur Slideshow &quot;%2&quot; hinzugefügt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="779"/>
-        <location filename="mainwindow.cpp" line="1021"/>
+        <location filename="mainwindow.cpp" line="800"/>
+        <location filename="mainwindow.cpp" line="1042"/>
         <source>Edit Comment</source>
         <translation>Kommentar bearbeiten</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="779"/>
-        <location filename="mainwindow.cpp" line="1021"/>
+        <location filename="mainwindow.cpp" line="800"/>
+        <location filename="mainwindow.cpp" line="1042"/>
         <source>Comment:</source>
         <translation>Kommentar:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="814"/>
+        <location filename="mainwindow.cpp" line="835"/>
         <source>%1 image(s) cut out</source>
         <translation>%1 Bild(er) ausgeschnitten</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="824"/>
+        <location filename="mainwindow.cpp" line="845"/>
         <source>%1 image(s) copied</source>
         <translation>%1 Bild(er) kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="867"/>
+        <location filename="mainwindow.cpp" line="888"/>
         <source>%1 image(s) inserted</source>
         <translation>%1 Bild(er) eingefügt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="881"/>
+        <location filename="mainwindow.cpp" line="902"/>
         <source>%1 image(s) removed from slideshow &quot;%2&quot;</source>
         <translation>%1 Bild(er) aus der Slideshow &quot;%2&quot; entfernt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="906"/>
+        <location filename="mainwindow.cpp" line="927"/>
         <source>Remove Image(s)</source>
         <translation>Bild(er) entfernen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="906"/>
+        <location filename="mainwindow.cpp" line="927"/>
         <source>Are you sure you want to remove the %1 image(s) from disk?</source>
-        <translation>Möchten Sie die Slideshow &quot;%1&quot; wirklich von der Festplatte löschen?</translation>
+        <translation>Möchten Sie die %1 Bild(er) wirklich von der Festplatte löschen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="919"/>
+        <location filename="mainwindow.cpp" line="940"/>
         <source>%1 image(s) removed from disk</source>
         <translation>%1 Bild(er) wurden gelöscht</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="936"/>
+        <location filename="mainwindow.cpp" line="957"/>
         <source>%1 image path(s) copied to the clipboard</source>
         <translation>%1 Bildpfad(e) wurden in die Zwischenablage kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="972"/>
-        <location filename="mainwindow.cpp" line="1087"/>
+        <location filename="mainwindow.cpp" line="993"/>
+        <location filename="mainwindow.cpp" line="1108"/>
         <source>%1 of %2 image(s) copied to &quot;%3&quot;</source>
         <translation>%1 von %2 Bild(er) wurde(n) nach &quot;%3&quot; kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1036"/>
+        <location filename="mainwindow.cpp" line="1057"/>
         <source>Remove Slideshow</source>
         <translation>Slideshow löschen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1036"/>
+        <location filename="mainwindow.cpp" line="1057"/>
         <source>Are you sure you want to remove the slideshow &quot;%1&quot;?</source>
         <translation>Möchten Sie die Slideshow &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1056"/>
+        <location filename="mainwindow.cpp" line="1077"/>
         <source>Select Slideshow</source>
         <translation>Slideshow auswählen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1057"/>
+        <location filename="mainwindow.cpp" line="1078"/>
         <source>Copy all images to slideshow:</source>
         <translation>Kopiere alle Bild zur Slideshow:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1068"/>
+        <location filename="mainwindow.cpp" line="1089"/>
         <source>%1 image(s) copied from slideshow &quot;%2&quot; to &quot;%3&quot;</source>
         <translation>Es wurde(n) %1 Bild(er) von Slideshow &quot;%2% nach &quot;%3&quot; kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1203"/>
+        <location filename="mainwindow.cpp" line="1224"/>
         <source>Select Multiple Move Count</source>
         <translation>Mehrfachverschiebunganzahl anpassen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1204"/>
+        <location filename="mainwindow.cpp" line="1225"/>
         <source>Move Count:</source>
         <translation>Verschiebungsschritte:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1217"/>
+        <location filename="mainwindow.cpp" line="1238"/>
         <source>Changed font size to %1 points</source>
         <translation>Schriftgröße auf %1 Punkte geändert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="642"/>
+        <location filename="mainwindow.cpp" line="331"/>
         <source>aborting...</source>
         <translation>Bitte warten...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="649"/>
+        <location filename="mainwindow.cpp" line="670"/>
         <source>New Slideshow</source>
         <translation>Neue Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="675"/>
+        <location filename="mainwindow.cpp" line="696"/>
         <source>Window</source>
         <translation>Fenster</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="684"/>
+        <location filename="mainwindow.cpp" line="705"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="692"/>
+        <location filename="mainwindow.cpp" line="713"/>
         <source>Slideshow</source>
         <translation>Slideshow</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="699"/>
+        <location filename="mainwindow.cpp" line="720"/>
         <source>Image View</source>
         <translation>Bildanzeige</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="734"/>
+        <location filename="mainwindow.cpp" line="755"/>
         <source>About QSM</source>
         <translation>Über QSM</translation>
     </message>
@@ -780,32 +780,32 @@ p, li { white-space: pre-wrap; }
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="39"/>
+        <location filename="optionsdialog.cpp" line="61"/>
         <source>Failed to create directory</source>
         <translation>Fehler beim Erstellen des Verzeichnisses</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="40"/>
+        <location filename="optionsdialog.cpp" line="62"/>
         <source>Could not create directory &quot;%1&quot;.</source>
         <translation>Konnte das Verzeichnis &quot;%1&quot; nicht erstellen.</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="61"/>
+        <location filename="optionsdialog.cpp" line="83"/>
         <source>Window Context</source>
         <translation>Fenster Kontext</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="62"/>
+        <location filename="optionsdialog.cpp" line="84"/>
         <source>Widget Context</source>
         <translation>Steuerelement Kontext</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="139"/>
+        <location filename="optionsdialog.cpp" line="161"/>
         <source>Restart required</source>
         <translation>Neustart erforderlich</translation>
     </message>
     <message>
-        <location filename="optionsdialog.cpp" line="140"/>
+        <location filename="optionsdialog.cpp" line="162"/>
         <source>The language change will take effect after a restart of Qt Slideshow Manager.</source>
         <oldsource>The language change will take effect after a restart of Qt SlideShow Manager.</oldsource>
         <translation>Die Änderung der Sprache wird nach einem Neustart von Qt Slideshow Manager wirksam.</translation>
@@ -814,27 +814,27 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SlideshowWindow</name>
     <message>
-        <location filename="slideshowwindow.cpp" line="140"/>
+        <location filename="slideshowwindow.cpp" line="164"/>
         <source>Slideshow stopped</source>
         <translation>Slideshow angehalten</translation>
     </message>
     <message>
-        <location filename="slideshowwindow.cpp" line="175"/>
+        <location filename="slideshowwindow.cpp" line="199"/>
         <source>Comments %1</source>
         <translation>Kommentare %1</translation>
     </message>
     <message>
-        <location filename="slideshowwindow.cpp" line="175"/>
+        <location filename="slideshowwindow.cpp" line="201"/>
         <source>enabled</source>
         <translation>aktiviert</translation>
     </message>
     <message>
-        <location filename="slideshowwindow.cpp" line="175"/>
+        <location filename="slideshowwindow.cpp" line="201"/>
         <source>disabled</source>
         <translation>deaktiviert</translation>
     </message>
     <message>
-        <location filename="slideshowwindow.cpp" line="182"/>
+        <location filename="slideshowwindow.cpp" line="208"/>
         <source>Slideshow continued</source>
         <translation>Slideshow fortgesetzt</translation>
     </message>
