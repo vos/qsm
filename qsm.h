@@ -25,15 +25,28 @@
 
 #include <Qt>
 
+/*!
+  \brief The Qsm namespace contains miscellaneous identifiers used throughout
+         different classes of the Qt Slideshow Manager.
+ */
 namespace Qsm
 {
+
+    /*!
+      \brief This enum describes the sort options available to lists of images
+             like slideshows and other presentations of multiple images. The
+             flags can be combined to provide more sort options.
+     */
     enum SortFlag {
-        Name = 0x1, Date = 0x2, Unsorted = 0x4, // sort order
-        Reversed = 0x8,                         // reverse sort order
-        NameReversed = Name | Reversed,         // combinations
-        DateReversed = Date | Reversed
+        Name = 0x1,                     //!< Sort by name.
+        Date = 0x2,                     //!< Sort by date.
+        Unsorted = 0x4,                 //!< Do not sort.
+        Reversed = 0x8,                 //!< Reverse sort order.
+        NameReversed = Name | Reversed, //!< Sort by name reversed.
+        DateReversed = Date | Reversed  //!< Sort by date reversed.
     };
     Q_DECLARE_FLAGS(SortFlags, SortFlag)
+
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qsm::SortFlags)

@@ -48,21 +48,21 @@ ImageInfo::ImageInfo(const QFileInfo &fileInfo)
     m_width = m_height = 0;
 }
 
-ImageInfo::ImageInfo(const ImageInfo &obj)
+ImageInfo::ImageInfo(const ImageInfo &imageInfo)
 {
-    m_fileInfo = obj.m_fileInfo;
-    m_icon = obj.m_icon;
-    m_width = obj.m_width;
-    m_height = obj.m_height;
+    m_fileInfo = imageInfo.m_fileInfo;
+    m_icon = imageInfo.m_icon;
+    m_width = imageInfo.m_width;
+    m_height = imageInfo.m_height;
 }
 
-ImageInfo& ImageInfo::operator =(const ImageInfo &obj)
+ImageInfo& ImageInfo::operator =(const ImageInfo &imageInfo)
 {
-    if (this != &obj) {
-        m_fileInfo = obj.m_fileInfo;
-        m_icon = obj.m_icon;
-        m_width = obj.m_width;
-        m_height = obj.m_height;
+    if (this != &imageInfo) {
+        m_fileInfo = imageInfo.m_fileInfo;
+        m_icon = imageInfo.m_icon;
+        m_width = imageInfo.m_width;
+        m_height = imageInfo.m_height;
     }
     return *this;
 }

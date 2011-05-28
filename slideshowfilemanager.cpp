@@ -66,7 +66,7 @@ void SlideshowFileManager::saveSlideshow(Slideshow &slideshow, const QString &di
     xml.setAutoFormatting(true);
     xml.writeStartDocument("1.0", true);
     xml.writeStartElement("slideshow");
-    Qsm::SortFlags sort = slideshow.sortFlags();
+    Qsm::SortFlags sort = slideshow.sortOrder();
     if (sort.testFlag(Qsm::Name) || sort.testFlag(Qsm::Date)) {
         xml.writeAttribute("sort", sort.testFlag(Qsm::Name) ? "name" : "date");
         if (sort.testFlag(Qsm::Reversed))
@@ -142,7 +142,7 @@ void SlideshowFileManager::loadSlideshow(const QFileInfo &fileInfo)
                         if (sortOrdner == "desc")
                             sortFlags |= Qsm::Reversed;
                     }
-                    slideshow.setSortFlags(sortFlags);
+                    slideshow.setSortOrder(sortFlags);
                 }
                 if (attr.hasAttribute("comment")) {
                     QString comment = attr.value("comment").toString();

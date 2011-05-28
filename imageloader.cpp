@@ -36,11 +36,9 @@ void ImageLoader::setScaleSize(int width, int height)
 void ImageLoader::run()
 {
     QImage image(m_imagePath);
-    if (m_scaleWidth > 0 && m_scaleHeight > 0) {
+    if (m_scaleWidth > 0 && m_scaleHeight > 0)
         emit imageLoaded(image.scaled(m_scaleWidth, m_scaleHeight, Qt::KeepAspectRatio,
                                       Qt::FastTransformation), image.width(), image.height(), m_index);
-    }
-    else {
+    else
         emit imageLoaded(image, image.width(), image.height(), m_index);
-    }
 }

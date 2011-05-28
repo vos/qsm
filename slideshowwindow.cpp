@@ -29,7 +29,8 @@
 
 #include "imageloader.h"
 
-SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval, bool random, bool repeat, QWidget *parent) :
+SlideshowWindow::SlideshowWindow(Slideshow *slideshow, int interval,
+                                 bool random, bool repeat, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SlideshowWindow),
     m_slideshow(slideshow),
@@ -131,7 +132,8 @@ bool SlideshowWindow::prepareNextImage(int delta, bool synchronous)
             m_slideshowIndex = index;
         } else {
             ImageLoader *imageLoader = new ImageLoader(m_nextImage->path(), index);
-            connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)), SLOT(imageLoaded(QImage, int, int, int)));
+            connect(imageLoader, SIGNAL(imageLoaded(QImage, int, int, int)),
+                    SLOT(imageLoaded(QImage, int, int, int)));
             QThreadPool::globalInstance()->start(imageLoader, 1);
         }
     } else
@@ -194,7 +196,9 @@ void SlideshowWindow::keyPressEvent(QKeyEvent *event)
         ui->imageWidget->zoomOut();
         break;
     case Qt::Key_C:
-        ui->imageWidget->setOverlayText(tr("Comments %1").arg(ui->imageWidget->toggleTextVisibility() ? tr("enabled") : tr("disabled")));
+        ui->imageWidget->setOverlayText(tr("Comments %1").
+                arg(ui->imageWidget->toggleTextVisibility()
+                    ? tr("enabled") : tr("disabled")));
         break;
     case Qt::Key_Space:
         if (m_timer.isActive())

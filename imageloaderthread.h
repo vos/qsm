@@ -27,20 +27,49 @@
 
 class ImageLoader;
 
+/*!
+  \brief The ImageLoaderThread class provides a thin wrapper around a ImageLoader.
+  \sa ImageLoader, ImageLoaderPool
+ */
 class ImageLoaderThread : public QThread
 {
     Q_OBJECT
 
 public:
+
+    /*!
+      \brief Constructs a new ImageLoaderThread to run an ImageLoader inside
+             a separate thread.
+      \param loader The image loader to be encapsulated by this thread.
+      \param parent The parent object.
+      \note If ImageLoader::autoDelete() returns \c true this thread will take
+            ownership of the image loader and deletes it automatically after
+            the execution of run().
+     */
     explicit ImageLoaderThread(ImageLoader *loader, QObject *parent = 0);
+
+    /*!
+      \brief Destroys the ImageLoaderThread and the associated image loader,
+             if ImageLoader::autoDelete() returns \c true.
+     */
     ~ImageLoaderThread();
 
+    /*!
+      \brief Returns the image loader associated with this thread.
+      \return The image loader associated with this thread.
+     */
     inline ImageLoader* loader() const { return m_loader; }
 
 private:
-    ImageLoader *m_loader;
 
+    ImageLoader *m_loader; //!< The image loader associated with this thread.
+
+    /*!
+      \brief Runs the image loader inside a separate thread.
+      \sa ImageLoader::run(), start()
+     */
     void run();
+
 };
 
 #endif // IMAGELOADERTHREAD_H

@@ -27,10 +27,10 @@
 
 const QString Slideshow::FILE_EXTENSION = ".xml";
 
-Slideshow::Slideshow(const QString &name, Qsm::SortFlags sortFlags, const QString &comment) :
-    m_name(name), m_comment(comment), m_changed(false)
+Slideshow::Slideshow(const QString &name, Qsm::SortFlags sortOrder, const QString &comment) :
+    m_name(name), m_comment(comment), m_changed(false), m_comparator(NULL)
 {
-    setSortFlags(sortFlags);
+    setSortOrder(sortOrder);
 }
 
 Slideshow::Slideshow(const Slideshow &slideshow)
@@ -70,12 +70,12 @@ QString Slideshow::path(const QString &dir) const
     return dir + QDir::separator() + m_name + Slideshow::FILE_EXTENSION;
 }
 
-bool Slideshow::setSortFlags(Qsm::SortFlags sortFlags)
+bool Slideshow::setSortOrder(Qsm::SortFlags sortOrder)
 {
-    if (sortFlags == m_sort)
+    if (sortOrder == m_sort)
         return false;
 
-    m_sort = sortFlags;
+    m_sort = sortOrder;
     switch (m_sort) {
     case Qsm::Name: m_comparator = &Slideshow::sortNameAsc; break;
     case Qsm::NameReversed: m_comparator = &Slideshow::sortNameDesc; break;
@@ -137,13 +137,14 @@ int Slideshow::moveImage(int index, int delta)
     return to;
 }
 
-void Slideshow::removeImage(int index)
+bool Slideshow::removeImage(int index)
 {
     if (index < 0 || index >= imageCount())
-        return;
+        return false;
 
     m_images.removeAt(index);
     m_changed = true;
+    return true;
 }
 
 void Slideshow::clearImages()

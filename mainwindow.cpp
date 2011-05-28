@@ -298,7 +298,7 @@ void MainWindow::scanFolderThread_started()
 {
     qDebug("scanFolderThread_started");
     m_imageListModel->clear();
-    statusBar()->showMessage(tr("Scanning folder %1 ...").arg(m_scanFolderThread->getFolder()));
+    statusBar()->showMessage(tr("Scanning folder %1 ...").arg(m_scanFolderThread->folder()));
     m_scanFolderLabel->clear();
     m_scanFolderLabel->setVisible(true);
     m_scanFolderAbortButton->setText(tr("Abort"));
@@ -321,6 +321,16 @@ void MainWindow::scanFolderThread_finished()
                              .arg(m_scanFolderThread->count()));
     m_scanFolderLabel->setVisible(false);
     m_scanFolderAbortButton->setVisible(false);
+}
+
+void MainWindow::scanFolderAbortButton_clicked()
+{
+    if (!m_scanFolderThread->isRunning())
+        return;
+
+    m_scanFolderAbortButton->setText(tr("aborting..."));
+    m_scanFolderAbortButton->setEnabled(false);
+    m_scanFolderThread->abort();
 }
 
 void MainWindow::prepareImage(const ImageListModel *model, const QModelIndex &index)
@@ -468,7 +478,7 @@ void MainWindow::on_slideshowListView_selectionChanged(const QModelIndex &index)
 
     // update sort combo box
     int sortIndex = 4; // Unsorted
-    switch (slideshow->sortFlags()) {
+    switch (slideshow->sortOrder()) {
     case Qsm::Name: sortIndex = 0; break;
     case Qsm::NameReversed: sortIndex = 1; break;
     case Qsm::Date: sortIndex = 2; break;
@@ -584,7 +594,6 @@ void MainWindow::slideshowImageListModel_changed()
 
 void MainWindow::slideshowImageListModel_imageRenamed(const QModelIndex &index, const QString &newPath)
 {
-    qDebug() << newPath;
     Slideshow *slideshow = m_slideshowListModel->currentSlideshow();
     if (!slideshow) return;
     SlideshowImage *image = slideshow->image(index.row());
@@ -654,16 +663,6 @@ void MainWindow::on_imageWidget_customContextMenuRequested(const QPoint &pos)
     }
     menu.addAction(ui->actionShowComments);
     menu.exec(ui->imageWidget->mapToGlobal(pos));
-}
-
-void MainWindow::scanFolderAbortButton_clicked()
-{
-    if (!m_scanFolderThread->isRunning())
-        return;
-
-    m_scanFolderAbortButton->setText(tr("aborting..."));
-    m_scanFolderAbortButton->setEnabled(false);
-    m_scanFolderThread->abort();
 }
 
 void MainWindow::on_actionNewSlideshow_triggered()
@@ -824,7 +823,7 @@ void MainWindow::on_actionRenameImage_triggered()
     else if (indexList.count() == 1) // inline rename
         view->edit(view->currentIndex());
     else // show dialog to rename multiple images
-        ;
+        ; // TODO
 }
 
 void MainWindow::on_actionCutImage_triggered()
@@ -1151,7 +1150,7 @@ void MainWindow::on_slideshowSortComboBox_currentIndexChanged(int index)
     case 4: sort = Qsm::Unsorted; break;
     }
 
-    if (slideshow->setSortFlags(sort) && !(sort & Qsm::Unsorted))
+    if (slideshow->setSortOrder(sort) && !(sort & Qsm::Unsorted))
         on_slideshowListView_selectionChanged(ui->slideshowListView->currentIndex()); // refresh view
 }
 
@@ -1164,7 +1163,7 @@ void MainWindow::moveImages(int delta)
     if (indexList.isEmpty()) return;
 
     // set to unsorted
-    if (!(slideshow->sortFlags() & Qsm::Unsorted))
+    if (!(slideshow->sortOrder() & Qsm::Unsorted))
         ui->slideshowSortComboBox->setCurrentIndex(4);
 
     // move images

@@ -25,17 +25,39 @@
 
 #include <QListView>
 
+/*!
+  \brief The SlideshowListView class provides a list view onto a SlideshowListModel.
+  \sa SlideshowListModel, Slideshow
+ */
 class SlideshowListView : public QListView
 {
     Q_OBJECT
 
 public:
+
+    /*!
+      \brief Creates a new SlideshowListView with the given \a parent to view
+             a SlideshowListModel.
+      \param parent The parent widget.
+     */
     explicit SlideshowListView(QWidget *parent = 0);
 
 signals:
+
+    /*!
+      \brief This signal is emitted after the selection of the view has been changed.
+      \param index The model index of the selected item.
+     */
     void selectionChanged(const QModelIndex &index);
 
 protected slots:
+
+    /*!
+      \brief Changes the selection of the view and emits the selectionChanged() signal.
+      \param selected The item selection of the selected item.
+      \param deselected The item selection of the deselected item.
+      \sa selectionChanged()
+     */
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 };

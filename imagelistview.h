@@ -25,14 +25,29 @@
 
 #include <QListView>
 
+/*!
+  \brief The ImageListView class provides a list view onto a ImageListModel.
+  \sa ImageListModel
+ */
 class ImageListView : public QListView
 {
     Q_OBJECT
 
 public:
+
+    /*!
+      \brief Creates a new ImageListView with the given \a parent to view
+             a ImageListModel.
+      \param parent The parent widget.
+     */
     explicit ImageListView(QWidget *parent = 0);
 
+    /*!
+      \brief Returns a list of all selected and non-hidden item indexes in the view.
+      \return A list of all selected and non-hidden item indexes.
+     */
     inline QModelIndexList selectedIndexes() const { return QListView::selectedIndexes(); }
+
 };
 
 #endif // IMAGELISTVIEW_H

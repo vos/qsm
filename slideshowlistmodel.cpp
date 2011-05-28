@@ -45,8 +45,8 @@ QVariant SlideshowListModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::DisplayRole:
     {
-        const Slideshow *slideshow = &m_slideshowList.at(index.row());
-        return QString("%1 (%2 images)").arg(slideshow->name()).arg(slideshow->imageCount());
+        const Slideshow &slideshow = m_slideshowList.at(index.row());
+        return QString("%1 (%2 images)").arg(slideshow.name()).arg(slideshow.imageCount());
     }
     case Qt::ToolTipRole:
         return m_slideshowList.at(index.row()).comment();

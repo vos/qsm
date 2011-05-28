@@ -28,6 +28,17 @@
 
 #include "mainwindow.h"
 
+/*!
+  \brief The main entry point of this application.
+
+  The main function will install a global translator for internationalization
+  to support other languages than english, the function will then show the
+  MainWindow GUI to the user and start the main event loop for event handling.
+
+  \param argc The command-line argument count.
+  \param argv The command-line argument-array.
+  \return The return code of the application.
+ */
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

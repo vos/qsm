@@ -24,10 +24,11 @@
 
 #include "imageloaderthread.h"
 
-ImageLoaderPool::ImageLoaderPool(QObject *parent) :
+ImageLoaderPool::ImageLoaderPool(int maxThreadCount, QObject *parent) :
     QObject(parent)
 {
-    m_maxThreadCount = QThread::idealThreadCount();
+    if (maxThreadCount <= 0)
+        m_maxThreadCount = QThread::idealThreadCount();
 }
 
 ImageLoaderPool::~ImageLoaderPool()
